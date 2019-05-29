@@ -9,7 +9,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>automacent-fwk-core</artifactId>
-	<name>AUTOMACENT-FWK-CORE</name>
+	<name>automacent-fwk-core</name>
 
 	<description>Automacent framework core components</description>
 	<url>http://www.automacent.com/</url>
