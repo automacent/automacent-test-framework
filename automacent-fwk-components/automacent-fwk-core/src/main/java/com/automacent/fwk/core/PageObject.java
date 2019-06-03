@@ -4,11 +4,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -23,15 +25,32 @@ import com.automacent.fwk.selenium.CustomExpectedConditions;
  * 
  * @author sighil.sivadas
  */
-public class PageObject {
+public class PageObject implements IPageObject {
 
 	private static Logger _logger = Logger.getLogger(PageObject.class);
 
 	protected WebDriver driver;
 
-	public PageObject(WebDriver driver) {
-		this.driver = driver;
+	public PageObject() {
+		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
+		PageFactory.initElements(driver, this);
+	}
+
+	/**
+	 * Initialize the specified page class and return object
+	 * 
+	 * @param page
+	 *            Page class to be initialized
+	 * @return Instance of class or null if error
+	 */
+	protected <T extends IPageObject> T getPage(Class<T> page) {
+		try {
+			return (T) page.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			_logger.warn(String.format("Error initializing component %s", page.getName()), e);
+		}
+		return null;
 	}
 
 	private int explicitWaitInSeconds = 0;
@@ -72,9 +91,10 @@ public class PageObject {
 	 * @param elements
 	 *            {@link WebElement}s to be used Javascript
 	 */
+	@SuppressWarnings("all")
 	@com.automacent.fwk.annotations.Action
 	protected void executeJavascript(String command, WebElement... elements) {
-		getJavascriptExecutor().executeScript(command, (Object) elements);
+		getJavascriptExecutor().executeScript(command, elements);
 	}
 
 	/**
@@ -84,8 +104,8 @@ public class PageObject {
 	 *            {@link WebElement} on which click has to be performed
 	 */
 	@com.automacent.fwk.annotations.Action
-	protected void javascriptClick(WebElement elements) {
-		executeJavascript("arguments[0].click()", elements);
+	protected void javascriptClick(WebElement element) {
+		executeJavascript("arguments[0].click()", element);
 	}
 
 	/**
@@ -207,7 +227,6 @@ public class PageObject {
 						.until(ExpectedConditions.presenceOfElementLocated(by));
 				break;
 			case PROXY_ELEMENT_LOCATED:
-				setImplicitWaitToOneSecond();
 				returnElement = explicitWait(explicitWaitInSeconds)
 						.until(CustomExpectedConditions.proxyElementLocated(element));
 				break;
@@ -218,8 +237,8 @@ public class PageObject {
 			throw e;
 		} finally {
 			_logger.debug(String.format("Setting implicit wait to %s seconds",
-					BaseTest.getTestObject().getTestDurationInSeconds()));
-			driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTestDurationInSeconds(),
+					BaseTest.getTestObject().getTimeoutInSeconds()));
+			driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
 					TimeUnit.SECONDS);
 		}
 		return returnElement;
@@ -235,7 +254,6 @@ public class PageObject {
 	 *            Explicit wait timeout in seconds
 	 * @return true if element is found
 	 */
-	@com.automacent.fwk.annotations.Action
 	public boolean isElementFound(WebElement element, int explicitWaitInSeconds) {
 		boolean isFound = false;
 		try {
@@ -243,7 +261,7 @@ public class PageObject {
 					explicitWaitInSeconds);
 			if (returnElement != null)
 				isFound = true;
-		} catch (TimeoutException e) {
+		} catch (TimeoutException | NoSuchElementException e) {
 		}
 		return isFound;
 	}
@@ -258,7 +276,6 @@ public class PageObject {
 	 *            Explicit wait timeout in seconds
 	 * @return true if element is found
 	 */
-	@com.automacent.fwk.annotations.Action
 	public boolean isElementFound(By by, int explicitWaitInSeconds) {
 		boolean isFound = false;
 		try {
@@ -266,8 +283,32 @@ public class PageObject {
 					explicitWaitInSeconds);
 			if (returnElement != null)
 				isFound = true;
-		} catch (TimeoutException e) {
+		} catch (TimeoutException | NoSuchElementException e) {
 		}
 		return isFound;
+	}
+
+	/**
+	 * Override the Implicit wait and enforce the explicit wait for checking whether
+	 * the {@link WebElement} is present in the DOM. Default explicit wait is used
+	 *
+	 * @param element
+	 *            {@link WebElement} object
+	 * @return true if element is found
+	 */
+	public boolean isElementFound(WebElement element) {
+		return isElementFound(element, getExplicitWaitInSeconds());
+	}
+
+	/**
+	 * Override the Implicit wait and enforce the explicit wait for checking whether
+	 * the {@link WebElement} is present in the DOM. Default explicit wait is used
+	 *
+	 * @param by
+	 *            {@link By} object
+	 * @return true if element is found
+	 */
+	public boolean isElementFound(By by) {
+		return isElementFound(by, getExplicitWaitInSeconds());
 	}
 }

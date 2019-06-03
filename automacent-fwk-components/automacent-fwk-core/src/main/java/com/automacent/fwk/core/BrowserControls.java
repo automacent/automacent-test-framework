@@ -5,6 +5,7 @@ import java.util.Set;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.Assert;
 
 import com.automacent.fwk.annotations.Step;
 import com.automacent.fwk.utils.ThreadUtils;
@@ -21,8 +22,8 @@ public abstract class BrowserControls {
 
 	protected WebDriver driver;
 
-	public BrowserControls(WebDriver driver) {
-		this.driver = driver;
+	public BrowserControls() {
+		this.driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
 	}
 
 	/**
@@ -46,6 +47,24 @@ public abstract class BrowserControls {
 	@Step
 	public void switchToWindow(String windowHandle) {
 		driver.switchTo().window(windowHandle);
+	}
+
+	/**
+	 * Switch to window specified by the index
+	 * 
+	 * @param index
+	 */
+	@Step
+	public void switchToWindow(int index) {
+		Set<String> windowHandles = driver.getWindowHandles();
+		Assert.assertTrue(windowHandles.size() > index, String.format(
+				"The number of window handles %s does not match the provided index %s", windowHandles.size(), index));
+		int count = 0;
+		for (String windowHandle : windowHandles)
+			if (count++ == index) {
+				driver.switchTo().window(windowHandle);
+				break;
+			}
 	}
 
 	/**

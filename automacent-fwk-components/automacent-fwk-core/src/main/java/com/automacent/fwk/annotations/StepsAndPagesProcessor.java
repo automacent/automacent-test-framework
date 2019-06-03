@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
-
-import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
 
@@ -28,9 +24,11 @@ public class StepsAndPagesProcessor {
 	}
 
 	/**
-	 * Process all the {@link Pages} / {@link Steps} annotation present in th
+	 * Process all the {@link Pages} / {@link Steps} annotation present in the
 	 * provided obj including super classes and initialize them based upon the
-	 * provided annotationClass paremeter
+	 * provided annotationClass paremeter. If the provided object is annotated with
+	 * {@link Steps} the method is called recursively to initiaize the {@link Pages}
+	 * in the Step cass
 	 * 
 	 * @param obj
 	 *            Instance of class in which {@link Pages} / {@link Steps}
@@ -39,7 +37,8 @@ public class StepsAndPagesProcessor {
 	 *            Type of annotation to be processed [{@link Pages} / {@link Steps}]
 	 */
 	public static void processAnnotation(Object obj, Class<?> annotationClass) {
-		_logger.debug(String.format("Initializing @Pages for Step class %s", obj.getClass().getName()));
+		_logger.debug(
+				String.format("Initializing %s in %s", annotationClass.getSimpleName(), obj.getClass().getName()));
 
 		Class<?> objClass = obj.getClass();
 		List<Class<?>> objClassList = new ArrayList<>();
@@ -49,57 +48,22 @@ public class StepsAndPagesProcessor {
 		}
 		Collections.reverse(objClassList);
 
-		for (Class<?> Objclass : objClassList)
-			for (Field field : Objclass.getClass().getDeclaredFields())
+		for (Class<?> clazz : objClassList)
+			for (Field field : clazz.getDeclaredFields())
 				for (Annotation annotation : field.getAnnotations())
-					if (annotation.annotationType() == annotationClass)
-						if (annotationClass.equals(Pages.class))
-							initializePageClasses(obj, field);
-						else if (annotationClass.equals(Steps.class))
-							initializeStepClasses(obj, field);
-	}
+					if (annotation.annotationType().equals(annotationClass)) {
+						field.setAccessible(true);
+						try {
+							Object newObject = field.getType().getConstructor().newInstance();
+							if (annotationClass.equals(Steps.class))
+								processAnnotation(field.getType().cast(newObject), Pages.class);
+							field.set(obj, newObject);
+						} catch (NoSuchMethodException | InstantiationException | IllegalAccessException
+								| IllegalArgumentException | InvocationTargetException | SecurityException e) {
+							throw new SetupFailedFatalException(
+									String.format("Error in initializing Page class %s", field.getType().getName()), e);
+						}
+					}
 
-	/**
-	 * This method initializes Page class field which are annotated with
-	 * {@link Pages}
-	 * 
-	 * @param obj
-	 *            Instance of class in which {@link Pages} annotations are used
-	 * @param field
-	 *            Page class field
-	 */
-	private static void initializePageClasses(Object obj, Field field) {
-		field.setAccessible(true);
-		try {
-			Object newObject = PageFactory.initElements(
-					BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver(),
-					field.getType());
-			field.set(obj, newObject);
-		} catch (IllegalAccessException | IllegalArgumentException | SecurityException e) {
-			throw new SetupFailedFatalException(String.format("Error in initializing Page class %s", field.getType().getName()),e);
-		}
-	}
-
-	/**
-	 * This method initializes Step class filed which are annotated with
-	 * {@link Steps}
-	 * 
-	 * @param obj
-	 *            Instance of class in which {@link Steps} annotations are used
-	 * @param field
-	 *            Step class field
-	 */
-	private static void initializeStepClasses(Object obj, Field field) {
-		field.setAccessible(true);
-		try {
-			Object newObj = field.getType().getConstructor(WebDriver.class)
-					.newInstance(BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver());
-			processAnnotation(field.getType().cast(newObj), Pages.class);
-			field.set(obj, newObj);
-		} catch (NoSuchMethodException | InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException | SecurityException e) {
-			throw new SetupFailedFatalException(
-					String.format("Error in initializing Step class %s", field.getType().getName()), e);
-		}
 	}
 }
