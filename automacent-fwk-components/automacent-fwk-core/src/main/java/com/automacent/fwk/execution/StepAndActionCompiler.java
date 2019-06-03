@@ -62,7 +62,7 @@ public class StepAndActionCompiler {
 				throw new ActionExecutionException(methodNameWithArguments, e);
 		}
 
-		ExecutionLogManager.logMethodEnd(point, MethodType.ACTION, new Date().getTime() - startTime);
+		ExecutionLogManager.logMethodEnd(point, MethodType.ACTION, new Date().getTime() - startTime, result);
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.AFTER_ACTION))
 			ReportingTools.takeScreenshot(ScreenshotMode.AFTER_ACTION.name());
@@ -100,7 +100,7 @@ public class StepAndActionCompiler {
 			throw new StepExecutionException(methodNameWithArguments, e);
 		}
 
-		ExecutionLogManager.logMethodEnd(point, MethodType.STEP, new Date().getTime() - startTime);
+		ExecutionLogManager.logMethodEnd(point, MethodType.STEP, new Date().getTime() - startTime, result);
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.AFTER_STEP))
 			ReportingTools.takeScreenshot(ScreenshotMode.AFTER_STEP.name());

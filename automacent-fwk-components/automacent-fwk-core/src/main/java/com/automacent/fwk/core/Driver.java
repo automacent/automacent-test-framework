@@ -140,8 +140,9 @@ public class Driver {
 		File givenFile = new File(driverServerLocation);
 		if (!givenFile.exists()) {
 			try {
-				_logger.info(String.format("Provided driver file, %s, does not exist. "
-						+ "Framework will extract and use the default driver executable", driverServerLocation));
+				_logger.info(String.format("Provided driver file, %s, does not exist for %s. "
+						+ "Framework will extract and use the default driver executable", driverServerLocation,
+						driverName));
 				byte[] buffer = new byte[4096];
 				String parent = "target" + File.separator + "driver";
 
@@ -155,7 +156,7 @@ public class Driver {
 
 				FileOutputStream output = new FileOutputStream(driverServer);
 				InputStream input = Driver.class.getClassLoader()
-						.getResourceAsStream("drivers" + File.separator + driverName);
+						.getResourceAsStream("drivers/" + driverName);
 				int bytesRead = input.read(buffer);
 				while (bytesRead != -1) {
 					output.write(buffer, 0, bytesRead);

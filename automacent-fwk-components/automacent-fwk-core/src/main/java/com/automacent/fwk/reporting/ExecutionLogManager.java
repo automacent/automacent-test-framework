@@ -59,7 +59,13 @@ public class ExecutionLogManager {
 	 * @param duration
 	 *            Execution duration for method
 	 */
-	public static void logMethodEnd(ProceedingJoinPoint point, MethodType methodType, long duration) {
+	public static void logMethodEnd(ProceedingJoinPoint point, MethodType methodType, long duration, Object result) {
+		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
+		if (methodName.startsWith("is"))
+			Logger.getLogger(MethodSignature.class.cast(point.getSignature()).getDeclaringType())
+					.info(String.format("%s %s",
+							LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
+							result != null ? result.toString() : ""));
 	}
 
 	/**
@@ -73,7 +79,7 @@ public class ExecutionLogManager {
 	public static void logTestStart(ProceedingJoinPoint point, MethodType methodType) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
 		Logger.getLogger(MethodSignature.class.cast(point.getSignature()).getDeclaringType())
-				.info(
+				.infoHeading(
 						String.format("%s%s",
 								LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
 								AspectJUtils.getArguments(point)));

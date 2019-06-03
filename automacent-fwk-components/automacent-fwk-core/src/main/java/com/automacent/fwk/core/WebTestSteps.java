@@ -1,6 +1,6 @@
 package com.automacent.fwk.core;
 
-import org.openqa.selenium.WebDriver;
+import java.util.regex.Pattern;
 
 /**
  * Base class for Web Test Step classes. All Step classes must extend this
@@ -13,8 +13,6 @@ import org.openqa.selenium.WebDriver;
  */
 public class WebTestSteps extends BrowserControls {
 
-	public WebTestSteps(WebDriver driver) {
-		super(driver);
-	}
+	protected static final Pattern FIND_HTML_TAGS = Pattern.compile("<[^>]*>");
 
 }
