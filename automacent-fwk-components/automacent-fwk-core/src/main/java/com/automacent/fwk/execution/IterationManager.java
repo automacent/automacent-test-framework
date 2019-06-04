@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import com.automacent.fwk.annotations.Repeat;
 import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.enums.RepeatMode;
+import com.automacent.fwk.exceptions.TestDurationExceededException;
 import com.automacent.fwk.reporting.ExecutionLogManager;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.reporting.ReportingTools;
@@ -204,7 +205,7 @@ public class IterationManager {
 		if (testDurationInMilliSeconds > elapsedTime) {
 			return false;
 		}
-		_logger.debug("Elapsed time has exceeded test duration");
+		_logger.debug("Elapsed time has exceeded set test duration");
 		return true;
 	}
 
@@ -227,5 +228,19 @@ public class IterationManager {
 			_logger.info("Test will sleep for " + sleepTimeInSeconds + " seconds untill start of next iteration");
 			ThreadUtils.sleepFor(sleepTimeInSeconds);
 		}
+	}
+
+	/**
+	 * Check if test duration is exceeded. This method comes into picture when the
+	 * method under execution is a test and {@link RepeatMode} is
+	 * {@link RepeatMode#TEST_DURATION}
+	 * 
+	 * throws TestDurationExceededException
+	 */
+	public void checkIfTestDurationExceeded() {
+		if (BaseTest.getTestObject().getRepeatMode() == RepeatMode.TEST_DURATION
+				&& IterationManager.getManager().isTestDurationElapsed()
+				&& ExceptionManager.isMethodUnderExecutionATest())
+			throw new TestDurationExceededException();
 	}
 }
