@@ -10,11 +10,9 @@ import com.automacent.fwk.annotations.Action;
 import com.automacent.fwk.annotations.Step;
 import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.enums.MethodType;
-import com.automacent.fwk.enums.RepeatMode;
 import com.automacent.fwk.enums.ScreenshotMode;
 import com.automacent.fwk.exceptions.ActionExecutionException;
 import com.automacent.fwk.exceptions.StepExecutionException;
-import com.automacent.fwk.exceptions.TestDurationExceededException;
 import com.automacent.fwk.reporting.ExecutionLogManager;
 import com.automacent.fwk.reporting.ReportingTools;
 import com.automacent.fwk.utils.AspectJUtils;
@@ -67,10 +65,7 @@ public class StepAndActionCompiler {
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.AFTER_ACTION))
 			ReportingTools.takeScreenshot(ScreenshotMode.AFTER_ACTION.name());
 
-		if (BaseTest.getTestObject().getRepeatMode() == RepeatMode.TEST_DURATION
-				&& IterationManager.getManager().isTestDurationElapsed()
-				&& ExceptionManager.isMethodUnderExecutionATest())
-			throw new TestDurationExceededException();
+		IterationManager.getManager().checkIfTestDurationExceeded();
 
 		return result;
 
