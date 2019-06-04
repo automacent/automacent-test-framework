@@ -18,6 +18,7 @@ import com.automacent.fwk.enums.RepeatMode;
 import com.automacent.fwk.enums.RetryMode;
 import com.automacent.fwk.exceptions.IterationFailedException;
 import com.automacent.fwk.exceptions.MainTestInvocationFailedException;
+import com.automacent.fwk.exceptions.TestDurationExceededException;
 import com.automacent.fwk.reporting.ExecutionLogManager;
 import com.automacent.fwk.reporting.Logger;
 
@@ -141,7 +142,11 @@ public class TestNgCompiler {
 					IterationManager.getManager().setExecuteRecoveryScenarios(true);
 				} finally {
 					IterationManager.getManager().stopIteration();
-					IterationManager.getManager().sleepTillNextIteration();
+					try {
+						IterationManager.getManager().sleepTillNextIteration();
+					} catch (TestDurationExceededException e) {
+						_logger.warn("Test Duration exceeding during sleep till next iteration. Iteration will exit.");
+					}
 				}
 			}
 
