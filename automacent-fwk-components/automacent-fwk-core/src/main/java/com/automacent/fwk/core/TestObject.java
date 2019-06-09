@@ -404,4 +404,27 @@ public class TestObject {
 	public void setRecoveryManager(RecoveryManager recoveryManager) {
 		this.recoveryManager = recoveryManager;
 	}
+
+	// Base URL -----------------------------------------------------
+
+	private String baseUrl;
+
+	/**
+	 * Get the base URL String
+	 * 
+	 * @return base URL String
+	 */
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	/**
+	 * Set base URL String
+	 * 
+	 * @param baseUrl
+	 *            Base URL String
+	 */
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
 }

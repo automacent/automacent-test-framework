@@ -240,4 +240,11 @@ public class DriverManager {
 		driverMap.remove(browserId);
 		driver.terminateDriver();
 	}
+
+	/**
+	 * Open the set Base URL parameter
+	 */
+	public void openBaseUrl() {
+		getActiveDriver().getWebDriver().get(BaseTest.getTestObject().getBaseUrl());
+	}
 }
