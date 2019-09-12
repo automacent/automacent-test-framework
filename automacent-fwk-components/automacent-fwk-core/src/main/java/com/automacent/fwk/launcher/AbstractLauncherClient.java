@@ -28,11 +28,13 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 	private static final Logger _logger = Logger.getLogger(AbstractLauncherClient.class);
 
 	protected String host;
+	protected String identityHost;
 	private String username;
 	private String password;
 
-	public AbstractLauncherClient(String host, String username, String password) {
+	public AbstractLauncherClient(StringThe  host, String identityHost, String username, String password) {
 		this.host = host;
+		this.identityHost = identityHost;
 		this.username = username;
 		this.password = password;
 	}
@@ -75,7 +77,7 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 	 * @return Password Grand URL
 	 */
 	public String getPasswordGrantURL() {
-		return String.format(PASSWORD_GRANT_URL, host, username, password);
+		return String.format(PASSWORD_GRANT_URL, identityHost, username, password);
 	}
 
 	/*
