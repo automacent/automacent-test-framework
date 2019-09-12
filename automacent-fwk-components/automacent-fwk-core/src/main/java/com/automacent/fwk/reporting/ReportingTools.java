@@ -75,12 +75,12 @@ public class ReportingTools {
 
 		int iteration = IterationManager.getManager().getIteration();
 
-		String screenShotDirectory = "Screenshots" + File.separator + "itr_" + BaseTest.getTestObject().getTestName()
+		String screenShotDirectory = "screenshots" + File.separator + "itr_" + BaseTest.getTestObject().getTestName()
 				+ "_" + iteration;
-		String screenShotDirectoryPath = System.getProperty("test.screenshot.dir") + File.separator
+		String screenShotDirectoryPath = System.getProperty("automacent.reportdir") + File.separator
 				+ screenShotDirectory;
 		String screenShotName = "scr" + (++screenshotNumber) + ".png";
-		String href = File.separator + screenShotDirectory + File.separator + screenShotName;
+		String href = screenShotDirectory + File.separator + screenShotName;
 		String screenShotFile = screenShotDirectoryPath + File.separator + screenShotName;
 
 		if (screenshotType == ScreenshotType.BROWSER_SCREENSHOT)
@@ -132,7 +132,7 @@ public class ReportingTools {
 			Reporter.log("<div style='color: " + Color.BLACK.getColorValue() + "; font-size: small; "
 					+ Css.UNDERLINE_NONE.getCssValue() + "'>" + DateUtils.getDate() + " : "
 					+ LoggingUtils.getSpaceForNestingLevel(LoggingUtils.getNestingLevelOfLogs() + 1, LogType.HTML)
-					+ "<a href='.." + href + "'><img src='.." + href + "' style='height:25%; width:25%;' alt='itr_"
+					+ "<a href='" + href + "'><img src='" + href + "' style='height:25%; width:25%;' alt='itr_"
 					+ BaseTest.getTestObject().getTestName() + "_" + IterationManager.getManager().getIteration()
 					+ "'/></a></div>");
 		}
@@ -275,7 +275,7 @@ public class ReportingTools {
 		if (BaseTest.getTestObject().getScreenshotModeForIteration().equals(ScreenshotModeForIteration.LAST_ITERATION)
 				&& !IterationManager.getManager().isIterationFailed()) {
 			int iteration = IterationManager.getManager().getIteration();
-			String screenShotDirectoryPath = System.getProperty("test.screenshot.dir") + File.separator + "Screenshots"
+			String screenShotDirectoryPath = System.getProperty("automacent.reportdir") + File.separator + "screenshots"
 					+ File.separator + "itr_" + BaseTest.getTestObject().getTestName() + "_" + iteration;
 
 			if (iteration != 0)
@@ -357,7 +357,7 @@ public class ReportingTools {
 	public static void captureSeleniumLogs1(String logType) {
 		try {
 			if (BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver() != null) {
-				File parentDir = new File(System.getProperty("test.screenshot.dir") + File.separator + "logs");
+				File parentDir = new File(System.getProperty("automacent.reportdir") + File.separator + "logs");
 				if (!parentDir.exists())
 					parentDir.mkdirs();
 
