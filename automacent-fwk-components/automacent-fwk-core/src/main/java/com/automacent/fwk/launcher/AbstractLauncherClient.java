@@ -32,7 +32,7 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 	private String username;
 	private String password;
 
-	public AbstractLauncherClient(StringThe  host, String identityHost, String username, String password) {
+	public AbstractLauncherClient(String host, String identityHost, String username, String password) {
 		this.host = host;
 		this.identityHost = identityHost;
 		this.username = username;
