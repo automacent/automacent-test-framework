@@ -11,6 +11,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -25,16 +26,93 @@ import com.automacent.fwk.selenium.CustomExpectedConditions;
  * 
  * @author sighil.sivadas
  */
-public class PageObject implements IPageObject {
+public abstract class PageObject implements IPageObject {
 
 	private static Logger _logger = Logger.getLogger(PageObject.class);
 
 	protected WebDriver driver;
 
+	private String parentContainerXPATH;
+
+	/**
+	 * Get Parent Container XPATH
+	 * 
+	 * @return Parent Container XPATH String
+	 */
+	public String getParentContainerXPATH() {
+		return parentContainerXPATH;
+	}
+
+	private WebElement parentContainer;
+
+	public WebElement getParentContainer() {
+		return parentContainer;
+	}
+
+	/**
+	 * Initialize page objects using {@link WebDriver}
+	 */
 	public PageObject() {
 		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
+		PageFactory.initElements(field -> {
+			return new DefaultElementLocator(driver, field);
+		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
-		PageFactory.initElements(driver, this);
+	}
+
+	/**
+	 * Initialize page objects using the provided parent container XPATH. When
+	 * invoking this constructor, the provided container should be visible in the
+	 * Page
+	 * 
+	 * @param parentContainerXPATH
+	 *            XPATH to identify the parent container
+	 */
+	public PageObject(String parentContainerXPATH) {
+		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
+		PageFactory.initElements(field -> {
+			return new DefaultElementLocator(driver.findElement(By.xpath(parentContainerXPATH)), field);
+		}, this);
+		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
+		this.parentContainerXPATH = parentContainerXPATH;
+		this.parentContainer = driver.findElement(By.xpath(parentContainerXPATH));
+	}
+
+	/**
+	 * Initialize page objects using the provided parent container element. When
+	 * invoking this constructor, the provided container should be visible in the
+	 * Page
+	 * 
+	 * @param parentContainer
+	 *            Parent Container element
+	 */
+	public PageObject(WebElement parentContainer) {
+		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
+		PageFactory.initElements(field -> {
+			return new DefaultElementLocator(parentContainer, field);
+		}, this);
+		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
+		this.parentContainer = parentContainer;
+	}
+
+	/**
+	 * Initialize page objects using the provided parent container identifier. When
+	 * invoking this constructor, the provided page container should be visible in
+	 * the Page
+	 * 
+	 * @param superContainer
+	 *            Super Parent Container
+	 * @param parentContainerXPATH
+	 *            XPATH identifier to the parent container element
+	 */
+	public PageObject(WebElement superContainer, String parentContainerXPATH) {
+		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
+		PageFactory.initElements(field -> {
+			return new DefaultElementLocator(superContainer.findElement(By.xpath(parentContainerXPATH)), field);
+		}, this);
+		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
+		this.parentContainerXPATH = parentContainerXPATH;
+		this.parentContainer = superContainer.findElement(By.xpath(parentContainerXPATH));
 	}
 
 	/**
@@ -126,7 +204,7 @@ public class PageObject implements IPageObject {
 	 * 
 	 * @return @link Actions} object
 	 */
-	public Actions mouse() {
+	protected Actions mouse() {
 		return new Actions(driver);
 	}
 
@@ -165,7 +243,7 @@ public class PageObject implements IPageObject {
 	 *            y-axis to move
 	 */
 	@com.automacent.fwk.annotations.Action
-	public void moveRelativeToElementAndClick(WebElement element, int x, int y) {
+	protected void moveRelativeToElementAndClick(WebElement element, int x, int y) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(element).moveByOffset(x, y);
 		actions.perform();
@@ -186,6 +264,16 @@ public class PageObject implements IPageObject {
 	 */
 	protected WebDriverWait explicitWait(int explicitWaitInSeconds) {
 		return new WebDriverWait(driver, explicitWaitInSeconds);
+	}
+
+	/**
+	 * Get the {@link WebDriverWait} (explicit wait) object with the set timeout in
+	 * seconds value
+	 * 
+	 * @return {@link WebDriverWait} object
+	 */
+	protected WebDriverWait explicitWait() {
+		return new WebDriverWait(driver, getExplicitWaitInSeconds());
 	}
 
 	/**
@@ -245,6 +333,30 @@ public class PageObject implements IPageObject {
 	}
 
 	/**
+	 * Wait untill Invisibility of Element defined {@link By}
+	 * 
+	 * @param by
+	 *            {@link By}
+	 * @return true if invisible
+	 */
+	protected boolean waitUntillInvisibilityOfElement(By by) {
+		setImplicitWaitToOneSecond();
+		boolean returnValue = false;
+		try {
+			returnValue = explicitWait(explicitWaitInSeconds)
+					.until(ExpectedConditions.invisibilityOfElementLocated(by));
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			_logger.debug(String.format("Setting implicit wait to %s seconds",
+					BaseTest.getTestObject().getTimeoutInSeconds()));
+			driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
+					TimeUnit.SECONDS);
+		}
+		return returnValue;
+	}
+
+	/**
 	 * Override the Implicit wait and enforce the explicit wait for checking whether
 	 * the {@link WebElement} is present in the DOM
 	 *
@@ -254,7 +366,7 @@ public class PageObject implements IPageObject {
 	 *            Explicit wait timeout in seconds
 	 * @return true if element is found
 	 */
-	public boolean isElementFound(WebElement element, int explicitWaitInSeconds) {
+	protected boolean isElementFound(WebElement element, int explicitWaitInSeconds) {
 		boolean isFound = false;
 		try {
 			WebElement returnElement = waitUntil(ExpectedCondition.PROXY_ELEMENT_LOCATED, null, element,
@@ -276,7 +388,7 @@ public class PageObject implements IPageObject {
 	 *            Explicit wait timeout in seconds
 	 * @return true if element is found
 	 */
-	public boolean isElementFound(By by, int explicitWaitInSeconds) {
+	protected boolean isElementFound(By by, int explicitWaitInSeconds) {
 		boolean isFound = false;
 		try {
 			WebElement returnElement = waitUntil(ExpectedCondition.PRESENCE_OF_ELEMENT_LOCATED_BY, by, null,
@@ -296,7 +408,7 @@ public class PageObject implements IPageObject {
 	 *            {@link WebElement} object
 	 * @return true if element is found
 	 */
-	public boolean isElementFound(WebElement element) {
+	protected boolean isElementFound(WebElement element) {
 		return isElementFound(element, getExplicitWaitInSeconds());
 	}
 
@@ -308,7 +420,26 @@ public class PageObject implements IPageObject {
 	 *            {@link By} object
 	 * @return true if element is found
 	 */
-	public boolean isElementFound(By by) {
+	protected boolean isElementFound(By by) {
 		return isElementFound(by, getExplicitWaitInSeconds());
+	}
+
+	public abstract PageValidation pageValidation();
+
+	public abstract class PageValidation {
+		protected String title;
+
+		public PageValidation() {
+		}
+
+		public PageValidation(String title) {
+			this.title = title;
+		}
+
+		public abstract void validate();
+
+		public void validate(String... parameters) {
+
+		};
 	}
 }
