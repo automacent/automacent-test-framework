@@ -3,7 +3,6 @@ package com.automacent.fwk.recovery;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.automacent.fwk.annotations.Steps;
 import com.automacent.fwk.annotations.StepsAndPagesProcessor;
 import com.automacent.fwk.exceptions.RecoveryFailedException;
 import com.automacent.fwk.execution.IterationManager;
@@ -74,7 +73,7 @@ public class RecoveryManager {
 				_logger.info(String.format("Starting recovery steps specified in %s", recoveryClass.getName()));
 				try {
 					WebRecovery recovery = (WebRecovery) recoveryClass.newInstance();
-					StepsAndPagesProcessor.processAnnotation(recovery, Steps.class);
+					StepsAndPagesProcessor.processAnnotation(recovery);
 					recovery.checkRecoveryParameters();
 					recovery.recover();
 				} catch (Throwable e) {

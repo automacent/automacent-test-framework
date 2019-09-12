@@ -209,7 +209,7 @@ public class DriverManager {
 	 */
 	public void setActiveDriver(BrowserId browserId, Object testClassInstance) {
 		this.activeDriver = getDriver(browserId);
-		StepsAndPagesProcessor.processAnnotation(testClassInstance, Steps.class);
+		StepsAndPagesProcessor.processAnnotation(testClassInstance);
 	}
 
 	/**
