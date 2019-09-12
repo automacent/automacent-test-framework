@@ -78,7 +78,7 @@ public abstract class BaseTestSelenium extends BaseTest {
 			@Optional("CHROME") String browser,
 			@Optional("BROWSER_SCREENSHOT") String screenshotType,
 			@Optional("ON_FAILURE") String screenshotMode,
-			@Optional("EACH_ITERATION") String screenshotModeForIteration,
+			@Optional("LAST_ITERATION") String screenshotModeForIteration,
 			String baseUrl,
 			ITestContext testContext) {
 		TestObject testObject = BaseTest.getTestObject();
