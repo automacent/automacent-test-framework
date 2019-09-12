@@ -168,7 +168,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 *            Duration of execution of method
 	 */
 	public void logSuccess(String methodName, MethodType methodType, int iteration, long duration) {
-		if (isEnabled) {
+		if (isEnabled && !methodName.toLowerCase().startsWith("automacent")) {
 			for (ILauncherClient launcherClient : getLauncherClients()) {
 				launcherClient.logSuccess(methodName, methodType, iteration, duration);
 			}
@@ -190,7 +190,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 *            Duration of execution of method
 	 */
 	public void logFailure(String methodName, MethodType methodType, int iteration, Throwable e, long duration) {
-		if (isEnabled) {
+		if (isEnabled && !methodName.toLowerCase().startsWith("automacent")) {
 			for (ILauncherClient launcherClient : getLauncherClients()) {
 				launcherClient.logFailure(methodName, methodType, iteration, e, duration);
 			}
