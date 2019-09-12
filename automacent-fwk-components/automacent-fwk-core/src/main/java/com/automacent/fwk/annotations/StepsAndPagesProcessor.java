@@ -25,20 +25,16 @@ public class StepsAndPagesProcessor {
 
 	/**
 	 * Process all the {@link Pages} / {@link Steps} annotation present in the
-	 * provided obj including super classes and initialize them based upon the
-	 * provided annotationClass paremeter. If the provided object is annotated with
-	 * {@link Steps} the method is called recursively to initiaize the {@link Pages}
-	 * in the Step cass
+	 * provided obj including super classes and initialize them. This method will
+	 * recursievly process all the annotations
 	 * 
 	 * @param obj
 	 *            Instance of class in which {@link Pages} / {@link Steps}
 	 *            annotations are used
-	 * @param annotationClass
-	 *            Type of annotation to be processed [{@link Pages} / {@link Steps}]
 	 */
-	public static void processAnnotation(Object obj, Class<?> annotationClass) {
+	public static void processAnnotation(Object obj) {
 		_logger.debug(
-				String.format("Initializing %s in %s", annotationClass.getSimpleName(), obj.getClass().getName()));
+				String.format("Initializing %s", obj.getClass().getName()));
 
 		Class<?> objClass = obj.getClass();
 		List<Class<?>> objClassList = new ArrayList<>();
@@ -51,12 +47,12 @@ public class StepsAndPagesProcessor {
 		for (Class<?> clazz : objClassList)
 			for (Field field : clazz.getDeclaredFields())
 				for (Annotation annotation : field.getAnnotations())
-					if (annotation.annotationType().equals(annotationClass)) {
+					if (annotation.annotationType().equals(Steps.class)
+							|| annotation.annotationType().equals(Pages.class)) {
 						field.setAccessible(true);
 						try {
 							Object newObject = field.getType().getConstructor().newInstance();
-							if (annotationClass.equals(Steps.class))
-								processAnnotation(field.getType().cast(newObject), Pages.class);
+							processAnnotation(field.getType().cast(newObject));
 							field.set(obj, newObject);
 						} catch (NoSuchMethodException | InstantiationException | IllegalAccessException
 								| IllegalArgumentException | InvocationTargetException | SecurityException e) {
