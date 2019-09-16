@@ -57,10 +57,13 @@ public abstract class BaseTest {
 	 * @param launcherClients
 	 *            Comma seperated list of fully qualified launcher client class
 	 *            names
+	 * @param runName
+	 * @param batchNumber
 	 */
 	@BeforeSuite
-	@Parameters({ "launcherClients" })
-	public void automacentInternalSetLauncherClients(@Optional("") String launcherClients) {
+	@Parameters({ "launcherClients", "runName", "batchNumber" })
+	public void automacentInternalSetLauncherClients(@Optional("") String launcherClients, @Optional("") String runName,
+			@Optional("") String batchNumber) {
 		LauncherClientManager.getManager().addLauncherClientClasses(launcherClients);
 	}
 

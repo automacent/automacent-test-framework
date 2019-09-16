@@ -164,9 +164,9 @@ class Executor {
 	private Map<String, String> getGlobalParametersFromEnvironmentParameters() {
 		Map<String, String> globalParameters = new HashMap<>();
 
+		globalParameters.put("launcherClients", System.getProperty("automacent.launcherClients", ""));
 		globalParameters.put("runName", System.getProperty("automacent.runName", ""));
 		globalParameters.put("batchNumber", System.getProperty("automacent.batchNumber", ""));
-		globalParameters.put("launcherClients", System.getProperty("automacent.launcherClients", ""));
 
 		globalParameters.put("retryMode", System.getProperty("automacent.retryMode", "OFF"));
 		globalParameters.put("recoveryClasses", System.getProperty("automacent.recoveryClasses", ""));
