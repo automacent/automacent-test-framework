@@ -29,8 +29,7 @@ public abstract class BrowserControls {
 	/**
 	 * Open the URL in browser window
 	 * 
-	 * @param url
-	 *            URL of the application to load
+	 * @param url URL of the application to load
 	 */
 	@Step
 	public void openUrl(String url) {
@@ -83,6 +82,31 @@ public abstract class BrowserControls {
 			switchToWindow(windowHandles.iterator().next());
 		}
 		ThreadUtils.sleepFor(5);
+	}
+
+	/**
+	 * Close all the child windows and then switch to the parent window
+	 */
+	@Step
+	public void closeAllChildWindows() {
+		Set<String> windowHandles = driver.getWindowHandles();
+		int count = 0;
+		for (String windowHandle : windowHandles)
+			if (count++ != 0) {
+				driver.switchTo().window(windowHandle);
+				driver.close();
+			}
+		switchToParentWindow();
+	}
+
+	/**
+	 * Get the open window count
+	 * 
+	 * @return Window count
+	 */
+	@Step
+	public int getWindowCount() {
+		return driver.getWindowHandles().size();
 	}
 
 	/**
