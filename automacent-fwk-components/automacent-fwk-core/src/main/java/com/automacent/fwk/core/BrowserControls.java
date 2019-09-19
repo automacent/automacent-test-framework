@@ -88,6 +88,31 @@ public abstract class BrowserControls {
 	}
 
 	/**
+	 * Close all the child windows and then switch to the parent window
+	 */
+	@Step
+	public void closeAllChildWindows() {
+		Set<String> windowHandles = driver.getWindowHandles();
+		int count = 0;
+		for (String windowHandle : windowHandles)
+			if (count++ != 0) {
+				driver.switchTo().window(windowHandle);
+				driver.close();
+			}
+		switchToParentWindow();
+	}
+
+	/**
+	 * Get the open window count
+	 * 
+	 * @return Window count
+	 */
+	@Step
+	public int getWindowCount() {
+		return driver.getWindowHandles().size();
+	}
+
+	/**
 	 * Open a new window. This uses the keyboard short cut CTL+n
 	 */
 	@Step
