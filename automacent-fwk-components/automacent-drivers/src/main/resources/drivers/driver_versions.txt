@@ -1,3 +1,3 @@
-ChromeDriver 75.0.3770.8 (681f24ea911fe754973dda2fdc6d2a2e159dd300-refs/branch-heads/3770@{#40}) (32-bit)
+ChromeDriver 78.0.3904.11 (32-bit)
 IEDriverServer.exe 3.141.59.0 (32-bit)
 geckodriver 0.24.0 (32-bit)
