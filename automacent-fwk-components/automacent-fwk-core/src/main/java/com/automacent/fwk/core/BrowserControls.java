@@ -32,7 +32,8 @@ public abstract class BrowserControls {
 	/**
 	 * Open the URL in browser window
 	 * 
-	 * @param url URL of the application to load
+	 * @param url
+	 *            URL of the application to load
 	 */
 	@Step
 	public void openUrl(String url) {
@@ -133,7 +134,8 @@ public abstract class BrowserControls {
 	 * Check if a new window is open. This method assumes that the new window is of
 	 * index 1. [Index starts from 0].
 	 * 
-	 * @param timeoutInSeconds Time to wait for new window
+	 * @param timeoutInSeconds
+	 *            Time to wait for new window
 	 * @return true if found
 	 */
 	@Step
@@ -150,6 +152,15 @@ public abstract class BrowserControls {
 		}
 		return isWindowOpen;
 	}
+
+	// Frame ----------------------------------------------
+
+	@Step
+	public void switchToDefaultContent() {
+		driver.switchTo().defaultContent();
+	}
+
+	// ----------------------------------------------------
 
 	/**
 	 * Click back button of the browser.
