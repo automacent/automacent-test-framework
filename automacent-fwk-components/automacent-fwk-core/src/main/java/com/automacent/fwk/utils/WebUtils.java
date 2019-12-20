@@ -22,16 +22,18 @@ public class WebUtils {
 	 *            WebDriver instance
 	 */
 	public static void handleCertificateError(WebDriver driver) {
-		String PageTitle = driver.getTitle();
-		while (PageTitle.equals("Certificate Error: Navigation Blocked")) {
+		String pageTitle = driver.getTitle();
+		while (pageTitle.equals("Certificate Error: Navigation Blocked")) {
 			driver.navigate().to("javascript:document.getElementById('overridelink').click()");
-			PageTitle = driver.getTitle();
+			pageTitle = driver.getTitle();
 			_logger.info("Certificate Error found and handled");
 		}
 
-		while (PageTitle.equals("Privacy error")) {
+		while (pageTitle.equals("Privacy error")) {
 			driver.findElement(By.id("details-button")).click();
 			driver.findElement(By.id("proceed-link")).click();
+			pageTitle = driver.getTitle();
+			_logger.info("Certificate Error found and handled");
 		}
 	}
 }
