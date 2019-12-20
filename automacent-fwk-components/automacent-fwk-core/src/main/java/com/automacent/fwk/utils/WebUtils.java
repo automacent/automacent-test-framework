@@ -1,5 +1,6 @@
 package com.automacent.fwk.utils;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.automacent.fwk.reporting.Logger;
@@ -26,6 +27,11 @@ public class WebUtils {
 			driver.navigate().to("javascript:document.getElementById('overridelink').click()");
 			PageTitle = driver.getTitle();
 			_logger.info("Certificate Error found and handled");
+		}
+
+		while (PageTitle.equals("Privacy error")) {
+			driver.findElement(By.id("details-button")).click();
+			driver.findElement(By.id("proceed-link")).click();
 		}
 	}
 }
