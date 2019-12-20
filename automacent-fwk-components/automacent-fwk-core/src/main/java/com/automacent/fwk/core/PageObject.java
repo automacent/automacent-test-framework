@@ -374,6 +374,7 @@ public abstract class PageObject implements IPageObject {
 			if (returnElement != null)
 				isFound = true;
 		} catch (TimeoutException | NoSuchElementException e) {
+			_logger.debug(String.format("Element not found. %s", e.getMessage()));
 		}
 		return isFound;
 	}
@@ -396,6 +397,7 @@ public abstract class PageObject implements IPageObject {
 			if (returnElement != null)
 				isFound = true;
 		} catch (TimeoutException | NoSuchElementException e) {
+			_logger.debug(String.format("Element not found. %s", e.getMessage()));
 		}
 		return isFound;
 	}
