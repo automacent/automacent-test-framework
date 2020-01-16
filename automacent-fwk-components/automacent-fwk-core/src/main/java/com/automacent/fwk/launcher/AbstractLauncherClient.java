@@ -96,7 +96,7 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 	 * @return {@link HttpHeaders} with Basic authentication
 	 */
 	protected HttpHeaders getHeadersWithClientCredentials() {
-		String plainClientCredentials = "my-trusted-client:secret";
+		String plainClientCredentials = "automacent-fwk-client:secret";
 		String base64ClientCredentials = new String(
 				java.util.Base64.getEncoder().encode(plainClientCredentials.getBytes()));
 		HttpHeaders headers = getHeaders();
