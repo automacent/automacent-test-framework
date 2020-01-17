@@ -1,10 +1,13 @@
 package com.automacent.fwk.core;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,6 +16,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.automacent.fwk.enums.ExpectedCondition;
@@ -31,6 +36,8 @@ public abstract class PageObject implements IPageObject {
 	private static Logger _logger = Logger.getLogger(PageObject.class);
 
 	protected WebDriver driver;
+
+	protected SearchContext component;
 
 	private String parentContainerXPATH;
 
@@ -58,6 +65,7 @@ public abstract class PageObject implements IPageObject {
 			return new DefaultElementLocator(driver, field);
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
+		component = driver;
 	}
 
 	/**
@@ -76,6 +84,7 @@ public abstract class PageObject implements IPageObject {
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
 		this.parentContainerXPATH = parentContainerXPATH;
 		this.parentContainer = driver.findElement(By.xpath(parentContainerXPATH));
+		component = parentContainer;
 	}
 
 	/**
@@ -93,6 +102,7 @@ public abstract class PageObject implements IPageObject {
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
 		this.parentContainer = parentContainer;
+		component = parentContainer;
 	}
 
 	/**
@@ -113,6 +123,7 @@ public abstract class PageObject implements IPageObject {
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
 		this.parentContainerXPATH = parentContainerXPATH;
 		this.parentContainer = superContainer.findElement(By.xpath(parentContainerXPATH));
+		component = superContainer;
 	}
 
 	/**
@@ -256,7 +267,8 @@ public abstract class PageObject implements IPageObject {
 	// Explicit wait ------------------------------------------------
 
 	/**
-	 * Get the {@link WebDriverWait} (explicit wait) object
+	 * Get the {@link WebDriverWait} (explicit wait) object with the set timeout in
+	 * seconds value
 	 * 
 	 * @param explicitWaitInSeconds
 	 *            Explicit wait timeout
@@ -267,13 +279,25 @@ public abstract class PageObject implements IPageObject {
 	}
 
 	/**
-	 * Get the {@link WebDriverWait} (explicit wait) object with the set timeout in
-	 * seconds value
+	 * Get the {@link WebDriverWait} (explicit wait) object
 	 * 
 	 * @return {@link WebDriverWait} object
 	 */
 	protected WebDriverWait explicitWait() {
 		return new WebDriverWait(driver, getExplicitWaitInSeconds());
+	}
+
+	/**
+	 * Get the {@link FluentWait} object with the set timeout in seconds value
+	 * 
+	 * @param explicitWaitInSeconds
+	 *            Explicit wait timeout
+	 * @return {@link FluentWait} object
+	 */
+	@SuppressWarnings("deprecation")
+	private Wait<SearchContext> fluentWait(int explicitWaitInSeconds) {
+		return new FluentWait<SearchContext>(component).withTimeout(explicitWaitInSeconds, TimeUnit.SECONDS)
+				.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
 	}
 
 	/**
@@ -309,10 +333,18 @@ public abstract class PageObject implements IPageObject {
 		setImplicitWaitToOneSecond();
 		WebElement returnElement = null;
 		try {
+			long startTime = new Date().getTime();
 			switch (expectedCondition) {
 			case PRESENCE_OF_ELEMENT_LOCATED_BY:
-				returnElement = explicitWait(explicitWaitInSeconds)
-						.until(ExpectedConditions.presenceOfElementLocated(by));
+				returnElement = fluentWait(explicitWaitInSeconds)
+						.until(new Function<SearchContext, WebElement>() {
+							@Override
+							public WebElement apply(SearchContext t) {
+								_logger.trace(String.format("%s seconds spent in fluent Wait to find element %s",
+										(new Date().getTime() - startTime) / 1000, t.toString()));
+								return t.findElement(by);
+							}
+						});
 				break;
 			case PROXY_ELEMENT_LOCATED:
 				returnElement = explicitWait(explicitWaitInSeconds)
