@@ -1,5 +1,6 @@
 package com.automacent.fwk.reporting;
 
+import java.awt.AWTError;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -48,9 +49,18 @@ public class ReportingTools {
 
 	private static final Logger _logger = Logger.getLogger(ReportingTools.class);
 
-	private static Rectangle screenshotFrame = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize().width,
-			Toolkit.getDefaultToolkit().getScreenSize().height - 75);
+	private static Rectangle screenshotFrame;
 
+	static {
+		try {
+			screenshotFrame = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize().width,
+					Toolkit.getDefaultToolkit().getScreenSize().height - 75);
+		} catch (AWTError e) {
+			screenshotFrame = new Rectangle(1024, 768);
+			BaseTest.getTestObject().setScreenshotType(ScreenshotType.BROWSER_SCREENSHOT.name());
+			_logger.warn("Error Initilizing DESKTOP SCREENSHOT. BROWSER_SCREENSHOT will be used.", e);
+		}
+	}
 	private static int screenshotNumber = 0;
 
 	/*----------------------Print Screenshot to Report------------------*/
