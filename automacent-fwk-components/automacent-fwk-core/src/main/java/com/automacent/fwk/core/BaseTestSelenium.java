@@ -7,11 +7,12 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-import com.automacent.fwk.enums.Browser;
 import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.enums.ScreenshotMode;
 import com.automacent.fwk.enums.ScreenshotModeForIteration;
 import com.automacent.fwk.enums.ScreenshotType;
+
+import io.github.bonigarcia.wdm.DriverManagerType;
 
 /**
  * All Selenium test classes must inherit this class. Class contains essential
@@ -52,9 +53,8 @@ public abstract class BaseTestSelenium extends BaseTest {
 			@Optional("300") String scriptTimeoutInSeconds,
 			@Optional("300") String pageLoadTimeoutInSeconds,
 			@Optional("300") String socketTimeoutInSeconds) {
-		DriverManager.setupDefaultDriver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
+		Driver.setupDefaultDriver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
 				scriptTimeoutInSeconds, pageLoadTimeoutInSeconds, socketTimeoutInSeconds);
-
 	}
 
 	/**
@@ -120,9 +120,9 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * @param browserId
 	 *            {@link BrowserId}
 	 * @param browser
-	 *            {@link Browser}
+	 *            {@link DriverManagerType}
 	 */
-	protected void startBrowser(BrowserId browserId, Browser browser) {
+	protected void startBrowser(BrowserId browserId, DriverManagerType browser) {
 		BaseTest.getTestObject().getDriverManager().startBrowser(this, browserId, browser);
 	}
 
