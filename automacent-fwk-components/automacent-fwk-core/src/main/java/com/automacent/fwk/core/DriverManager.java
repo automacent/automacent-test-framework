@@ -2,16 +2,15 @@ package com.automacent.fwk.core;
 
 import java.util.HashMap;
 
-import org.openqa.selenium.WebDriver;
-
 import com.automacent.fwk.annotations.Steps;
 import com.automacent.fwk.annotations.StepsAndPagesProcessor;
-import com.automacent.fwk.enums.Browser;
 import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.enums.ErrorCode;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.StringUtils;
+
+import io.github.bonigarcia.wdm.DriverManagerType;
 
 /**
  * Manage {@link Driver} object. This class can initiliaze {@link Driver}
@@ -23,46 +22,6 @@ public class DriverManager {
 
 	private static final Logger _logger = Logger.getLogger(DriverManager.class);
 
-	// Default Driver -----------------------------------------------
-
-	private static Driver defaultDriver;
-
-	/**
-	 * Setup default {@link Driver}. This will be used when setting up Test suite
-	 * level parameters in the {@link BaseTestSelenium}
-	 * 
-	 * @param ieDriverLocation
-	 *            Path of the IE driver server executable
-	 * @param chromeDriverLocation
-	 *            Path of the Chrome driver server executable
-	 * @param geckoDriverLocation
-	 *            Path of the Firefox driver server executable
-	 * @param scriptTimeoutInSeconds
-	 *            Selenium javascript timeout
-	 * @param pageLoadTimeoutInSeconds
-	 *            Selenium page load timeout
-	 * @param socketTimeoutInSeconds
-	 *            {@link WebDriver} SocketTimeoutException timeout
-	 */
-	public static void setupDefaultDriver(String ieDriverLocation, String chromeDriverLocation,
-			String geckoDriverLocation,
-			String scriptTimeoutInSeconds, String pageLoadTimeoutInSeconds, String socketTimeoutInSeconds) {
-		defaultDriver = new Driver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
-				scriptTimeoutInSeconds, pageLoadTimeoutInSeconds, socketTimeoutInSeconds);
-
-	}
-
-	/**
-	 * 
-	 * @return Default {@link Driver} instance
-	 */
-	public static Driver getDefaultDriver() {
-		if (defaultDriver == null) {
-			throw new SetupFailedFatalException("Default Driver instance is not configured");
-		}
-		return defaultDriver;
-	}
-
 	/**
 	 * Create a new {@link Driver} instance from the default {@link Driver} instance
 	 * 
@@ -72,27 +31,24 @@ public class DriverManager {
 	 *            {@link BrowserId}
 	 * @return
 	 */
-	private Driver configureNewDriverFromDefaultDriver(Browser browser, BrowserId browserId) {
-		return new Driver(getDefaultDriver().getIeDriverLocation(), getDefaultDriver().getChromeDriverLocation(),
-				getDefaultDriver().getGeckoDriverLocation(), getDefaultDriver().getScriptTimeoutInSeconds(),
-				getDefaultDriver().getPageLoadTimeoutInSeconds(), getDefaultDriver().getSocketTimeoutInSeconds(),
-				browserId);
+	private Driver configureNewDriverFromDefaultDriver(BrowserId browserId) {
+		return Driver.cloneDefaultDriver(browserId);
 	}
 
 	// Browser ------------------------------------------------------
 
-	private Browser browser;
+	private DriverManagerType browser;
 
 	/**
 	 * If {@link Browser} value is not set, the default value is returned
 	 * 
 	 * @return {@link Browser}
 	 */
-	public Browser getBrowser() {
+	public DriverManagerType getBrowser() {
 		if (this.browser == null)
 			_logger.warn(String.format("%s Browser is not set. Default value, %s, will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), Browser.getDefault()));
-		return browser != null ? browser : Browser.getDefault();
+					ErrorCode.INVALID_PARAMETER_VALUE.name(), DriverManagerType.CHROME.name()));
+		return browser != null ? browser : DriverManagerType.CHROME;
 	}
 
 	/**
@@ -102,11 +58,11 @@ public class DriverManager {
 	 *            {@link Browser}
 	 */
 	public void setBrowser(String browser) {
-		this.browser = StringUtils.getEnumFromString(Browser.class, browser);
+		this.browser = StringUtils.getEnumFromString(DriverManagerType.class, browser);
 		if (this.browser == null) {
 			_logger.warn(String.format("%s for browser. Expected one of %s. Got %s. Default value will be set",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), Browser.values(), browser));
-			this.browser = Browser.getDefault();
+					ErrorCode.INVALID_PARAMETER_VALUE.name(), DriverManagerType.values(), browser));
+			this.browser = DriverManagerType.CHROME;
 		}
 		_logger.info(String.format("Browser set to %s", getBrowser()));
 	}
@@ -174,13 +130,13 @@ public class DriverManager {
 	 * @param browser
 	 *            {@link Browser}
 	 */
-	public void startBrowser(Object testClassInstance, BrowserId browserId, Browser browser) {
+	public void startBrowser(Object testClassInstance, BrowserId browserId, DriverManagerType browser) {
 		if (driverMap.containsKey(browserId)) {
 			throw new SetupFailedFatalException(
 					String.format("Error starting new browser. The provided browser id, %s, is already in use",
 							browserId));
 		} else {
-			Driver driver = configureNewDriverFromDefaultDriver(browser, browserId);
+			Driver driver = configureNewDriverFromDefaultDriver(browserId);
 			driver.startDriver(browser);
 			driverMap.put(browserId, driver);
 			setActiveDriver(browserId, testClassInstance);

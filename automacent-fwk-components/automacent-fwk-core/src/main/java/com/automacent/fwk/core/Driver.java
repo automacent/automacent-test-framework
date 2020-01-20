@@ -13,11 +13,13 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import com.automacent.fwk.enums.Browser;
 import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.enums.ErrorCode;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
+
+import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * Driver object holding {@link WebDriver} instaces for Selenium Web Tests
@@ -29,7 +31,7 @@ public class Driver {
 
 	private static final Logger _logger = Logger.getLogger(Driver.class);
 
-	public Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
+	protected Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
 			String scriptTimeoutInSeconds, String pageLoadTimeoutInSeconds, String socketTimeoutInSeconds) {
 		setIeDriverLocation(ieDriverLocation);
 		setChromeDriverLocation(chromeDriverLocation);
@@ -40,12 +42,12 @@ public class Driver {
 		setSocketTimeoutInSeconds(socketTimeoutInSeconds);
 	}
 
-	public Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
+	protected Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
 			long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds, long socketTimeoutInSeconds,
 			BrowserId browserId) {
-		setIeDriverLocation(ieDriverLocation);
-		setChromeDriverLocation(chromeDriverLocation);
-		setGeckoDriverLocation(geckoDriverLocation);
+		this.ieDriverLocation = ieDriverLocation;
+		this.chromeDriverLocation = chromeDriverLocation;
+		this.geckoDriverLocation = geckoDriverLocation;
 
 		setScriptTimeoutInSeconds(scriptTimeoutInSeconds);
 		setPageLoadTimeoutInSeconds(pageLoadTimeoutInSeconds);
@@ -53,12 +55,66 @@ public class Driver {
 		setBrowserId(browserId);
 	}
 
-	// Executables --------------------------------------------------
+	// Default Driver -------------------------------------
+
+	private static Driver defaultDriver;
+
+	/**
+	 * Setup default {@link Driver}. This will be used when setting up Test suite
+	 * level parameters in the {@link BaseTestSelenium}
+	 * 
+	 * @param ieDriverLocation
+	 *            Path of the IE driver server executable
+	 * @param chromeDriverLocation
+	 *            Path of the Chrome driver server executable
+	 * @param geckoDriverLocation
+	 *            Path of the Firefox driver server executable
+	 * @param scriptTimeoutInSeconds
+	 *            Selenium javascript timeout
+	 * @param pageLoadTimeoutInSeconds
+	 *            Selenium page load timeout
+	 * @param socketTimeoutInSeconds
+	 *            {@link WebDriver} SocketTimeoutException timeout
+	 */
+	public static void setupDefaultDriver(String ieDriverLocation, String chromeDriverLocation,
+			String geckoDriverLocation,
+			String scriptTimeoutInSeconds, String pageLoadTimeoutInSeconds, String socketTimeoutInSeconds) {
+		defaultDriver = new Driver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
+				scriptTimeoutInSeconds, pageLoadTimeoutInSeconds, socketTimeoutInSeconds);
+	}
+
+	/**
+	 * 
+	 * @return Default {@link Driver} instance
+	 */
+	public static Driver getDefaultDriver() {
+		if (defaultDriver == null) {
+			throw new SetupFailedFatalException("Default Driver instance is not configured");
+		}
+		return defaultDriver;
+	}
+
+	public static Driver cloneDefaultDriver(BrowserId browserId) {
+		return new Driver(getDefaultDriver().getIeDriverLocation(), getDefaultDriver().getChromeDriverLocation(),
+				getDefaultDriver().getGeckoDriverLocation(), getDefaultDriver().getScriptTimeoutInSeconds(),
+				getDefaultDriver().getPageLoadTimeoutInSeconds(), getDefaultDriver().getSocketTimeoutInSeconds(),
+				browserId);
+	}
+
+	// Variables ------------------------------------------
 
 	private String ieDriverLocation;
 	private String chromeDriverLocation;
 	private String geckoDriverLocation;
 
+	private long scriptTimeoutInSeconds = 300;
+	private long pageLoadTimeoutInSeconds = 300;
+	private long socketTimeoutInSeconds = 300;
+
+	private BrowserId browserId;
+	private WebDriver webDriver;
+
+	// Executables --------------------------------------------------
 	/**
 	 * 
 	 * @return absolute IE driver server executable path
@@ -68,17 +124,22 @@ public class Driver {
 	}
 
 	/**
-	 * Set IE driver server executable path. Before setting up the path, check for
-	 * file exists is done. If file does not exist the default driver packaged in
-	 * the framework is used
+	 * Set Custom IE driver server executable path.
 	 * 
 	 * @param ieDriverLocation
 	 *            IE driver server executable path
 	 */
 	private void setIeDriverLocation(String ieDriverLocation) {
-		this.ieDriverLocation = extractDrivers(ieDriverLocation, "IEDriverServer.exe");
-		System.setProperty("webdriver.ie.driver", getIeDriverLocation());
-		_logger.info(String.format("ieDriverLocation set to %s", getIeDriverLocation()));
+		if (!ieDriverLocation.equals("") && isCustomDriverFound(ieDriverLocation)) {
+			this.ieDriverLocation = ieDriverLocation;
+			System.setProperty("webdriver.ie.driver", getIeDriverLocation());
+			_logger.info(String.format("ieDriverLocation set to %s", getIeDriverLocation()));
+		} else {
+			if (ieDriverLocation.equals(""))
+				_logger.info("No custom ieDriverLocation provided");
+			else
+				_logger.warn("Invalid custom ieDriverLocation provided. Will use default");
+		}
 	}
 
 	/**
@@ -90,17 +151,22 @@ public class Driver {
 	}
 
 	/**
-	 * Set Chrome driver server executable path. Before setting up the path, check
-	 * for file exists is done. If file does not exist the default driver packaged
-	 * in the framework is used
+	 * Set Custom Chrome driver server executable path.
 	 * 
 	 * @param chromeDriverLocation
 	 *            Chrome driver server executable path
 	 */
 	private void setChromeDriverLocation(String chromeDriverLocation) {
-		this.chromeDriverLocation = extractDrivers(chromeDriverLocation, "chromedriver.exe");
-		System.setProperty("webdriver.chrome.driver", getChromeDriverLocation());
-		_logger.info(String.format("chromeDriverLocation set to %s", getChromeDriverLocation()));
+		if (!chromeDriverLocation.equals("") && isCustomDriverFound(chromeDriverLocation)) {
+			this.chromeDriverLocation = chromeDriverLocation;
+			System.setProperty("webdriver.chrome.driver", getChromeDriverLocation());
+			_logger.info(String.format("chromeDriverLocation set to %s", getChromeDriverLocation()));
+		} else {
+			if (chromeDriverLocation.equals(""))
+				_logger.info("No custom chromeDriverLocation provided");
+			else
+				_logger.warn("Invalid custom chromeDriverLocation provided. Will use default");
+		}
 	}
 
 	/**
@@ -112,17 +178,22 @@ public class Driver {
 	}
 
 	/**
-	 * Set Firefox driver server executable path. Before setting up the path, check
-	 * for file exists is done. If file does not exist the default driver packaged
-	 * in the framework is used
+	 * Set Firefox driver server executable path.
 	 * 
 	 * @param geckoDriverLocation
 	 *            Firefox driver server executable path
 	 */
 	private void setGeckoDriverLocation(String geckoDriverLocation) {
-		this.geckoDriverLocation = extractDrivers(geckoDriverLocation, "geckodriver.exe");
-		System.setProperty("webdriver.gecko.driver", getGeckoDriverLocation());
-		_logger.info(String.format("geckoDriverLocation set to %s", getGeckoDriverLocation()));
+		if (!geckoDriverLocation.equals("") && isCustomDriverFound(geckoDriverLocation)) {
+			this.geckoDriverLocation = geckoDriverLocation;
+			System.setProperty("webdriver.gecko.driver", getGeckoDriverLocation());
+			_logger.info(String.format("geckoDriverLocation set to %s", getGeckoDriverLocation()));
+		} else {
+			if (geckoDriverLocation.equals(""))
+				_logger.info("No custom geckoDriverLocation provided");
+			else
+				_logger.warn("Invalid custom geckoDriverLocation provided. Will use default");
+		}
 	}
 
 	/**
@@ -136,6 +207,8 @@ public class Driver {
 	 *            Name of the driver
 	 * @return
 	 */
+	@SuppressWarnings("unused")
+	@Deprecated
 	private String extractDrivers(String driverServerLocation, String driverName) {
 		File givenFile = new File(driverServerLocation);
 		if (!givenFile.exists()) {
@@ -172,11 +245,20 @@ public class Driver {
 		return givenFile.getAbsolutePath();
 	}
 
-	// Timeouts -----------------------------------------------------
+	/**
+	 * Check if the provided driver server executable path is valid. If path is not
+	 * valid
+	 * 
+	 * @param driverServerLocation
+	 *            path of driver server executable
+	 * @return true if valid
+	 */
+	private boolean isCustomDriverFound(String driverServerLocation) {
+		File givenFile = new File(driverServerLocation);
+		return givenFile.exists();
+	}
 
-	private long scriptTimeoutInSeconds = 300;
-	private long pageLoadTimeoutInSeconds = 300;
-	private long socketTimeoutInSeconds = 300;
+	// Timeouts -----------------------------------------------------
 
 	/**
 	 * 
@@ -288,8 +370,6 @@ public class Driver {
 
 	// Browser Id ---------------------------------------------------
 
-	private BrowserId browserId;
-
 	/**
 	 * 
 	 * @return {@link BrowserId} for the driver instance
@@ -310,8 +390,6 @@ public class Driver {
 
 	// WebDriver ----------------------------------------------------
 
-	private WebDriver webDriver;
-
 	/**
 	 *
 	 * @return {@link WebDriver}
@@ -327,19 +405,34 @@ public class Driver {
 	 * @param browser
 	 *            {@link Browser}
 	 */
-	public void startDriver(Browser browser) {
+	public void startDriver(DriverManagerType browser) {
 		try {
-			if (browser.name().equals(Browser.IE.name())) {
+			if (browser.name().equals(DriverManagerType.IEXPLORER.name())) {
 				DesiredCapabilities capab = DesiredCapabilities.internetExplorer();
 				capab.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 				capab.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
 				capab.setCapability(InternetExplorerDriver.ENABLE_PERSISTENT_HOVERING, false);
 				InternetExplorerOptions ieOptions = new InternetExplorerOptions(capab);
+				if (ieDriverLocation == null) {
+					WebDriverManager.iedriver().setup();
+					_logger.info("Using ieDriver from framework");
+				}
 				webDriver = new InternetExplorerDriver(ieOptions);
-			} else if (browser.name().equals(Browser.CHROME.name())) {
+			} else if (browser.name().equals(DriverManagerType.CHROME.name())) {
+				if (chromeDriverLocation == null) {
+					WebDriverManager.chromedriver().setup();
+					_logger.info("Using chromeDriver from framework");
+				}
 				webDriver = new ChromeDriver();
-			} else if (browser.name().equals(Browser.FF.name())) {
+			} else if (browser.name().equals(DriverManagerType.FIREFOX.name())) {
+				if (geckoDriverLocation == null) {
+					WebDriverManager.firefoxdriver().setup();
+					_logger.info("Using geckoDriver from framework");
+				}
 				webDriver = new FirefoxDriver();
+			} else if (browser.name().equals(DriverManagerType.CHROMIUM.name())) {
+				WebDriverManager.chromiumdriver().setup();
+				webDriver = new ChromeDriver();
 			}
 		} catch (Exception e) {
 			throw new SetupFailedFatalException("Error initializing the driver", e);

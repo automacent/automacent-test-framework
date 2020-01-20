@@ -1,3 +1,0 @@
-ChromeDriver 79.0.3945.36 (32-bit)
-IEDriverServer.exe 3.141.59.0 (32-bit)
-geckodriver 0.24.0 (32-bit)
