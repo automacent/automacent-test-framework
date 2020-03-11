@@ -414,24 +414,24 @@ public class Driver {
 				capab.setCapability(InternetExplorerDriver.ENABLE_PERSISTENT_HOVERING, false);
 				InternetExplorerOptions ieOptions = new InternetExplorerOptions(capab);
 				if (ieDriverLocation == null) {
-					WebDriverManager.iedriver().setup();
+					WebDriverManager.getInstance(DriverManagerType.IEXPLORER).setup();
 					_logger.info("Using ieDriver from framework");
 				}
 				webDriver = new InternetExplorerDriver(ieOptions);
 			} else if (browser.name().equals(DriverManagerType.CHROME.name())) {
 				if (chromeDriverLocation == null) {
-					WebDriverManager.chromedriver().setup();
+					WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
 					_logger.info("Using chromeDriver from framework");
 				}
 				webDriver = new ChromeDriver();
 			} else if (browser.name().equals(DriverManagerType.FIREFOX.name())) {
 				if (geckoDriverLocation == null) {
-					WebDriverManager.firefoxdriver().setup();
+					WebDriverManager.getInstance(DriverManagerType.FIREFOX).setup();
 					_logger.info("Using geckoDriver from framework");
 				}
 				webDriver = new FirefoxDriver();
 			} else if (browser.name().equals(DriverManagerType.CHROMIUM.name())) {
-				WebDriverManager.chromiumdriver().setup();
+				WebDriverManager.getInstance(DriverManagerType.CHROMIUM).setup();
 				webDriver = new ChromeDriver();
 			}
 		} catch (Exception e) {
