@@ -1,7 +1,9 @@
 package com.automacent.fwk.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.automacent.fwk.annotations.Action;
 import com.automacent.fwk.enums.ErrorCode;
@@ -10,6 +12,7 @@ import com.automacent.fwk.enums.RetryMode;
 import com.automacent.fwk.enums.ScreenshotMode;
 import com.automacent.fwk.enums.ScreenshotModeForIteration;
 import com.automacent.fwk.enums.ScreenshotType;
+import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.recovery.RecoveryManager;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.StringUtils;
@@ -24,6 +27,22 @@ import com.automacent.fwk.utils.StringUtils;
 public class TestObject {
 
 	private static final Logger _logger = Logger.getLogger(TestObject.class);
+
+	// Test parameters ----------------------------------------------
+
+	private Map<String, String> testParameters = new HashMap<>();
+
+	public String getTestParameter(String parameter) {
+		String value = testParameters.get(parameter);
+		if (value == null)
+			throw new SetupFailedFatalException(
+					String.format("Requested Test Parameter %s not found. Test will exit", parameter));
+		return value;
+	}
+
+	public void setTestParameters(Map<String, String> testParameters) {
+		this.testParameters.putAll(testParameters);
+	}
 
 	// Driver Manager -----------------------------------------------
 

@@ -107,11 +107,11 @@ public abstract class BaseTest {
 			@Optional("OFF") String retryMode,
 			@Optional("") String recoveryClasses,
 			ITestContext testContext) {
-
 		System.setProperty("org.uncommons.reportng.escape-output", "false");
 
 		TestObject testObject = BaseTest.getTestObject();
 		testObject.setTestName(testContext.getCurrentXmlTest().getName());
+		testObject.setTestParameters(testContext.getCurrentXmlTest().getAllParameters());
 		testObject.setRepeatMode(repeatMode);
 		testObject.setTestDurationInSeconds(testDurationInSeconds);
 		testObject.setInvocationCount(invocationCount);
