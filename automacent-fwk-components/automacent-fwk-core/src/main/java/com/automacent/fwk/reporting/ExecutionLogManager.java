@@ -225,8 +225,6 @@ public class ExecutionLogManager {
 						methodName, IterationManager.getManager().getIteration(), e.getMessage(), e.getStackTrace()),
 						e);
 
-		// TODO Check if test duration exceeded issue is thrown
-
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.ON_FAILURE)) {
 			if (ExceptionManager.isExceptionSocketTimeout(e))
 				ReportingTools.logScreenGrabOnFailure("Test failed : " + e.getMessage());
