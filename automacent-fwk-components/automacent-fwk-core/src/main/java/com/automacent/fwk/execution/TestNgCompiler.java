@@ -137,9 +137,15 @@ public class TestNgCompiler {
 					result = point.proceed();
 					ExecutionLogManager.logIterationSuccess(point, new Date().getTime() - iterationStartTime);
 				} catch (Throwable e) {
-					ExecutionLogManager.logIterationFailure(point, e, new Date().getTime() - iterationStartTime);
-					IterationManager.getManager().addError(e);
-					IterationManager.getManager().setExecuteRecoveryScenarios(true);
+					if (ExceptionManager.isExceptionTestDurationExceededException(e)
+							&& IterationManager.getManager().getIteration() > 1) {
+						_logger.warn("Test Duration exceeded during execution. "
+								+ "Iteration will exit without failure as at least one iteration is completed.");
+					} else {
+						ExecutionLogManager.logIterationFailure(point, e, new Date().getTime() - iterationStartTime);
+						IterationManager.getManager().addError(e);
+						IterationManager.getManager().setExecuteRecoveryScenarios(true);
+					}
 				} finally {
 					IterationManager.getManager().stopIteration();
 					try {
@@ -156,8 +162,10 @@ public class TestNgCompiler {
 				IterationManager.getManager().addError(e);
 			}
 			Map<Integer, String> errorMap = IterationManager.getManager().getErrorMap();
-			if (!errorMap.isEmpty())
+
+			if (!errorMap.isEmpty()) {
 				throw new IterationFailedException(errorMap);
+			}
 		} else {
 			RetryMode retryMode = BaseTest.getTestObject().getRetryMode();
 			try {

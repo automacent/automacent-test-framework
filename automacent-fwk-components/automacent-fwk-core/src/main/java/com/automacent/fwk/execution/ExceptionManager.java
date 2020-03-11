@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import com.automacent.fwk.annotations.Action;
+import com.automacent.fwk.exceptions.TestDurationExceededException;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.ThreadUtils;
 
@@ -53,7 +54,7 @@ public class ExceptionManager {
 	}
 
 	/**
-	 * Check if Exeption comes under the category of different manifestations of
+	 * Check if Exception comes under the category of different manifestations of
 	 * {@link SocketTimeoutException}. When these Exceptions occur,
 	 * {@link WebDriver} might freeze and not allow further execution
 	 * 
@@ -89,6 +90,25 @@ public class ExceptionManager {
 			ThreadUtils.sleepFor(10);
 
 		return isSocketTimeout;
+	}
+
+	/**
+	 * Check if Exception cause is {@link TestDurationExceededException}
+	 * 
+	 * @param e
+	 *            {@link Throwable}
+	 * @return True if given Throwable is a type of TestDurationExceededException
+	 */
+	public static boolean isExceptionTestDurationExceededException(Throwable e) {
+		boolean isTestDurationExceeded = false;
+		while (e != null) {
+			if (e instanceof TestDurationExceededException) {
+				isTestDurationExceeded = true;
+				break;
+			}
+			e = e.getCause();
+		}
+		return isTestDurationExceeded;
 	}
 
 	/**
