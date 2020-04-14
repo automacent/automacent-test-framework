@@ -19,6 +19,8 @@ public class LauncherHeartBeat {
 		pingCounter = new Date().getTime();
 	}
 
+	boolean isTestInstanceStopped = false;
+
 	private static HashMap<Long, LauncherHeartBeat> heartBeatMap = new HashMap<Long, LauncherHeartBeat>();
 
 	/**
@@ -41,10 +43,18 @@ public class LauncherHeartBeat {
 	 *             when test instance status is not RUNNING
 	 */
 	public void ping() throws LauncherForceCompletedException {
+		if (isTestInstanceStopped)
+			return;
 		if (new Date().getTime() - pingCounter > 60 * 2 * 1000) {
 			pingCounter = new Date().getTime();
 			_logger.debug("Sending heart beat to launcher");
-			LauncherClientManager.getManager().ping();
+			try {
+				LauncherClientManager.getManager().ping();
+			} catch (LauncherForceCompletedException e) {
+				isTestInstanceStopped = true;
+				throw e;
+			}
 		}
+
 	}
 }
