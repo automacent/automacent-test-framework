@@ -1,6 +1,7 @@
 package com.automacent.fwk.utils;
 
 import com.automacent.fwk.execution.IterationManager;
+import com.automacent.fwk.launcher.LauncherHeartBeat;
 import com.automacent.fwk.reporting.Logger;
 
 /**
@@ -33,6 +34,7 @@ public class ThreadUtils {
 						currentSleepTime));
 				Thread.sleep(scanInterval * 1000);
 				IterationManager.getManager().checkIfTestDurationExceeded();
+				LauncherHeartBeat.getManager().ping();
 			} while ((currentSleepTime = currentSleepTime - 30) > 0);
 		} catch (InterruptedException e) {
 			_logger.warn("Thread.sleep interuppted", e);

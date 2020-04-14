@@ -140,7 +140,7 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 		return null;
 	}
 
-	private long testInstanceId;
+	private long testInstanceId = 0l;
 
 	/**
 	 * Get Test instance Id
@@ -156,7 +156,10 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 	 * 
 	 * @param testInstanceId
 	 */
-	protected void setTestInstanceId(long testInstanceId) {
-		this.testInstanceId = testInstanceId;
+	protected void setTestInstanceId(String testInstanceId) {
+		try {
+			this.testInstanceId = Long.parseLong(testInstanceId);
+		} catch (Exception e) {			
+		}
 	}
 }

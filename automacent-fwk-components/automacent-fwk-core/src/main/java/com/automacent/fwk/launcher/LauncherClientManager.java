@@ -11,6 +11,7 @@ import org.testng.ITestResult;
 
 import com.automacent.fwk.core.TestObject;
 import com.automacent.fwk.enums.MethodType;
+import com.automacent.fwk.exceptions.LauncherForceCompletedException;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.ThreadUtils;
 
@@ -204,6 +205,20 @@ public class LauncherClientManager implements ILauncherClient {
 		if (isEnabled) {
 			for (ILauncherClient launcherClient : getLauncherClients()) {
 				launcherClient.stopTest();
+			}
+		}
+	}
+
+	/**
+	 * Send heart beat to the launcher server
+	 *
+	 * @throws LauncherForceCompletedException
+	 *             when test instance status is not RUNNING
+	 */
+	public void ping() throws LauncherForceCompletedException {
+		if (isEnabled) {
+			for (ILauncherClient launcherClient : getLauncherClients()) {
+				launcherClient.ping();
 			}
 		}
 	}

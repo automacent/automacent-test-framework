@@ -6,6 +6,7 @@ import org.testng.ITestResult;
 
 import com.automacent.fwk.core.TestObject;
 import com.automacent.fwk.enums.MethodType;
+import com.automacent.fwk.exceptions.LauncherForceCompletedException;
 
 /**
  * 
@@ -70,4 +71,12 @@ public interface ILauncherClient {
 	 * Mark completion of test on launcher client
 	 */
 	void stopTest();
+
+	/**
+	 * Send heart beat to the launcher server
+	 *
+	 * @throws LauncherForceCompletedException
+	 *             when test instance status is not RUNNING
+	 */
+	void ping() throws LauncherForceCompletedException;
 }

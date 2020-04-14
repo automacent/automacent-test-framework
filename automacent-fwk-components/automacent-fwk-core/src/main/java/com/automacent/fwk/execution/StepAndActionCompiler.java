@@ -13,6 +13,7 @@ import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.ScreenshotMode;
 import com.automacent.fwk.exceptions.ActionExecutionException;
 import com.automacent.fwk.exceptions.StepExecutionException;
+import com.automacent.fwk.launcher.LauncherHeartBeat;
 import com.automacent.fwk.reporting.ExecutionLogManager;
 import com.automacent.fwk.reporting.ReportingTools;
 import com.automacent.fwk.utils.AspectJUtils;
@@ -66,6 +67,7 @@ public class StepAndActionCompiler {
 			ReportingTools.takeScreenshot(ScreenshotMode.AFTER_ACTION.name());
 
 		IterationManager.getManager().checkIfTestDurationExceeded();
+		LauncherHeartBeat.getManager().ping();
 
 		return result;
 
