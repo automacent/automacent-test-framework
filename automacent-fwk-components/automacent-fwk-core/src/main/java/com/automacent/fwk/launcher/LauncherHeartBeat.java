@@ -45,7 +45,7 @@ public class LauncherHeartBeat {
 	public void ping() throws LauncherForceCompletedException {
 		if (isTestInstanceStopped)
 			return;
-		if (new Date().getTime() - pingCounter > 60 * 2 * 1000) {
+		if (new Date().getTime() - pingCounter > 60 * 1 * 1000) {
 			pingCounter = new Date().getTime();
 			_logger.debug("Sending heart beat to launcher");
 			try {
