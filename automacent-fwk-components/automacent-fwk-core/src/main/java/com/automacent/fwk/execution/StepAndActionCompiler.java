@@ -83,6 +83,7 @@ public class StepAndActionCompiler {
 	 */
 	@Around("execution(* *(..)) && @annotation(com.automacent.fwk.annotations.Step)")
 	public Object aroundStepCompilerAspect(ProceedingJoinPoint point) {
+		LauncherHeartBeat.getManager().ping();
 		long startTime = new Date().getTime();
 		ExecutionLogManager.logMethodStart(point, MethodType.STEP);
 		String methodNameWithArguments = AspectJUtils.getMethodNameWithArguments(point);
