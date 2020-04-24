@@ -8,5 +8,5 @@ package com.automacent.fwk.enums;
  * @author sighil.sivadas
  */
 public enum MethodType {
-	BEFORE, TEST, AFTER, ACTION, STEP, RECOVERY;
+	BEFORE, TEST, AFTER, ACTION, STEP, RECOVERY, ITERATION, SLEEP;
 }
