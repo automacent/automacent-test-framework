@@ -48,6 +48,10 @@ public class ExecutionLogManager {
 		Logger.getLogger(MethodSignature.class.cast(point.getSignature()).getDeclaringType())
 				.info(String.format("%s%s", LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
 						AspectJUtils.getArguments(point)));
+		LauncherClientManager.getManager()
+				.logStart(String.format("%s%s",
+						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
+						AspectJUtils.getArguments(point)), methodType);
 	}
 
 	/**
@@ -68,6 +72,10 @@ public class ExecutionLogManager {
 					.info(String.format("%s %s",
 							LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
 							result != null ? result.toString() : ""));
+		LauncherClientManager.getManager()
+				.logEnd(String.format("%s%s",
+						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
+						AspectJUtils.getArguments(point)), methodType, testStatus, duration);
 	}
 
 	/**
@@ -85,7 +93,10 @@ public class ExecutionLogManager {
 						String.format("%s%s",
 								LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
 								AspectJUtils.getArguments(point)));
-
+		LauncherClientManager.getManager()
+				.logStart(String.format("%s%s",
+						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
+						AspectJUtils.getArguments(point)), methodType);
 	}
 
 	/**
@@ -102,6 +113,10 @@ public class ExecutionLogManager {
 				.infoHeading(String.format("%s completed successfully",
 						LoggingUtils.addSpaceToCamelCaseString(LoggingUtils.addGrammer(methodName))));
 		LauncherClientManager.getManager().logSuccess(methodName, methodType, 0, duration);
+		LauncherClientManager.getManager()
+				.logEnd(String.format("%s%s",
+						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
+						AspectJUtils.getArguments(point)), methodType, TestStatus.PASS, duration);
 	}
 
 	/**
@@ -130,6 +145,11 @@ public class ExecutionLogManager {
 
 		if (BaseTest.getTestObject().getRepeatMode().equals(RepeatMode.OFF))
 			LauncherClientManager.getManager().logFailure(methodName, methodType, 0, e, duration);
+
+		LauncherClientManager.getManager()
+				.logEnd(String.format("%s%s",
+						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
+						AspectJUtils.getArguments(point)), methodType, TestStatus.FAIL, duration);
 	}
 
 	/**
@@ -155,6 +175,9 @@ public class ExecutionLogManager {
 				e);
 
 		LauncherClientManager.getManager().logFailure(testngMethod.getMethodName(), methodType, 0, e, 0);
+
+		LauncherClientManager.getManager().logStart(testngMethod.getMethodName(), methodType);
+		LauncherClientManager.getManager().logEnd(testngMethod.getMethodName(), methodType, TestStatus.SKIP, 0);
 	}
 
 	// Iteration logging --------------------------------------------
@@ -180,6 +203,9 @@ public class ExecutionLogManager {
 		else
 			_logger.info(String.format("Starting Iteration : %s/%s", iteration,
 					BaseTest.getTestObject().getInvocationCount()));
+
+		LauncherClientManager.getManager().logStart(
+				String.format("Iteration %s", IterationManager.getManager().getIteration()), MethodType.ITERATION);
 	}
 
 	/**
@@ -195,6 +221,10 @@ public class ExecutionLogManager {
 						IterationManager.getManager().getIteration(), MethodType.TEST.name(), methodName));
 		LauncherClientManager.getManager().logSuccess(methodName, MethodType.TEST,
 				IterationManager.getManager().getIteration(), duration);
+
+		LauncherClientManager.getManager().logEnd(
+				String.format("Iteration %s", IterationManager.getManager().getIteration()), MethodType.ITERATION,
+				TestStatus.PASS, duration);
 	}
 
 	/**
@@ -223,6 +253,10 @@ public class ExecutionLogManager {
 
 		LauncherClientManager.getManager().logFailure(methodName, MethodType.TEST,
 				IterationManager.getManager().getIteration(), e, duration);
+
+		LauncherClientManager.getManager().logEnd(
+				String.format("Iteration %s", IterationManager.getManager().getIteration()), MethodType.ITERATION,
+				TestStatus.FAIL, duration);
 	}
 
 	/**

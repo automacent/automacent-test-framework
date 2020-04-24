@@ -1,6 +1,11 @@
 package com.automacent.fwk.utils;
 
+import java.util.Date;
+
+import com.automacent.fwk.enums.MethodType;
+import com.automacent.fwk.enums.TestStatus;
 import com.automacent.fwk.execution.IterationManager;
+import com.automacent.fwk.launcher.LauncherClientManager;
 import com.automacent.fwk.launcher.LauncherHeartBeat;
 import com.automacent.fwk.reporting.Logger;
 
@@ -23,6 +28,8 @@ public class ThreadUtils {
 	 * @param sleepTimeInSeconds
 	 */
 	public static void sleepFor(int sleepTimeInSeconds) {
+		long startTime = new Date().getTime();
+		LauncherClientManager.getManager().logStart("sleep", MethodType.SLEEP);
 		int currentSleepTime = sleepTimeInSeconds;
 		if (currentSleepTime > 10)
 			_logger.info(String.format("Sleeping for %s seconds", sleepTimeInSeconds));
@@ -36,8 +43,15 @@ public class ThreadUtils {
 				IterationManager.getManager().checkIfTestDurationExceeded();
 				LauncherHeartBeat.getManager().ping();
 			} while ((currentSleepTime = currentSleepTime - 30) > 0);
+			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.PASS,
+					new Date().getTime() - startTime);
 		} catch (InterruptedException e) {
+			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.FAIL,
+					new Date().getTime() - startTime);
 			_logger.warn("Thread.sleep interuppted", e);
+		} catch (Exception e) {
+			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.FAIL,
+					new Date().getTime() - startTime);
 		}
 	}
 }
