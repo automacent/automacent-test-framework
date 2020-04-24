@@ -15,6 +15,7 @@ import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.RepeatMode;
 import com.automacent.fwk.enums.ScreenshotMode;
+import com.automacent.fwk.enums.TestStatus;
 import com.automacent.fwk.execution.ExceptionManager;
 import com.automacent.fwk.execution.IterationManager;
 import com.automacent.fwk.launcher.LauncherClientManager;
@@ -59,7 +60,8 @@ public class ExecutionLogManager {
 	 * @param duration
 	 *            Execution duration for method
 	 */
-	public static void logMethodEnd(ProceedingJoinPoint point, MethodType methodType, long duration, Object result) {
+	public static void logMethodEnd(ProceedingJoinPoint point, MethodType methodType, TestStatus testStatus,
+			long duration, Object result) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
 		if (methodName.startsWith("is"))
 			Logger.getLogger(MethodSignature.class.cast(point.getSignature()).getDeclaringType())
@@ -126,7 +128,8 @@ public class ExecutionLogManager {
 			else
 				ReportingTools.logScreenshotOnFailure("Test failed : " + e.getMessage());
 
-		LauncherClientManager.getManager().logFailure(methodName, methodType, 0, e, duration);
+		if (BaseTest.getTestObject().getRepeatMode().equals(RepeatMode.OFF))
+			LauncherClientManager.getManager().logFailure(methodName, methodType, 0, e, duration);
 	}
 
 	/**
@@ -180,20 +183,6 @@ public class ExecutionLogManager {
 	}
 
 	/**
-	 * Log end of iteration in case {@link Repeat} is true
-	 * 
-	 * @param iteration
-	 *            Iteration count
-	 * @param elapsedTimeInMilliSeconds
-	 *            Elapsed time since last iteration
-	 * @param testDurationInMilliSeconds
-	 *            Set test duration
-	 */
-	public static void logIterationEnd(long iteration, long elapsedTimeInMilliSeconds,
-			long testDurationInMilliSeconds) {
-	}
-
-	/**
 	 * Log successful completion of Iteration
 	 * 
 	 * @param point
@@ -235,6 +224,22 @@ public class ExecutionLogManager {
 		LauncherClientManager.getManager().logFailure(methodName, MethodType.TEST,
 				IterationManager.getManager().getIteration(), e, duration);
 	}
+
+	/**
+	 * Log end of iteration in case {@link Repeat} is true
+	 * 
+	 * @param iteration
+	 *            Iteration count
+	 * @param elapsedTimeInMilliSeconds
+	 *            Elapsed time since last iteration
+	 * @param testDurationInMilliSeconds
+	 *            Set test duration
+	 */
+	public static void logIterationEnd(long iteration, long elapsedTimeInMilliSeconds,
+			long testDurationInMilliSeconds) {
+	}
+
+	// ----------------------------------------------------
 
 	/**
 	 * Log the execution result of a TestNG {@link Test} method after all the

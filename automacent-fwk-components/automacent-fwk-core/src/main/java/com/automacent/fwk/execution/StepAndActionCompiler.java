@@ -11,6 +11,7 @@ import com.automacent.fwk.annotations.Step;
 import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.ScreenshotMode;
+import com.automacent.fwk.enums.TestStatus;
 import com.automacent.fwk.exceptions.ActionExecutionException;
 import com.automacent.fwk.exceptions.StepExecutionException;
 import com.automacent.fwk.launcher.LauncherHeartBeat;
@@ -47,21 +48,25 @@ public class StepAndActionCompiler {
 			ReportingTools.takeScreenshot(ScreenshotMode.BEFORE_ACTION.name());
 
 		Object result = null;
+		TestStatus testStatus = TestStatus.PASS;
 		try {
 			ThreadUtils.sleepFor((int) BaseTest.getTestObject().getSlowdownDurationInSeconds());
 			result = point.proceed();
 		} catch (Throwable e) {
+			testStatus = TestStatus.FAIL;
 			if (ExceptionManager.shouldPerformActionRetry(e))
 				try {
 					result = point.proceed();
+					testStatus = TestStatus.PASS;
 				} catch (Throwable ee) {
 					throw new ActionExecutionException(methodNameWithArguments, ee);
 				}
 			else
 				throw new ActionExecutionException(methodNameWithArguments, e);
+		} finally {
+			ExecutionLogManager.logMethodEnd(point, MethodType.ACTION, testStatus, new Date().getTime() - startTime,
+					result);
 		}
-
-		ExecutionLogManager.logMethodEnd(point, MethodType.ACTION, new Date().getTime() - startTime, result);
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.AFTER_ACTION))
 			ReportingTools.takeScreenshot(ScreenshotMode.AFTER_ACTION.name());
@@ -92,13 +97,16 @@ public class StepAndActionCompiler {
 			ReportingTools.takeScreenshot(ScreenshotMode.BEFORE_STEP.name());
 
 		Object result = null;
+		TestStatus testStatus = TestStatus.PASS;
 		try {
 			result = point.proceed();
 		} catch (Throwable e) {
+			testStatus = TestStatus.FAIL;
 			throw new StepExecutionException(methodNameWithArguments, e);
+		} finally {
+			ExecutionLogManager.logMethodEnd(point, MethodType.STEP, testStatus, new Date().getTime() - startTime,
+					result);
 		}
-
-		ExecutionLogManager.logMethodEnd(point, MethodType.STEP, new Date().getTime() - startTime, result);
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.AFTER_STEP))
 			ReportingTools.takeScreenshot(ScreenshotMode.AFTER_STEP.name());
