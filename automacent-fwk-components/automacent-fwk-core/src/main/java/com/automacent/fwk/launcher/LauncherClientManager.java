@@ -9,10 +9,10 @@ import org.testng.IInvokedMethod;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 
-import com.automacent.fwk.annotations.Action;
 import com.automacent.fwk.annotations.Step;
 import com.automacent.fwk.core.TestObject;
 import com.automacent.fwk.enums.MethodType;
+import com.automacent.fwk.enums.TestStatus;
 import com.automacent.fwk.exceptions.LauncherForceCompletedException;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.ThreadUtils;
@@ -211,166 +211,32 @@ public class LauncherClientManager implements ILauncherClient {
 	}
 
 	/**
-	 * Log {@link Step} start
+	 * Log start of {@link MethodType}
 	 * 
 	 * @param method
+	 * @param methodType
+	 *            {@link MethodType}
 	 */
-	public void logStepStart(String method) {
+	public void logStart(String method, MethodType methodType) {
 		if (isEnabled)
 			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logStepStart(method);
+				launcherClient.logStart(method, methodType);
 	}
 
 	/**
 	 * Log {@link Step} completion and duration
 	 * 
 	 * @param method
+	 * @param methodType
+	 *            {@link MethodType}
+	 * @param testStatus
+	 *            {@link TestStatus}
+	 * 
 	 * @param duration
 	 */
-	public void logStepPass(String method, long duration) {
+	public void logEnd(String method, MethodType methodType, TestStatus testStatus, long duration) {
 		if (isEnabled)
 			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logStepPass(method, duration);
+				launcherClient.logEnd(method, methodType, testStatus, duration);
 	}
-
-	/**
-	 * Log {@link Step} failure and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logStepFail(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logStepFail(method, duration);
-	}
-
-	/**
-	 * Log {@link Action} start
-	 * 
-	 * @param method
-	 */
-	public void logActionStart(String method) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logActionStart(method);
-	}
-
-	/**
-	 * Log {@link Action} completion and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logActionPass(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logActionPass(method, duration);
-	}
-
-	/**
-	 * Log {@link Action} failure and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logActionFail(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logActionFail(method, duration);
-	}
-
-	/**
-	 * Log iteration start
-	 * 
-	 * @param method
-	 */
-	public void logIterationStart(String method) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logIterationStart(method);
-	}
-
-	/**
-	 * Log iteration completion and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logIterationPass(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logIterationPass(method, duration);
-	}
-
-	/**
-	 * Log iteration failure and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logIterationFail(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logIterationFail(method, duration);
-	}
-
-	/**
-	 * Log method start
-	 * 
-	 * @param method
-	 */
-	public void logMethodStart(String method) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logMethodStart(method);
-	}
-
-	/**
-	 * Log method completion and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logMethodPass(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logMethodPass(method, duration);
-	}
-
-	/**
-	 * Log method failure and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logMethodFail(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logMethodFail(method, duration);
-	}
-
-	/**
-	 * Log sleep start
-	 * 
-	 * @param method
-	 */
-	public void logSleepStart(String method) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logSleepStart(method);
-	}
-
-	/**
-	 * Log sleep completion and duration
-	 * 
-	 * @param method
-	 * @param duration
-	 */
-	public void logSleepEnd(String method, long duration) {
-		if (isEnabled)
-			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logSleepEnd(method, duration);
-	}
-
 }
