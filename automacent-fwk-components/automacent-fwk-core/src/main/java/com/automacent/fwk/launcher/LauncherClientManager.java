@@ -218,7 +218,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 *            {@link MethodType}
 	 */
 	public void logStart(String method, MethodType methodType) {
-		if (isEnabled)
+		if (isEnabled && !method.toLowerCase().startsWith("automacent"))
 			for (ILauncherClient launcherClient : getLauncherClients())
 				launcherClient.logStart(method, methodType);
 	}
@@ -235,7 +235,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 * @param duration
 	 */
 	public void logEnd(String method, MethodType methodType, TestStatus testStatus, long duration) {
-		if (isEnabled)
+		if (isEnabled && !method.toLowerCase().startsWith("automacent"))
 			for (ILauncherClient launcherClient : getLauncherClients())
 				launcherClient.logEnd(method, methodType, testStatus, duration);
 	}
