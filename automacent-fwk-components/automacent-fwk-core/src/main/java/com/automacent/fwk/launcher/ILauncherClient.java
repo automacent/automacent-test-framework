@@ -84,21 +84,25 @@ public interface ILauncherClient {
 	/**
 	 * Log start of {@link MethodType}
 	 * 
-	 * @param method
+	 * @param methodWithArguments
 	 * @param methodType
 	 *            {@link MethodType}
 	 */
-	public void logStart(String method, MethodType methodType);
+	public void logStart(String methodWithArguments, MethodType methodType);
 
 	/**
-	 * Log {@link MethodType} completion and duration
+	 * Log {@link MethodType} completion and duration. If {@link MethodType} failure
+	 * then log exception as well
 	 * 
-	 * @param method
+	 * @param methodWithArguments
 	 * @param methodType
 	 *            {@link MethodType}
 	 * @param testStatus
 	 *            {@link TestStatus}
 	 * @param duration
+	 * @param t
+	 *            {@link Throwable}
 	 */
-	public void logEnd(String method, MethodType methodType, TestStatus testStatus, long duration);
+	public void logEnd(String methodWithArguments, MethodType methodType, TestStatus testStatus, long duration,
+			Throwable t);
 }

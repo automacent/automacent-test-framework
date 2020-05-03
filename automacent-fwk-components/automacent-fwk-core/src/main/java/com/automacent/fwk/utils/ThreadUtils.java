@@ -44,14 +44,14 @@ public class ThreadUtils {
 				LauncherHeartBeat.getManager().ping();
 			} while ((currentSleepTime = currentSleepTime - 30) > 0);
 			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.PASS,
-					new Date().getTime() - startTime);
+					new Date().getTime() - startTime, null);
 		} catch (InterruptedException e) {
 			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.FAIL,
-					new Date().getTime() - startTime);
+					new Date().getTime() - startTime, e);
 			_logger.warn("Thread.sleep interuppted", e);
 		} catch (Exception e) {
 			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.FAIL,
-					new Date().getTime() - startTime);
+					new Date().getTime() - startTime, e);
 		}
 	}
 }

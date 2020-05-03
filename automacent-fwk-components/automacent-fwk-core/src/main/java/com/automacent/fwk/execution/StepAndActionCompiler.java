@@ -49,6 +49,7 @@ public class StepAndActionCompiler {
 
 		Object result = null;
 		TestStatus testStatus = TestStatus.PASS;
+		Throwable t = null;
 		try {
 			ThreadUtils.sleepFor((int) BaseTest.getTestObject().getSlowdownDurationInSeconds());
 			result = point.proceed();
@@ -59,13 +60,16 @@ public class StepAndActionCompiler {
 					result = point.proceed();
 					testStatus = TestStatus.PASS;
 				} catch (Throwable ee) {
+					t = ee;
 					throw new ActionExecutionException(methodNameWithArguments, ee);
 				}
-			else
+			else {
+				t = e;
 				throw new ActionExecutionException(methodNameWithArguments, e);
+			}
 		} finally {
 			ExecutionLogManager.logMethodEnd(point, MethodType.ACTION, testStatus, new Date().getTime() - startTime,
-					result);
+					result, t);
 		}
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.AFTER_ACTION))
@@ -98,14 +102,16 @@ public class StepAndActionCompiler {
 
 		Object result = null;
 		TestStatus testStatus = TestStatus.PASS;
+		Throwable t = null;
 		try {
 			result = point.proceed();
 		} catch (Throwable e) {
 			testStatus = TestStatus.FAIL;
+			t = e;
 			throw new StepExecutionException(methodNameWithArguments, e);
 		} finally {
 			ExecutionLogManager.logMethodEnd(point, MethodType.STEP, testStatus, new Date().getTime() - startTime,
-					result);
+					result, t);
 		}
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.AFTER_STEP))
