@@ -2,6 +2,8 @@ package com.automacent.fwk.utils;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /**
  * Util class containing helper methods for manipulating AspectJ components
@@ -37,7 +39,12 @@ public class AspectJUtils {
 		for (Object signatureArg : signatureArgs) {
 			if (++count > 1)
 				arguments += ", ";
-			arguments += signatureArg;
+			if (signatureArg instanceof WebElement)
+				arguments += "webelement";
+			else if (signatureArg instanceof WebDriver)
+				arguments += "webdriver";
+			else
+				arguments += signatureArg;
 		}
 		arguments += ")";
 		return count == 0 ? "" : arguments;
