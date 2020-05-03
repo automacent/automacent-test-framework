@@ -38,11 +38,11 @@ public class ExceptionManager {
 		boolean isRetry = false;
 		while (ee != null) {
 			if (ee instanceof StaleElementReferenceException) {
-				_logger.info("Stale Element Reference Exception occured. Will Retry Action");
+				_logger.info("Stale Element Reference Exception occured");
 				isRetry = true;
 				break;
 			} else if (ee instanceof WebDriverException && ee.getMessage().contains("is not clickable at point")) {
-				_logger.info("Element is not clickable at the given point. Will Retry @Action");
+				_logger.info("Element is not clickable at the given point");
 				isRetry = true;
 				break;
 			}
@@ -51,6 +51,25 @@ public class ExceptionManager {
 		if (isRetry)
 			ThreadUtils.sleepFor(10);
 		return isRetry;
+	}
+
+	/**
+	 * Check if Exception cause is {@link StaleElementReferenceException}
+	 * 
+	 * @param e
+	 *            {@link Throwable}
+	 * @return True if given Throwable is a type of StaleElementReferenceException
+	 */
+	public static boolean isStaleElementReferenceException(Throwable e) {
+		boolean isStale = false;
+		while (e != null) {
+			if (e instanceof StaleElementReferenceException) {
+				isStale = true;
+				break;
+			}
+			e = e.getCause();
+		}
+		return isStale;
 	}
 
 	/**

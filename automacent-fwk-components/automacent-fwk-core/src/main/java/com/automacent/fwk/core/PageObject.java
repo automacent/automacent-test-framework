@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -41,6 +42,10 @@ public abstract class PageObject implements IPageObject {
 
 	private String parentContainerXPATH;
 
+	private WebElement parentContainer;
+
+	private boolean isSuperContainer = false;
+
 	/**
 	 * Get Parent Container XPATH
 	 * 
@@ -50,10 +55,63 @@ public abstract class PageObject implements IPageObject {
 		return parentContainerXPATH;
 	}
 
-	private WebElement parentContainer;
-
+	/**
+	 * Get the parent container
+	 * 
+	 * @return {@link WebElement} Parent container
+	 */
 	public WebElement getParentContainer() {
 		return parentContainer;
+	}
+
+	/**
+	 * Reinitializes the {@link PageFactory}. This method can be use to
+	 * re-initialize {@link WebElement} found by {@link FindBy} in page objects
+	 * 
+	 * @return true if re-initialization successful
+	 */
+	public boolean reInitializePageObject() {
+		_logger.info("Attempting to re-initialize page object");
+		boolean isSuccessful = false;
+		if (getParentContainerXPATH() != null) {
+			try {
+				if (!isSuperContainer) {
+					PageFactory.initElements(field -> {
+						return new DefaultElementLocator(driver.findElement(By.xpath(parentContainerXPATH)), field);
+					}, this);
+					this.parentContainer = driver.findElement(By.xpath(parentContainerXPATH));
+					this.component = this.parentContainer;
+					isSuccessful = true;
+					_logger.info(String.format("Reinitialized page object with parentContainerXPath %s",
+							getParentContainerXPATH()));
+				} else {
+					try {
+						((WebElement) component).getTagName();
+						PageFactory.initElements(field -> {
+							return new DefaultElementLocator(component.findElement(By.xpath(parentContainerXPATH)),
+									field);
+						}, this);
+						this.parentContainer = component.findElement(By.xpath(parentContainerXPATH));
+						isSuccessful = true;
+						_logger.info(
+								String.format(
+										"Reinitialized page object with parentContainerXPath %s in super container",
+										getParentContainerXPATH()));
+					} catch (Exception e) {
+						_logger.info(
+								String.format("Super container threw exception %s. Cannot re-initialize page object",
+										e.getMessage()));
+					}
+				}
+			} catch (Exception e) {
+				_logger.info("Error trying to reinitialize objects");
+				_logger.debug(String.format("Error trying to reinitialize objects. Error is %s", e.getMessage()));
+			}
+		} else {
+			_logger.info("parentContainerXPATH is null. Cannot re-initialize page object");
+		}
+
+		return isSuccessful;
 	}
 
 	/**
@@ -124,6 +182,7 @@ public abstract class PageObject implements IPageObject {
 		this.parentContainerXPATH = parentContainerXPATH;
 		this.parentContainer = superContainer.findElement(By.xpath(parentContainerXPATH));
 		component = superContainer;
+		this.isSuperContainer = true;
 	}
 
 	/**
@@ -181,7 +240,6 @@ public abstract class PageObject implements IPageObject {
 	 *            {@link WebElement}s to be used Javascript
 	 */
 	@SuppressWarnings("all")
-	@com.automacent.fwk.annotations.Action
 	protected void executeJavascript(String command, WebElement... elements) {
 		getJavascriptExecutor().executeScript(command, elements);
 	}

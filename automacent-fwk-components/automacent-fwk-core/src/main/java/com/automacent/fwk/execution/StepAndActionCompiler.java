@@ -5,10 +5,12 @@ import java.util.Date;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 
 import com.automacent.fwk.annotations.Action;
 import com.automacent.fwk.annotations.Step;
 import com.automacent.fwk.core.BaseTest;
+import com.automacent.fwk.core.PageObject;
 import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.ScreenshotMode;
 import com.automacent.fwk.enums.TestStatus;
@@ -16,6 +18,7 @@ import com.automacent.fwk.exceptions.ActionExecutionException;
 import com.automacent.fwk.exceptions.StepExecutionException;
 import com.automacent.fwk.launcher.LauncherHeartBeat;
 import com.automacent.fwk.reporting.ExecutionLogManager;
+import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.reporting.ReportingTools;
 import com.automacent.fwk.utils.AspectJUtils;
 import com.automacent.fwk.utils.ThreadUtils;
@@ -55,15 +58,20 @@ public class StepAndActionCompiler {
 			result = point.proceed();
 		} catch (Throwable e) {
 			testStatus = TestStatus.FAIL;
-			if (ExceptionManager.shouldPerformActionRetry(e))
+			boolean retry = ExceptionManager.shouldPerformActionRetry(e);
+			if (ExceptionManager.isStaleElementReferenceException(e) && point.getThis() instanceof PageObject)
+				retry = ((PageObject) point.getThis()).reInitializePageObject();
+			if (retry) {
 				try {
+					Logger.getLogger(MethodSignature.class.cast(point.getSignature()).getDeclaringType())
+							.info("Retrying action");
 					result = point.proceed();
 					testStatus = TestStatus.PASS;
 				} catch (Throwable ee) {
 					t = ee;
 					throw new ActionExecutionException(methodNameWithArguments, ee);
 				}
-			else {
+			} else {
 				t = e;
 				throw new ActionExecutionException(methodNameWithArguments, e);
 			}
