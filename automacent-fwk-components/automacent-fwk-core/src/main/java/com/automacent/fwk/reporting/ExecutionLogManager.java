@@ -65,7 +65,7 @@ public class ExecutionLogManager {
 	 *            Execution duration for method
 	 */
 	public static void logMethodEnd(ProceedingJoinPoint point, MethodType methodType, TestStatus testStatus,
-			long duration, Object result) {
+			long duration, Object result, Throwable t) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
 		if (methodName.startsWith("is"))
 			Logger.getLogger(MethodSignature.class.cast(point.getSignature()).getDeclaringType())
@@ -75,7 +75,7 @@ public class ExecutionLogManager {
 		LauncherClientManager.getManager()
 				.logEnd(String.format("%s%s",
 						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
-						AspectJUtils.getArguments(point)), methodType, testStatus, duration);
+						AspectJUtils.getArguments(point)), methodType, testStatus, duration, t);
 	}
 
 	/**
@@ -112,11 +112,13 @@ public class ExecutionLogManager {
 		Logger.getLogger(MethodSignature.class.cast(point.getSignature()).getDeclaringType())
 				.infoHeading(String.format("%s completed successfully",
 						LoggingUtils.addSpaceToCamelCaseString(LoggingUtils.addGrammer(methodName))));
-		LauncherClientManager.getManager().logSuccess(methodName, methodType, 0, duration);
 		LauncherClientManager.getManager()
 				.logEnd(String.format("%s%s",
 						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
-						AspectJUtils.getArguments(point)), methodType, TestStatus.PASS, duration);
+						AspectJUtils.getArguments(point)), methodType, TestStatus.PASS, duration, null);
+		if (methodType.equals(MethodType.TEST) && !BaseTest.getTestObject().getRepeatMode().equals(RepeatMode.OFF))
+			return;
+		LauncherClientManager.getManager().logSuccess(methodName, methodType, 0, duration);
 	}
 
 	/**
@@ -143,13 +145,14 @@ public class ExecutionLogManager {
 			else
 				ReportingTools.logScreenshotOnFailure("Test failed : " + e.getMessage());
 
-		if (BaseTest.getTestObject().getRepeatMode().equals(RepeatMode.OFF))
-			LauncherClientManager.getManager().logFailure(methodName, methodType, 0, e, duration);
-
 		LauncherClientManager.getManager()
 				.logEnd(String.format("%s%s",
 						LoggingUtils.addGrammer(LoggingUtils.addSpaceToCamelCaseString(methodName)),
-						AspectJUtils.getArguments(point)), methodType, TestStatus.FAIL, duration);
+						AspectJUtils.getArguments(point)), methodType, TestStatus.FAIL, duration, e);
+
+		if (methodType.equals(MethodType.TEST) && !BaseTest.getTestObject().getRepeatMode().equals(RepeatMode.OFF))
+			return;
+		LauncherClientManager.getManager().logFailure(methodName, methodType, 0, e, duration);
 	}
 
 	/**
@@ -177,7 +180,7 @@ public class ExecutionLogManager {
 		LauncherClientManager.getManager().logFailure(testngMethod.getMethodName(), methodType, 0, e, 0);
 
 		LauncherClientManager.getManager().logStart(testngMethod.getMethodName(), methodType);
-		LauncherClientManager.getManager().logEnd(testngMethod.getMethodName(), methodType, TestStatus.SKIP, 0);
+		LauncherClientManager.getManager().logEnd(testngMethod.getMethodName(), methodType, TestStatus.SKIP, 0, e);
 	}
 
 	// Iteration logging --------------------------------------------
@@ -224,7 +227,7 @@ public class ExecutionLogManager {
 
 		LauncherClientManager.getManager().logEnd(
 				String.format("Iteration %s", IterationManager.getManager().getIteration()), MethodType.ITERATION,
-				TestStatus.PASS, duration);
+				TestStatus.PASS, duration, null);
 	}
 
 	/**
@@ -256,7 +259,7 @@ public class ExecutionLogManager {
 
 		LauncherClientManager.getManager().logEnd(
 				String.format("Iteration %s", IterationManager.getManager().getIteration()), MethodType.ITERATION,
-				TestStatus.FAIL, duration);
+				TestStatus.FAIL, duration, e);
 	}
 
 	/**

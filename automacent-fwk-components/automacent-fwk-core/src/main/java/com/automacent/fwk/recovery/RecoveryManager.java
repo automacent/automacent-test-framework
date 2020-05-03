@@ -85,10 +85,10 @@ public class RecoveryManager {
 					recovery.checkRecoveryParameters();
 					recovery.recover();
 					LauncherClientManager.getManager().logEnd(recoveryClassName, MethodType.RECOVERY,
-							TestStatus.PASS, new Date().getTime() - startTime);
+							TestStatus.PASS, new Date().getTime() - startTime, null);
 				} catch (Throwable e) {
 					LauncherClientManager.getManager().logEnd(recoveryClassName, MethodType.RECOVERY,
-							TestStatus.FAIL, new Date().getTime() - startTime);
+							TestStatus.FAIL, new Date().getTime() - startTime, e);
 					throw new RecoveryFailedException(e);
 				}
 				_logger.info(String.format("Recovery steps specified in %s completed", recoveryClass));

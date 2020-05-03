@@ -226,17 +226,20 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Log {@link Step} completion and duration
 	 * 
-	 * @param method
+	 * @param methodWithArguments
 	 * @param methodType
 	 *            {@link MethodType}
 	 * @param testStatus
 	 *            {@link TestStatus}
 	 * 
 	 * @param duration
+	 * @param t
+	 *            {@link Throwable}
 	 */
-	public void logEnd(String method, MethodType methodType, TestStatus testStatus, long duration) {
-		if (isEnabled && !method.toLowerCase().startsWith("automacent"))
+	public void logEnd(String methodWithArguments, MethodType methodType, TestStatus testStatus, long duration,
+			Throwable t) {
+		if (isEnabled && !methodWithArguments.toLowerCase().startsWith("automacent"))
 			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.logEnd(method, methodType, testStatus, duration);
+				launcherClient.logEnd(methodWithArguments, methodType, testStatus, duration, t);
 	}
 }
