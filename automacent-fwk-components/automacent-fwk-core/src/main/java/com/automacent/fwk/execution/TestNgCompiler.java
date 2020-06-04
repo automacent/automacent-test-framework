@@ -117,10 +117,9 @@ public class TestNgCompiler {
 				}
 			if (!repeat) {
 				BaseTest.getTestObject().setRepeatMode(RepeatMode.OFF.name());
-				_logger.info(String.format(
-						"Starting test without repeat logic sice @Repeat annotation is not used on the test. "
-								+ "Repeat Mode is %s",
-						repeatMode.name()));
+				_logger.info(String
+						.format("Starting test without repeat logic sice @Repeat annotation is not used on the test. "
+								+ "Repeat Mode is %s", repeatMode.name()));
 			}
 		} else {
 			_logger.info("Starting test without repeat logic. Repeat Mode is OFF");
@@ -134,6 +133,12 @@ public class TestNgCompiler {
 				IterationManager.getManager().startIteration();
 				long iterationStartTime = new Date().getTime();
 				try {
+					try {
+						IterationManager.getManager().sleepBetweenIteration();
+					} catch (TestDurationExceededException e) {
+						_logger.warn("Test Duration exceeded during sleep between iterations");
+						throw e;
+					}
 					BaseTest.getTestObject().getRecoveryManager().executeRecoveryScenarios();
 					result = point.proceed();
 					ExecutionLogManager.logIterationSuccess(point, new Date().getTime() - iterationStartTime);
@@ -149,11 +154,6 @@ public class TestNgCompiler {
 					}
 				} finally {
 					IterationManager.getManager().stopIteration();
-					try {
-						IterationManager.getManager().sleepTillNextIteration();
-					} catch (TestDurationExceededException e) {
-						_logger.warn("Test Duration exceeding during sleep till next iteration. Iteration will exit.");
-					}
 				}
 			}
 
