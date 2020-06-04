@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.UnreachableBrowserException;
 
 import com.automacent.fwk.annotations.Action;
+import com.automacent.fwk.exceptions.LauncherForceCompletedException;
 import com.automacent.fwk.exceptions.TestDurationExceededException;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.ThreadUtils;
@@ -128,6 +129,25 @@ public class ExceptionManager {
 			e = e.getCause();
 		}
 		return isTestDurationExceeded;
+	}
+
+	/**
+	 * Check if Exception cause is {@link LauncherForceCompletedException}
+	 * 
+	 * @param e
+	 *            {@link Throwable}
+	 * @return True if given Throwable is a type of LauncherForceCompletedException
+	 */
+	public static boolean isExceptionLauncherForceCompletedException(Throwable e) {
+		boolean isLauncherForceCompleted = false;
+		while (e != null) {
+			if (e instanceof LauncherForceCompletedException) {
+				isLauncherForceCompleted = true;
+				break;
+			}
+			e = e.getCause();
+		}
+		return isLauncherForceCompleted;
 	}
 
 	/**
