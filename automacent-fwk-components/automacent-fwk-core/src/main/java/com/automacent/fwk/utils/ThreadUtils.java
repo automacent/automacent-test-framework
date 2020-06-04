@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.TestStatus;
+import com.automacent.fwk.exceptions.LauncherForceCompletedException;
 import com.automacent.fwk.execution.IterationManager;
 import com.automacent.fwk.launcher.LauncherClientManager;
 import com.automacent.fwk.launcher.LauncherHeartBeat;
@@ -49,6 +50,8 @@ public class ThreadUtils {
 			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.FAIL,
 					new Date().getTime() - startTime, e);
 			_logger.warn("Thread.sleep interuppted", e);
+		} catch (LauncherForceCompletedException e) {
+			throw e;
 		} catch (Exception e) {
 			LauncherClientManager.getManager().logEnd("sleep", MethodType.SLEEP, TestStatus.FAIL,
 					new Date().getTime() - startTime, e);

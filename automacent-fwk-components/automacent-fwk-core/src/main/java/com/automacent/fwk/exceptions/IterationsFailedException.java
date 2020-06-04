@@ -8,14 +8,14 @@ import java.util.Map;
  * 
  * @author sighil.sivadas
  */
-public class IterationFailedException extends RuntimeException {
+public class IterationsFailedException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8187605870144828935L;
 
-	private IterationFailedException(String message) {
+	private IterationsFailedException(String message) {
 		super(message);
 	}
 
@@ -24,11 +24,11 @@ public class IterationFailedException extends RuntimeException {
 	 * 
 	 * @param errorMap
 	 */
-	public IterationFailedException(Map<Integer, String> errorMap) {
+	public IterationsFailedException(Map<Integer, String> errorMap) {
 		String message = "Test failed because there are iteration failures";
 		for (int iteration : errorMap.keySet()) {
 			message += String.format("%s\nIteration %s - %s", message, iteration, errorMap.get(iteration));
 		}
-		new IterationFailedException(message);
+		new IterationsFailedException(message);
 	}
 }

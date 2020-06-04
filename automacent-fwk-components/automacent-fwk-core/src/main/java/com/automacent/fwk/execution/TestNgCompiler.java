@@ -16,7 +16,7 @@ import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.RepeatMode;
 import com.automacent.fwk.enums.RetryMode;
-import com.automacent.fwk.exceptions.IterationFailedException;
+import com.automacent.fwk.exceptions.IterationsFailedException;
 import com.automacent.fwk.exceptions.MainTestInvocationFailedException;
 import com.automacent.fwk.exceptions.TestDurationExceededException;
 import com.automacent.fwk.reporting.ExecutionLogManager;
@@ -151,6 +151,8 @@ public class TestNgCompiler {
 						ExecutionLogManager.logIterationFailure(point, e, new Date().getTime() - iterationStartTime);
 						IterationManager.getManager().addError(e);
 						IterationManager.getManager().setExecuteRecoveryScenarios(true);
+						if (ExceptionManager.isExceptionLauncherForceCompletedException(e))
+							break;
 					}
 				} finally {
 					IterationManager.getManager().stopIteration();
@@ -164,12 +166,10 @@ public class TestNgCompiler {
 			Map<Integer, String> errorMap = IterationManager.getManager().getErrorMap();
 
 			if (!errorMap.isEmpty()) {
-				try {
-					throw new IterationFailedException(errorMap);
-				} catch (Exception e) {
-					ExecutionLogManager.logTestFailure(point, MethodType.TEST, e, new Date().getTime() - startTime);
-					throw e;
-				}
+				IterationsFailedException iterationsFailedException = new IterationsFailedException(errorMap);
+				ExecutionLogManager.logTestFailure(point, MethodType.TEST, iterationsFailedException,
+						new Date().getTime() - startTime);
+				throw iterationsFailedException;
 			} else {
 				ExecutionLogManager.logTestSuccess(point, MethodType.TEST, new Date().getTime() - startTime);
 			}
