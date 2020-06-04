@@ -222,10 +222,10 @@ public class IterationManager {
 	/**
 	 * Sleep for the set delayBetweenIterationInSeconds parameter set for the test
 	 */
-	public void sleepTillNextIteration() {
-		if (getIteration() > 0) {
+	public void sleepBetweenIteration() {
+		if (getIteration() > 1) {
 			int sleepTimeInSeconds = (int) BaseTest.getTestObject().getDelayBetweenIterationInSeconds();
-			_logger.info("Test will sleep for " + sleepTimeInSeconds + " seconds untill start of next iteration");
+			_logger.info("Test will sleep for " + sleepTimeInSeconds + " seconds as the set value between iteration");
 			ThreadUtils.sleepFor(sleepTimeInSeconds);
 		}
 	}
