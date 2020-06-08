@@ -113,6 +113,7 @@ public class Driver {
 
 	private BrowserId browserId;
 	private WebDriver webDriver;
+	private Boolean browserCrashed = false;
 
 	// Executables --------------------------------------------------
 	/**
@@ -462,4 +463,23 @@ public class Driver {
 			_logger.warn(String.format("Driver %s is already dead", webDriver));
 		}
 	}
+
+	// Browser crash --------------------------------------
+
+	/**
+	 * Check if browser has crashed
+	 * 
+	 * @return True if browser is crashed
+	 */
+	public Boolean isbrowserCrashed() {
+		return browserCrashed;
+	}
+
+	/**
+	 * Mark browser as crashed
+	 */
+	public void markBrowserCrashed() {
+		this.browserCrashed = true;
+	}
+
 }

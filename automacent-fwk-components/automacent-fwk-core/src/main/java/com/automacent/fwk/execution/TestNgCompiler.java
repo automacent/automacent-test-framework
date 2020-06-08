@@ -50,6 +50,8 @@ public class TestNgCompiler {
 			+ "(execution(* *(..)) && @annotation(org.testng.annotations.BeforeTest)) || "
 			+ "(execution(* *(..)) && @annotation(org.testng.annotations.BeforeMethod))")
 	public Object aroundBeforeCompilerAspect(ProceedingJoinPoint point) throws Throwable {
+		if (BaseTest.getTestObject().getDriverManager().isBrowserCrashed())
+			return null;
 		long startTime = new Date().getTime();
 		ExecutionLogManager.logTestStart(point, MethodType.BEFORE);
 		Object result = null;
@@ -58,6 +60,7 @@ public class TestNgCompiler {
 			ExecutionLogManager.logTestSuccess(point, MethodType.BEFORE, new Date().getTime() - startTime);
 		} catch (Throwable e) {
 			ExecutionLogManager.logTestFailure(point, MethodType.BEFORE, e, new Date().getTime() - startTime);
+			checkForBrowserCrash(e);
 			throw e;
 		}
 		return result;
@@ -79,6 +82,9 @@ public class TestNgCompiler {
 			+ "(execution(* *(..)) && @annotation(org.testng.annotations.AfterTest)) || "
 			+ "(execution(* *(..)) && @annotation(org.testng.annotations.AfterMethod))")
 	public Object aroundAfterCompilerAspect(ProceedingJoinPoint point) throws Throwable {
+		if (BaseTest.getTestObject().getDriverManager().isBrowserCrashed())
+			return null;
+
 		long startTime = new Date().getTime();
 		ExecutionLogManager.logTestStart(point, MethodType.AFTER);
 		Object result = null;
@@ -87,6 +93,7 @@ public class TestNgCompiler {
 			ExecutionLogManager.logTestSuccess(point, MethodType.AFTER, new Date().getTime() - startTime);
 		} catch (Throwable e) {
 			ExecutionLogManager.logTestFailure(point, MethodType.AFTER, e, new Date().getTime() - startTime);
+			checkForBrowserCrash(e);
 			throw e;
 		}
 		return result;
@@ -130,6 +137,8 @@ public class TestNgCompiler {
 			ExecutionLogManager.logTestStart(point, MethodType.TEST);
 			_logger.info(String.format("Starting test with the repeat logic. Repeat mode is %s", repeatMode.name()));
 			while (IterationManager.getManager().isIterationRemaining()) {
+				if (BaseTest.getTestObject().getDriverManager().isBrowserCrashed())
+					break;
 				IterationManager.getManager().startIteration();
 				long iterationStartTime = new Date().getTime();
 				try {
@@ -143,16 +152,17 @@ public class TestNgCompiler {
 					result = point.proceed();
 					ExecutionLogManager.logIterationSuccess(point, new Date().getTime() - iterationStartTime);
 				} catch (Throwable e) {
-					if (ExceptionManager.isExceptionTestDurationExceededException(e)
+					checkForBrowserCrash(e);
+					if (ExceptionManager.isTestDurationExceededException(e)
 							&& IterationManager.getManager().getIteration() > 1) {
 						_logger.warn("Test Duration exceeded during execution. "
 								+ "Iteration will exit without failure as at least one iteration is completed.");
 					} else {
 						ExecutionLogManager.logIterationFailure(point, e, new Date().getTime() - iterationStartTime);
 						IterationManager.getManager().addError(e);
-						IterationManager.getManager().setExecuteRecoveryScenarios(true);
-						if (ExceptionManager.isExceptionLauncherForceCompletedException(e))
+						if (ExceptionManager.isLauncherForceCompletedException(e))
 							break;
+						IterationManager.getManager().setExecuteRecoveryScenarios(true);
 					}
 				} finally {
 					IterationManager.getManager().stopIteration();
@@ -174,6 +184,8 @@ public class TestNgCompiler {
 				ExecutionLogManager.logTestSuccess(point, MethodType.TEST, new Date().getTime() - startTime);
 			}
 		} else {
+			if (BaseTest.getTestObject().getDriverManager().isBrowserCrashed())
+				return null;
 			ExecutionLogManager.logTestStart(point, MethodType.TEST);
 			RetryMode retryMode = BaseTest.getTestObject().getRetryMode();
 			try {
@@ -181,7 +193,10 @@ public class TestNgCompiler {
 				ExecutionLogManager.logTestSuccess(point, MethodType.TEST, new Date().getTime() - startTime);
 			} catch (Throwable e) {
 				ExecutionLogManager.logTestFailure(point, MethodType.TEST, e, new Date().getTime() - startTime);
+				checkForBrowserCrash(e);
 				if (retryMode.name().equals(RetryMode.ON.name())) {
+					if (BaseTest.getTestObject().getDriverManager().isBrowserCrashed())
+						return null;
 					ExecutionLogManager.logTestStart(point, MethodType.RETRY);
 					long retryStartTime = new Date().getTime();
 					_logger.info("Retrying test as Retry Mode is ON");
@@ -193,6 +208,7 @@ public class TestNgCompiler {
 					} catch (Throwable ee) {
 						ExecutionLogManager.logTestFailure(point, MethodType.RETRY, e,
 								new Date().getTime() - retryStartTime);
+						checkForBrowserCrash(e);
 						throw e;
 					}
 				} else {
@@ -202,5 +218,10 @@ public class TestNgCompiler {
 			}
 		}
 		return result;
+	}
+
+	private void checkForBrowserCrash(Throwable e) {
+		if (ExceptionManager.isBrowserCrashException(e))
+			BaseTest.getTestObject().getDriverManager().markBrowserCrashed();
 	}
 }
