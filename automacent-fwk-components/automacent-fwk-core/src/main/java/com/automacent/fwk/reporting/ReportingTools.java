@@ -55,6 +55,8 @@ public class ReportingTools {
 		try {
 			screenshotFrame = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize().width,
 					Toolkit.getDefaultToolkit().getScreenSize().height - 75);
+			_logger.info(String.format("Screen resolution is %sx%s", Toolkit.getDefaultToolkit().getScreenSize().width,
+					Toolkit.getDefaultToolkit().getScreenSize().height));
 		} catch (AWTError e) {
 			screenshotFrame = new Rectangle(1024, 768);
 			BaseTest.getTestObject().setScreenshotType(ScreenshotType.BROWSER_SCREENSHOT.name());

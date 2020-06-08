@@ -2,6 +2,7 @@ package com.automacent.fwk.execution;
 
 import java.net.SocketTimeoutException;
 
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -35,19 +36,20 @@ public class ExceptionManager {
 	 *            {@link Throwable}
 	 * @return True if retry required
 	 */
-	public static boolean shouldPerformActionRetry(Throwable ee) {
+	public static boolean shouldPerformActionRetry(Throwable e) {
 		boolean isRetry = false;
-		while (ee != null) {
-			if (ee instanceof StaleElementReferenceException) {
+		while (e != null) {
+			if (e instanceof StaleElementReferenceException) {
 				_logger.info("Stale Element Reference Exception occured");
 				isRetry = true;
 				break;
-			} else if (ee instanceof WebDriverException && ee.getMessage().contains("is not clickable at point")) {
+			} else if (e instanceof WebDriverException && e.getMessage() != null
+					&& e.getMessage().contains("is not clickable at point")) {
 				_logger.info("Element is not clickable at the given point");
 				isRetry = true;
 				break;
 			}
-			ee = ee.getCause();
+			e = e.getCause();
 		}
 		if (isRetry)
 			ThreadUtils.sleepFor(10);
@@ -82,22 +84,23 @@ public class ExceptionManager {
 	 *            {@link Throwable}
 	 * @return True if given Throwable is a type of SocketTimeoutException
 	 */
-	public static boolean isExceptionSocketTimeout(Throwable e) {
+	public static boolean isSocketTimeoutException(Throwable e) {
 		boolean isSocketTimeout = false;
 		while (e != null) {
 			if (e instanceof UnreachableBrowserException
-					&& e.getMessage().toLowerCase()
+					&& e.getMessage() != null && e.getMessage().toLowerCase()
 							.contains("Error communicating with the remote browser. It may have died.".toLowerCase())) {
 				_logger.info("Error communicating with the remote browser occured");
 				isSocketTimeout = true;
 				break;
 			} else if (e instanceof TimeoutException
-					&& e.getMessage().toLowerCase()
+					&& e.getMessage() != null && e.getMessage().toLowerCase()
 							.contains("Timed out receiving message from renderer".toLowerCase())) {
 				_logger.info("Exception timed out receiving message from renderer occured");
 				isSocketTimeout = true;
 				break;
 			} else if (e instanceof WebDriverException
+					&& e.getMessage() != null
 					&& e.getMessage().toLowerCase().contains("Read timed out".toLowerCase())) {
 				_logger.info("Java socket timeout exception occured");
 				isSocketTimeout = true;
@@ -119,7 +122,7 @@ public class ExceptionManager {
 	 *            {@link Throwable}
 	 * @return True if given Throwable is a type of TestDurationExceededException
 	 */
-	public static boolean isExceptionTestDurationExceededException(Throwable e) {
+	public static boolean isTestDurationExceededException(Throwable e) {
 		boolean isTestDurationExceeded = false;
 		while (e != null) {
 			if (e instanceof TestDurationExceededException) {
@@ -138,7 +141,7 @@ public class ExceptionManager {
 	 *            {@link Throwable}
 	 * @return True if given Throwable is a type of LauncherForceCompletedException
 	 */
-	public static boolean isExceptionLauncherForceCompletedException(Throwable e) {
+	public static boolean isLauncherForceCompletedException(Throwable e) {
 		boolean isLauncherForceCompleted = false;
 		while (e != null) {
 			if (e instanceof LauncherForceCompletedException) {
@@ -148,6 +151,31 @@ public class ExceptionManager {
 			e = e.getCause();
 		}
 		return isLauncherForceCompleted;
+	}
+
+	/**
+	 * Check if Exception comes under the category of different manifestations of
+	 * indicating browser crash. When these Exceptions occur, {@link WebDriver}
+	 * might still be active but the browser might have crashed
+	 * 
+	 * @param e
+	 *            {@link Throwable}
+	 * @return True if exception could have lead to browser crash
+	 */
+	public static boolean isBrowserCrashException(Throwable e) {
+		boolean isFatal = false;
+		while (e != null) {
+			if (e instanceof WebDriverException
+					&& e.getMessage() != null
+					&& e.getMessage().toLowerCase().contains("session deleted because of page crash")
+					|| e instanceof NoSuchSessionException) {
+				_logger.info("Browser have crashed");
+				isFatal = true;
+				break;
+			}
+			e = e.getCause();
+		}
+		return isFatal;
 	}
 
 	/**

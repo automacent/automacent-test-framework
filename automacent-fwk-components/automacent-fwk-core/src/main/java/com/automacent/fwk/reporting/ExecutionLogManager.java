@@ -140,7 +140,7 @@ public class ExecutionLogManager {
 				e);
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.ON_FAILURE))
-			if (ExceptionManager.isExceptionSocketTimeout(e))
+			if (ExceptionManager.isSocketTimeoutException(e))
 				ReportingTools.logScreenGrabOnFailure("Test failed : " + e.getMessage());
 			else
 				ReportingTools.logScreenshotOnFailure("Test failed : " + e.getMessage());
@@ -248,7 +248,7 @@ public class ExecutionLogManager {
 						e);
 
 		if (BaseTest.getTestObject().getScreenshotModes().contains(ScreenshotMode.ON_FAILURE)) {
-			if (ExceptionManager.isExceptionSocketTimeout(e))
+			if (ExceptionManager.isSocketTimeoutException(e))
 				ReportingTools.logScreenGrabOnFailure("Test failed : " + e.getMessage());
 			else
 				ReportingTools.logScreenshotOnFailure("Test failed : " + e.getMessage());
