@@ -204,22 +204,4 @@ public class DriverManager {
 		getActiveDriver().getWebDriver().get(BaseTest.getTestObject().getBaseUrl());
 	}
 
-	/**
-	 * Mark the active browser as crashed
-	 */
-	public void markBrowserCrashed() {
-		getActiveDriver().markBrowserCrashed();
-	}
-
-	/**
-	 * Check if the active browser is crashed
-	 * 
-	 * @return true if browser crashed
-	 */
-	public boolean isBrowserCrashed() {
-		boolean isBrowserCrashed = getActiveDriver().isbrowserCrashed();
-		if (isBrowserCrashed)
-			_logger.info("Browser crashed");
-		return isBrowserCrashed;
-	}
 }
