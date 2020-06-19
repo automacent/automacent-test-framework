@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
@@ -423,7 +424,10 @@ public class Driver {
 					WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
 					_logger.info("Using chromeDriver from framework");
 				}
-				webDriver = new ChromeDriver();
+				ChromeOptions chromeOptions = new ChromeOptions();
+				chromeOptions.addArguments("--no-sandbox");
+				chromeOptions.addArguments("--disable-dev-shm-usage");
+				webDriver = new ChromeDriver(chromeOptions);
 			} else if (browser.name().equals(DriverManagerType.FIREFOX.name())) {
 				if (geckoDriverLocation == null) {
 					WebDriverManager.getInstance(DriverManagerType.FIREFOX).setup();
