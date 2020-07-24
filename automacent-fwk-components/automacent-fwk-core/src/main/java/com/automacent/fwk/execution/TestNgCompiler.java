@@ -106,6 +106,7 @@ public class TestNgCompiler {
 	public Object aroundTestCompilerAspect(ProceedingJoinPoint point) throws Throwable {
 		long startTime = new Date().getTime();
 		Method method = MethodSignature.class.cast(point.getSignature()).getMethod();
+		ExecutionLogManager.logTestStart(point, MethodType.TEST);
 		boolean repeat = false;
 		RepeatMode repeatMode = BaseTest.getTestObject().getRepeatMode();
 		if (!repeatMode.name().equals(RepeatMode.OFF.name())) {
@@ -127,7 +128,6 @@ public class TestNgCompiler {
 
 		Object result = null;
 		if (repeat) {
-			ExecutionLogManager.logTestStart(point, MethodType.TEST);
 			_logger.info(String.format("Starting test with the repeat logic. Repeat mode is %s", repeatMode.name()));
 			while (IterationManager.getManager().isIterationRemaining()) {
 				IterationManager.getManager().startIteration();
@@ -175,7 +175,6 @@ public class TestNgCompiler {
 				ExecutionLogManager.logTestSuccess(point, MethodType.TEST, new Date().getTime() - startTime);
 			}
 		} else {
-			ExecutionLogManager.logTestStart(point, MethodType.TEST);
 			RetryMode retryMode = BaseTest.getTestObject().getRetryMode();
 			try {
 				result = point.proceed();

@@ -9,6 +9,7 @@ import org.testng.TestListenerAdapter;
 import org.testng.TestNGException;
 import org.testng.annotations.BeforeTest;
 
+import com.automacent.fwk.annotations.StepsAndPagesProcessor;
 import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.enums.ScreenshotModeForIteration;
 import com.automacent.fwk.exceptions.TestOrConfigurationSkipException;
@@ -118,6 +119,10 @@ public class AutomacentListener extends TestListenerAdapter implements IInvokedM
 	}
 
 	public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult testResult, ITestContext testContext) {
+		String methodName = invokedMethod.getTestMethod().getMethodName();
+		if (!methodName.startsWith("automacentInternal")
+				&& BaseTest.getTestObject().getDriverManager().getActiveDriver() != null)
+			StepsAndPagesProcessor.processAnnotation(invokedMethod.getTestMethod().getInstance());
 	}
 
 	/**
