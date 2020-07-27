@@ -32,8 +32,7 @@ public abstract class BrowserControls {
 	/**
 	 * Open the URL in browser window
 	 * 
-	 * @param url
-	 *            URL of the application to load
+	 * @param url URL of the application to load
 	 */
 	@Step
 	public void openUrl(String url) {
@@ -45,7 +44,7 @@ public abstract class BrowserControls {
 	/**
 	 * Switch to window specified by the window handle
 	 * 
-	 * @param windowHandle
+	 * @param windowHandle Selenium window handle
 	 */
 	@Step
 	public void switchToWindow(String windowHandle) {
@@ -55,7 +54,7 @@ public abstract class BrowserControls {
 	/**
 	 * Switch to window specified by the index
 	 * 
-	 * @param index
+	 * @param index Index of window
 	 */
 	@Step
 	public void switchToWindow(int index) {
@@ -134,8 +133,7 @@ public abstract class BrowserControls {
 	 * Check if a new window is open. This method assumes that the new window is of
 	 * index 1. [Index starts from 0].
 	 * 
-	 * @param timeoutInSeconds
-	 *            Time to wait for new window
+	 * @param timeoutInSeconds Time to wait for new window
 	 * @return true if found
 	 */
 	@Step
@@ -172,6 +170,8 @@ public abstract class BrowserControls {
 
 	/**
 	 * Get the Page source
+	 * 
+	 * @return Page source
 	 */
 	@Step
 	public String getPageSource() {

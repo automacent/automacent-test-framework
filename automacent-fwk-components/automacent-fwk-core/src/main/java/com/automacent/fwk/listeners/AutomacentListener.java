@@ -84,9 +84,9 @@ public class AutomacentListener extends TestListenerAdapter implements IInvokedM
 	}
 
 	/**
-	 * Override method for onFinish in the TestNG library<br/>
-	 * Override is done to log the iteration details and screenshot management
-	 * according to the set {@link ScreenshotModeForIteration} parameter.
+	 * Override method for onFinish in the TestNG library. Override is done to log
+	 * the iteration details and screenshot management according to the set
+	 * {@link ScreenshotModeForIteration} parameter.
 	 */
 	@Override
 	public void onFinish(ITestContext testContext) {

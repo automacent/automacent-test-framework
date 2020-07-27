@@ -24,7 +24,7 @@ public class CustomExpectedConditions {
 	 * {@link CustomExpectedConditions#proxyElementLocated(WebElement)} will take
 	 * care of this scenario
 	 * 
-	 * @param proxyElement
+	 * @param proxyElement Proxy {@link WebElement} object
 	 * @return null if not found, element if found
 	 */
 	public static ExpectedCondition<WebElement> proxyElementLocated(final WebElement proxyElement) {

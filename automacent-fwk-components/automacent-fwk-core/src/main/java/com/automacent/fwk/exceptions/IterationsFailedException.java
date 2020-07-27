@@ -22,7 +22,8 @@ public class IterationsFailedException extends RuntimeException {
 	/**
 	 * initialize the Exception with the map of test failure errors
 	 * 
-	 * @param errorMap
+	 * @param errorMap Error map containing the errors that occurred in the
+	 *                 iterations
 	 */
 	public IterationsFailedException(Map<Integer, String> errorMap) {
 		String message = "Test failed because there are iteration failures";

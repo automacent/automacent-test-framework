@@ -403,12 +403,12 @@ public class Driver {
 	 * This method initializes the driver (opens browser), maximizes browser window,
 	 * sets timeouts and deletes the cookies.
 	 * 
-	 * @param browser
-	 *            {@link Browser}
+	 * @param driverManagerType
+	 *            {@link DriverManagerType}
 	 */
-	public void startDriver(DriverManagerType browser) {
+	public void startDriver(DriverManagerType driverManagerType) {
 		try {
-			if (browser.name().equals(DriverManagerType.IEXPLORER.name())) {
+			if (driverManagerType.name().equals(DriverManagerType.IEXPLORER.name())) {
 				DesiredCapabilities capab = DesiredCapabilities.internetExplorer();
 				capab.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 				capab.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
@@ -419,7 +419,7 @@ public class Driver {
 					_logger.info("Using ieDriver from framework");
 				}
 				webDriver = new InternetExplorerDriver(ieOptions);
-			} else if (browser.name().equals(DriverManagerType.CHROME.name())) {
+			} else if (driverManagerType.name().equals(DriverManagerType.CHROME.name())) {
 				if (chromeDriverLocation == null) {
 					WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
 					_logger.info("Using chromeDriver from framework");
@@ -428,13 +428,13 @@ public class Driver {
 				chromeOptions.addArguments("--no-sandbox");
 				chromeOptions.addArguments("--disable-dev-shm-usage");
 				webDriver = new ChromeDriver(chromeOptions);
-			} else if (browser.name().equals(DriverManagerType.FIREFOX.name())) {
+			} else if (driverManagerType.name().equals(DriverManagerType.FIREFOX.name())) {
 				if (geckoDriverLocation == null) {
 					WebDriverManager.getInstance(DriverManagerType.FIREFOX).setup();
 					_logger.info("Using geckoDriver from framework");
 				}
 				webDriver = new FirefoxDriver();
-			} else if (browser.name().equals(DriverManagerType.CHROMIUM.name())) {
+			} else if (driverManagerType.name().equals(DriverManagerType.CHROMIUM.name())) {
 				WebDriverManager.getInstance(DriverManagerType.CHROMIUM).setup();
 				webDriver = new ChromeDriver();
 			}

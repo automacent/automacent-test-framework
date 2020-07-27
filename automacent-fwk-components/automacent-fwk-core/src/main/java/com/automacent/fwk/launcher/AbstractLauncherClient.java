@@ -154,12 +154,12 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 	/**
 	 * Set Test instance id
 	 * 
-	 * @param testInstanceId
+	 * @param testInstanceId Test instance id from logger application
 	 */
 	protected void setTestInstanceId(String testInstanceId) {
 		try {
 			this.testInstanceId = Long.parseLong(testInstanceId);
-		} catch (Exception e) {			
+		} catch (Exception e) {
 		}
 	}
 }

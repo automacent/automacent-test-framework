@@ -31,19 +31,19 @@ public class Logger {
 	 * Format the message for TEXT Report by adding the space according to the
 	 * nesting level
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
+	 * @return Formatted String
 	 */
 	protected String formatMessageForText(String message) {
 		return LoggingUtils.getSpaceForNestingLevel(LoggingUtils.getNestingLevelOfLogs(), TEXT) + message;
 	}
 
 	/**
-	 * Format the message for HTML Report by adding the space (&bsp;) according to
-	 * the nesting level
+	 * Format the message for HTML Report by adding the space according to the
+	 * nesting level
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
+	 * @return Formatted String
 	 */
 	protected String formatMessageForHTML(String message) {
 		return LoggingUtils.getSpaceForNestingLevel(LoggingUtils.getNestingLevelOfLogs() + 1, HTML) + message;
@@ -53,19 +53,19 @@ public class Logger {
 	 * Format the message for TEXT Report by adding the space according to the
 	 * nesting level
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
+	 * @return Formatted String
 	 */
 	protected String formatMessageForTextHeading(String message) {
 		return LoggingUtils.getSpaceForNestingLevel(LoggingUtils.getNestingLevelOfLogs() - 2, TEXT) + message;
 	}
 
 	/**
-	 * Format the message for HTML Report by adding the space (&bsp;) according to
-	 * the nesting level
+	 * Format the message for HTML Report by adding the space according to the
+	 * nesting level
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
+	 * @return Formatted String
 	 */
 	protected String formatMessageForHTMLHeading(String message) {
 		return LoggingUtils.getSpaceForNestingLevel(LoggingUtils.getNestingLevelOfLogs() - 2 + 1, HTML) + message;
@@ -76,8 +76,7 @@ public class Logger {
 	/**
 	 * Print DEBUG statement to TEXT log and HTML report
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
 	 */
 	public void trace(String message) {
 		_logger.trace(formatMessageForText(message));
@@ -89,8 +88,7 @@ public class Logger {
 	/**
 	 * Print DEBUG statement to TEXT log and HTML report
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
 	 */
 	public void debug(String message) {
 		_logger.debug(formatMessageForText(message));
@@ -102,8 +100,7 @@ public class Logger {
 	/**
 	 * Print INFO statement to TEXT log and HTML report
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
 	 */
 	public void info(String message) {
 		_logger.info(formatMessageForText(message));
@@ -113,8 +110,7 @@ public class Logger {
 	/**
 	 * Print WARN statement to TEXT log and HTML report
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
 	 */
 	public void warn(String message) {
 		_logger.warn(formatMessageForText(message));
@@ -124,10 +120,8 @@ public class Logger {
 	/**
 	 * Print WARN statement to TEXT and HTML report along with throwable
 	 * 
-	 * @param message
-	 *            Message to log
-	 * @param throwable
-	 *            Throwable
+	 * @param message   Message to log
+	 * @param throwable Throwable
 	 */
 	public void warn(String message, Throwable throwable) {
 		_logger.warn(formatMessageForText(message), throwable);
@@ -137,8 +131,7 @@ public class Logger {
 	/**
 	 * Print ERROR statement to TEXT log and HTML report
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
 	 */
 	public void error(String message) {
 		_logger.error(formatMessageForText(message));
@@ -148,10 +141,8 @@ public class Logger {
 	/**
 	 * Print ERROR statement to TEXT log and HTML report along with throwable
 	 * 
-	 * @param message
-	 *            Message to log
-	 * @param throwable
-	 *            Throwable
+	 * @param message   Message to log
+	 * @param throwable Throwable
 	 */
 	public void error(String message, Throwable throwable) {
 		_logger.error(formatMessageForText(message), throwable);
@@ -161,8 +152,7 @@ public class Logger {
 	/**
 	 * Print FATAL statement to TEXT log and HTML report
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
 	 */
 	public void fatal(String message) {
 		_logger.fatal(formatMessageForText(message));
@@ -172,10 +162,8 @@ public class Logger {
 	/**
 	 * Print FATAL statement to TEXT log and HTML report along with throwable
 	 * 
-	 * @param message
-	 *            Message to log
-	 * @param throwable
-	 *            Throwable
+	 * @param message   Message to log
+	 * @param throwable Throwable
 	 */
 	public void fatal(String message, Throwable throwable) {
 		_logger.fatal(formatMessageForText(message), throwable);
@@ -185,8 +173,7 @@ public class Logger {
 	/**
 	 * Print INFO statement formatted as a heading to TEXT log and HTML report
 	 * 
-	 * @param message
-	 *            Message to log
+	 * @param message Message to log
 	 */
 	public void infoHeading(String message) {
 		_logger.info(this.formatMessageForTextHeading(message));

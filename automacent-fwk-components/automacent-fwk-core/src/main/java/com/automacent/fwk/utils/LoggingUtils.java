@@ -38,10 +38,8 @@ public class LoggingUtils {
 	/**
 	 * Returns space specified as &nbsp; for HTML and " " for TEXT logs
 	 * 
-	 * @param nestingLevel
-	 *            Number of spaces
-	 * @param logType
-	 *            {@link LogType}
+	 * @param nestingLevel Number of spaces
+	 * @param logType      {@link LogType}
 	 * @return space
 	 */
 	public static String getSpaceForNestingLevel(int nestingLevel, LogType logType) {
@@ -58,8 +56,7 @@ public class LoggingUtils {
 	/**
 	 * Add space between camel cased string
 	 * 
-	 * @param source
-	 *            camel cased string
+	 * @param source camel cased string
 	 * @return String with spaces
 	 */
 	public static String addSpaceToCamelCaseString(String source) {
@@ -69,7 +66,7 @@ public class LoggingUtils {
 	/**
 	 * Add question mark to string which is a question/query
 	 * 
-	 * @param source
+	 * @param source String to be formatted
 	 * @return Formatted string
 	 */
 	public static String addGrammer(String source) {

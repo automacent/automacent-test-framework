@@ -30,8 +30,7 @@ public abstract class BaseTest {
 	 * Get the {@link TestObject} for the current test. If {@link TestObject} is not
 	 * initiated for current Test, a new {@link TestObject}is created
 	 * 
-	 * @param threadId
-	 *            Current execution thread id
+	 * @param threadId Current execution thread id
 	 * 
 	 * @return {@link TestObject}
 	 */
@@ -54,11 +53,10 @@ public abstract class BaseTest {
 	 * services which can update test run result to a custom dashboard. These
 	 * parameters are set for the whole Test suite
 	 * 
-	 * @param launcherClients
-	 *            Comma seperated list of fully qualified launcher client class
-	 *            names
-	 * @param runName
-	 * @param batchNumber
+	 * @param launcherClients Comma seperated list of fully qualified launcher
+	 *                        client class names
+	 * @param runName         Run Name in the logger application
+	 * @param batchNumber     Batch number in the logger application
 	 */
 	@BeforeSuite
 	@Parameters({ "launcherClients", "runName", "batchNumber" })
@@ -71,28 +69,25 @@ public abstract class BaseTest {
 	 * Set up common parameters required by the framework. These parameters will be
 	 * set at Test Level. Each test can provide their custom set of parameters
 	 * 
-	 * @param repeatMode
-	 *            {@link RepeatMode}
-	 * @param testDurationInSeconds
-	 *            Duration for which the tests should run in case {@link RepeatMode}
-	 *            == {@code TEST_DURATION}
-	 * @param invocationCount
-	 *            Number of times the tests should run in case {@link RepeatMode} ==
-	 *            {@code INVOCATION_COUNT}
-	 * @param delayBetweenIterationInSeconds
-	 *            Delay between each repeat in case {@link RepeatMode} ==
-	 *            {@code INVOCATION_COUNT} || {@code TEST_DURATION}
-	 * @param timeoutInSeconds
-	 *            Wait time before exception is thrown
-	 * @param slowdownDurationInSeconds
-	 *            Wait between subsequent {@link Action} methods
-	 * @param retryMode
-	 *            {@link RetryMode}
-	 * @param recoveryClasses
-	 *            Comma seperated list of fully qualified recovery class names in
-	 *            case the {@code RetryMode} == ${code ON}
-	 * @param testContext
-	 *            testNg {@link ITestContext}
+	 * @param repeatMode                     {@link RepeatMode}
+	 * @param testDurationInSeconds          Duration for which the tests should run
+	 *                                       in case {@link RepeatMode} ==
+	 *                                       {@code TEST_DURATION}
+	 * @param invocationCount                Number of times the tests should run in
+	 *                                       case {@link RepeatMode} ==
+	 *                                       {@code INVOCATION_COUNT}
+	 * @param delayBetweenIterationInSeconds Delay between each repeat in case
+	 *                                       {@link RepeatMode} ==
+	 *                                       {@code INVOCATION_COUNT} ||
+	 *                                       {@code TEST_DURATION}
+	 * @param timeoutInSeconds               Wait time before exception is thrown
+	 * @param slowdownDurationInSeconds      Wait between subsequent {@link Action}
+	 *                                       methods
+	 * @param retryMode                      {@link RetryMode}
+	 * @param recoveryClasses                Comma seperated list of fully qualified
+	 *                                       recovery class names in case the
+	 *                                       {@code RetryMode} == ${code ON}
+	 * @param testContext                    testNg {@link ITestContext}
 	 */
 	@BeforeTest
 	@Parameters({ "repeatMode", "testDurationInSeconds", "invocationCount", "delayBetweenIterationInSeconds",

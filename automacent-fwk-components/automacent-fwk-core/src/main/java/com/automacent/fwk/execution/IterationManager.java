@@ -79,7 +79,7 @@ public class IterationManager {
 	/**
 	 * Set the flag to enable execution of recovery scenarios.
 	 * 
-	 * @param executeRecoveryScenarios
+	 * @param executeRecoveryScenarios True id Recovery scenarios has to be executed
 	 */
 	public void setExecuteRecoveryScenarios(boolean executeRecoveryScenarios) {
 		this.executeRecoveryScenarios = executeRecoveryScenarios;
@@ -89,15 +89,14 @@ public class IterationManager {
 	 * Add Test failures in each iteration to a map. These errors will be output
 	 * when all the iterations are completed Add {@link Throwable}
 	 * 
-	 * @param e
-	 *            {@link Throwable}
+	 * @param e {@link Throwable}
 	 */
 	public void addError(Throwable e) {
 		errorMap.put(iteration, e.getMessage());
 	}
 
 	/**
-	 * Get the Error Map containing <Iteration number, Error>
+	 * Get the Error Map containing &lt;Iteration number, Error&gt;
 	 * 
 	 * @return Error map
 	 */
@@ -117,8 +116,7 @@ public class IterationManager {
 	/**
 	 * Check if provided iteration is failed
 	 * 
-	 * @param iteration
-	 *            iteration number
+	 * @param iteration iteration number
 	 * @return True if iteration is failed
 	 */
 	public boolean isIterationFailed(int iteration) {
