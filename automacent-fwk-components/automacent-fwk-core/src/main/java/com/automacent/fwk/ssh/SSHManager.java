@@ -20,9 +20,10 @@ import com.jcraft.jsch.Session;
  * SSH client to execute remote commands using the Exec channel.
  * 
  * To use the SSHManager, the manager should be initiated by calling
- * {@link SSHManager#SSHManager()} and the SSH session must be opened using
- * {@link SSHManager#openSSHSession()}. After completion of execution
- * {@link SSHManager#closeSSHSession()} must be invoked to close the SSH session
+ * {@link SSHManager#SSHManager(String, String, String)} and the SSH session
+ * must be opened using {@link SSHManager#openSSHSession()}. After completion of
+ * execution {@link SSHManager#closeSSHSession()} must be invoked to close the
+ * SSH session
  * 
  * @author sighil.sivadas
  *
@@ -231,8 +232,7 @@ public class SSHManager {
 	 * session should be opened before invoking this method using
 	 * {@link SSHManager#openSSHSession()} method
 	 * 
-	 * @param command
-	 *            Command to be executed
+	 * @param command Command to be executed
 	 * @return true if execution is successful and did not return any error
 	 */
 	public boolean executeCommand(String command) {
@@ -279,7 +279,8 @@ public class SSHManager {
 	private ChannelShell shellChannel;
 
 	/**
-	 * Open Shell channel. Used in the {@link SSHManager#executeShellCommand()}
+	 * Open Shell channel. Used in the
+	 * {@link SSHManager#executeShellCommand(String)}
 	 * 
 	 * @return true if successful
 	 */
@@ -300,7 +301,6 @@ public class SSHManager {
 	 * Close the Shell channel
 	 * 
 	 * @return true is successful
-	 * @throws InterruptedException
 	 */
 	public boolean closeShellChannel() {
 		try {
@@ -326,8 +326,7 @@ public class SSHManager {
 	 * execution. The calling method must close the Shell channel using
 	 * {@link SSHManager#closeShellChannel()}
 	 * 
-	 * @param command
-	 *            Command to be executed
+	 * @param command Command to be executed
 	 * @return {@link BufferedReader} from which the calling method can access the
 	 *         output
 	 */

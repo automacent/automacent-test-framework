@@ -57,7 +57,7 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Get the comma seperated launcher client classes and map it to Java classes
 	 * 
-	 * @param launcherClientClasses
+	 * @param launcherClientClasses Comma separated launcher client classes
 	 */
 	public void addLauncherClientClasses(String launcherClientClasses) {
 		if (!launcherClientClasses.trim().isEmpty()) {
@@ -138,10 +138,10 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Mark start of test on all launcher clients
 	 * 
-	 * @param testObject
-	 * @param invokedMethod
-	 * @param testResult
-	 * @param testContext
+	 * @param testObject    Test object for the Test
+	 * @param invokedMethod TestNG {@link IInvokedMethod}
+	 * @param testResult    TestNG {@link ITestResult}
+	 * @param testContext   TestNG {@link ITestContext}
 	 */
 	@Override
 	public void startTest(TestObject testObject, IInvokedMethod invokedMethod, ITestResult testResult,
@@ -154,14 +154,10 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Mark success of test/iteration on all launcher clients
 	 * 
-	 * @param methodName
-	 *            Name of test method
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param iteration
-	 *            Iteration number
-	 * @param duration
-	 *            Duration of execution of method
+	 * @param methodName Name of test method
+	 * @param methodType {@link MethodType}
+	 * @param iteration  Iteration number
+	 * @param duration   Duration of execution of method
 	 */
 	public void logSuccess(String methodName, MethodType methodType, int iteration, long duration) {
 		if (isEnabled && !methodName.toLowerCase().startsWith("automacent"))
@@ -172,16 +168,11 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Mark failure of test/iteration on all launcher clients
 	 * 
-	 * @param methodName
-	 *            Name of test method
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param iteration
-	 *            Iteration number
-	 * @param e
-	 *            {@link Throwable} resulting in failure
-	 * @param duration
-	 *            Duration of execution of method
+	 * @param methodName Name of test method
+	 * @param methodType {@link MethodType}
+	 * @param iteration  Iteration number
+	 * @param e          {@link Throwable} resulting in failure
+	 * @param duration   Duration of execution of method
 	 */
 	public void logFailure(String methodName, MethodType methodType, int iteration, Throwable e, long duration) {
 		if (isEnabled && !methodName.toLowerCase().startsWith("automacent"))
@@ -201,8 +192,8 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Send heart beat to the launcher server
 	 *
-	 * @throws LauncherForceCompletedException
-	 *             when test instance status is not RUNNING
+	 * @throws LauncherForceCompletedException when test instance status is not
+	 *                                         RUNNING
 	 */
 	public void ping() throws LauncherForceCompletedException {
 		if (isEnabled)
@@ -213,9 +204,8 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Log start of {@link MethodType}
 	 * 
-	 * @param method
-	 * @param methodType
-	 *            {@link MethodType}
+	 * @param method     Name of the method
+	 * @param methodType {@link MethodType}
 	 */
 	public void logStart(String method, MethodType methodType) {
 		if (isEnabled && !method.toLowerCase().startsWith("automacent"))
@@ -226,15 +216,12 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Log {@link Step} completion and duration
 	 * 
-	 * @param methodWithArguments
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param testStatus
-	 *            {@link TestStatus}
+	 * @param methodWithArguments Method name with arguments
+	 * @param methodType          {@link MethodType}
+	 * @param testStatus          {@link TestStatus}
 	 * 
-	 * @param duration
-	 * @param t
-	 *            {@link Throwable}
+	 * @param duration            Duration in milliseconds
+	 * @param t                   {@link Throwable}
 	 */
 	public void logEnd(String methodWithArguments, MethodType methodType, TestStatus testStatus, long duration,
 			Throwable t) {

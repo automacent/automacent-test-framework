@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
  * responses in the following formats
  * <ul>
  * <li>String</li>
- * <li>{@link LinkedHashMap}<String, Object></li>
+ * <li>{@link LinkedHashMap}&lt;String, Object&gt;</li>
  * <li>{@link JsonNode}</li>
  * </ul>
  * 
@@ -51,9 +51,9 @@ public class Response {
 	}
 
 	/**
-	 * Get response as {@link LinkedHashMap}<String, Object>
+	 * Get response as {@link LinkedHashMap}&lt;String, Object&gt;
 	 * 
-	 * @return {@link LinkedHashMap}<String, Object>
+	 * @return {@link LinkedHashMap}&lt;String, Object&gt;
 	 */
 	public Map<String, Object> getResponseBodyAsMap() {
 		return responseBodyAsMap;

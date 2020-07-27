@@ -23,8 +23,7 @@ public class JacksonUtils {
 	/**
 	 * Convert String to JSON pretty print
 	 * 
-	 * @param jsonString
-	 *            JSON String to be converted
+	 * @param jsonString JSON String to be converted
 	 * @return Pretty String
 	 */
 	public static String getPrettyString(String jsonString) {
@@ -39,8 +38,7 @@ public class JacksonUtils {
 	/**
 	 * Convert {@link JsonNode} to String
 	 * 
-	 * @param jsonNode
-	 *            {@link JsonNode} to be converted
+	 * @param jsonNode {@link JsonNode} to be converted
 	 * @return JSON String
 	 */
 	public static String getString(JsonNode jsonNode) {
@@ -53,10 +51,9 @@ public class JacksonUtils {
 	}
 
 	/**
-	 * Convert {@link Map}<String, Object> to String
+	 * Convert {@link Map}&lt;String, Object&gt; to String
 	 * 
-	 * @param jsonMap
-	 *            {@link Map}<String, Object> to be converted
+	 * @param jsonMap {@link Map}&lt;String, Object&gt; to be converted
 	 * @return JSON String
 	 */
 	public static String getString(Map<String, Object> jsonMap) {
@@ -65,11 +62,10 @@ public class JacksonUtils {
 
 	/**
 	 * 
-	 * Convert JSON String to {@link LinkedHashMap}<String, Object>
+	 * Convert JSON String to {@link LinkedHashMap}&lt;String, Object&gt;
 	 * 
-	 * @param jsonString
-	 *            JSON String to be converted
-	 * @return {@link LinkedHashMap}<String, Object>
+	 * @param jsonString JSON String to be converted
+	 * @return {@link LinkedHashMap}&lt;String, Object&gt;
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getJsonMap(String jsonString) {
@@ -82,11 +78,10 @@ public class JacksonUtils {
 	}
 
 	/**
-	 * Convert {@link JsonNode} to {@link LinkedHashMap}<String, Object>
+	 * Convert {@link JsonNode} to {@link LinkedHashMap}&lt;String, Object&gt;
 	 * 
-	 * @param jsonNode
-	 *            {@link JsonNode} to be converted
-	 * @return {@link LinkedHashMap}<String, Object>
+	 * @param jsonNode {@link JsonNode} to be converted
+	 * @return {@link LinkedHashMap}&lt;String, Object&gt;
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getJsonMap(JsonNode jsonNode) {
@@ -96,8 +91,7 @@ public class JacksonUtils {
 	/**
 	 * Convert JSON String to {@link JsonNode}
 	 * 
-	 * @param jsonString
-	 *            JSON String to be converted
+	 * @param jsonString JSON String to be converted
 	 * @return {@link JsonNode}
 	 */
 	public static JsonNode getJsonNode(String jsonString) {
@@ -110,10 +104,9 @@ public class JacksonUtils {
 	}
 
 	/**
-	 * Convert {@link Map}<String, Object> to {@link JsonNode}
+	 * Convert {@link Map}&lt;String, Object&gt; to {@link JsonNode}
 	 * 
-	 * @param jsonMap
-	 *            {@link Map}<String, Object> to be converted
+	 * @param jsonMap {@link Map}&lt;String, Object&gt; to be converted
 	 * @return {@link JsonNode}
 	 */
 	public static JsonNode getJsonNode(Map<String, Object> jsonMap) {

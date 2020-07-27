@@ -38,10 +38,8 @@ public class ExecutionLogManager {
 	/**
 	 * Log start of Step/Action method
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
-	 * @param methodType
-	 *            {@link MethodType}
+	 * @param point      {@link ProceedingJoinPoint}
+	 * @param methodType {@link MethodType}
 	 */
 	public static void logMethodStart(ProceedingJoinPoint point, MethodType methodType) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
@@ -55,14 +53,15 @@ public class ExecutionLogManager {
 	}
 
 	/**
+	 * 
 	 * Log end of Step/Action method
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param duration
-	 *            Execution duration for method
+	 * @param point      {@link ProceedingJoinPoint}
+	 * @param methodType {@link MethodType}
+	 * @param testStatus {@link TestStatus}
+	 * @param duration   Execution duration for method in milliseconds
+	 * @param result     {@link ProceedingJoinPoint execution result}
+	 * @param t          {@link Throwable}
 	 */
 	public static void logMethodEnd(ProceedingJoinPoint point, MethodType methodType, TestStatus testStatus,
 			long duration, Object result, Throwable t) {
@@ -81,10 +80,8 @@ public class ExecutionLogManager {
 	/**
 	 * Log start of Test/Before/After TestNG methods
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
-	 * @param methodType
-	 *            {@link MethodType}
+	 * @param point      {@link ProceedingJoinPoint}
+	 * @param methodType {@link MethodType}
 	 */
 	public static void logTestStart(ProceedingJoinPoint point, MethodType methodType) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
@@ -102,10 +99,9 @@ public class ExecutionLogManager {
 	/**
 	 * Log successful completion of Test/Before/After TestNG methods
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
-	 * @param methodType
-	 *            {@link MethodType}
+	 * @param point      {@link ProceedingJoinPoint}
+	 * @param methodType {@link MethodType}
+	 * @param duration   Execution duration for method in milliseconds
 	 */
 	public static void logTestSuccess(ProceedingJoinPoint point, MethodType methodType, long duration) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
@@ -124,14 +120,10 @@ public class ExecutionLogManager {
 	/**
 	 * Log failure of Test/Before/After TestNG methods
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param e
-	 *            {@link Throwable}
-	 * @param duration
-	 *            Duration of Execution of method
+	 * @param point      {@link ProceedingJoinPoint}
+	 * @param methodType {@link MethodType}
+	 * @param e          {@link Throwable}
+	 * @param duration   Duration of Execution of method
 	 */
 	public static void logTestFailure(ProceedingJoinPoint point, MethodType methodType, Throwable e, long duration) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
@@ -158,7 +150,7 @@ public class ExecutionLogManager {
 	/**
 	 * Log failure of Test/Before/After TestNG methods due to skipping of execution
 	 * 
-	 * @param testResult
+	 * @param testResult TestNG {@link ITestResult}
 	 */
 	public static void logTestSkip(ITestResult testResult) {
 		ITestNGMethod testngMethod = testResult.getMethod();
@@ -188,12 +180,9 @@ public class ExecutionLogManager {
 	/**
 	 * Log start of iteration in case {@link Repeat} is true
 	 * 
-	 * @param iteration
-	 *            Iteration count
-	 * @param elapsedTimeInMilliSeconds
-	 *            Elapsed time since last iteration
-	 * @param testDurationInMilliSeconds
-	 *            Set test duration
+	 * @param iteration                  Iteration count
+	 * @param elapsedTimeInMilliSeconds  Elapsed time since last iteration
+	 * @param testDurationInMilliSeconds Set test duration
 	 */
 	public static void logIterationStart(long iteration, long elapsedTimeInMilliSeconds,
 			long testDurationInMilliSeconds) {
@@ -214,8 +203,8 @@ public class ExecutionLogManager {
 	/**
 	 * Log successful completion of Iteration
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
+	 * @param point    {@link ProceedingJoinPoint}
+	 * @param duration Execution duration for method in milliseconds
 	 */
 	public static void logIterationSuccess(ProceedingJoinPoint point, long duration) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
@@ -233,12 +222,9 @@ public class ExecutionLogManager {
 	/**
 	 * Log failure of iteration
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
-	 * @param e
-	 *            {@link Throwable} failure reason
-	 * @param duration
-	 *            Duration of Execution of iteration
+	 * @param point    {@link ProceedingJoinPoint}
+	 * @param e        {@link Throwable} failure reason
+	 * @param duration Duration of Execution of iteration
 	 */
 	public static void logIterationFailure(ProceedingJoinPoint point, Throwable e, long duration) {
 		String methodName = MethodSignature.class.cast(point.getSignature()).getMethod().getName();
@@ -265,12 +251,9 @@ public class ExecutionLogManager {
 	/**
 	 * Log end of iteration in case {@link Repeat} is true
 	 * 
-	 * @param iteration
-	 *            Iteration count
-	 * @param elapsedTimeInMilliSeconds
-	 *            Elapsed time since last iteration
-	 * @param testDurationInMilliSeconds
-	 *            Set test duration
+	 * @param iteration                  Iteration count
+	 * @param elapsedTimeInMilliSeconds  Elapsed time since last iteration
+	 * @param testDurationInMilliSeconds Set test duration
 	 */
 	public static void logIterationEnd(long iteration, long elapsedTimeInMilliSeconds,
 			long testDurationInMilliSeconds) {
@@ -284,8 +267,7 @@ public class ExecutionLogManager {
 	 * {@link RepeatMode#INVOCATION_COUNT} or {@link RepeatMode#TEST_DURATION} and
 	 * is called from the {@link AutomacentListener}
 	 * 
-	 * @param testResult
-	 *            TestNG execution result
+	 * @param testResult TestNG execution result
 	 */
 	public static void logListenerFailure(ITestResult testResult) {
 		ITestNGMethod testngMethod = testResult.getMethod();

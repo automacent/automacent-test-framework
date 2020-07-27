@@ -17,8 +17,9 @@ import com.automacent.fwk.exceptions.LauncherForceCompletedException;
  *
  */
 public interface ILauncherClient {
+
 	/**
-	 * 
+	 * Enable client
 	 */
 	void enableClient();
 
@@ -30,10 +31,10 @@ public interface ILauncherClient {
 	/**
 	 * Mark start of test on all launcher client
 	 * 
-	 * @param testObject
-	 * @param invokedMethod
-	 * @param testResult
-	 * @param testContext
+	 * @param testObject    Test object for the class being logged
+	 * @param invokedMethod TestNG {@link IInvokedMethod} method
+	 * @param testResult    TestNG {@link ITestResult}
+	 * @param testContext   TestNG {@link ITestContext}
 	 */
 	void startTest(TestObject testObject, IInvokedMethod invokedMethod, ITestResult testResult,
 			ITestContext testContext);
@@ -41,30 +42,21 @@ public interface ILauncherClient {
 	/**
 	 * Mark success of test/iteration on launcher client
 	 * 
-	 * @param methodName
-	 *            Name of test method
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param iteration
-	 *            Iteration number
-	 * @param duration
-	 *            Duration of execution of method
+	 * @param methodName Name of test method
+	 * @param methodType {@link MethodType}
+	 * @param iteration  Iteration number
+	 * @param duration   Duration of execution of method
 	 */
 	void logSuccess(String methodName, MethodType methodType, int iteration, long duration);
 
 	/**
 	 * Mark failure of test/iteration on launcher client
 	 * 
-	 * @param methodName
-	 *            Name of test method
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param iteration
-	 *            Iteration number
-	 * @param e
-	 *            {@link Throwable} resulting in failure
-	 * @param duration
-	 *            Duration of execution of method
+	 * @param methodName Name of test method
+	 * @param methodType {@link MethodType}
+	 * @param iteration  Iteration number
+	 * @param e          {@link Throwable} resulting in failure
+	 * @param duration   Duration of execution of method
 	 */
 	void logFailure(String methodName, MethodType methodType, int iteration, Throwable e, long duration);
 
@@ -76,17 +68,16 @@ public interface ILauncherClient {
 	/**
 	 * Send heart beat to the launcher server
 	 *
-	 * @throws LauncherForceCompletedException
-	 *             when test instance status is not RUNNING
+	 * @throws LauncherForceCompletedException when test instance status is not
+	 *                                         RUNNING
 	 */
 	void ping() throws LauncherForceCompletedException;
 
 	/**
 	 * Log start of {@link MethodType}
 	 * 
-	 * @param methodWithArguments
-	 * @param methodType
-	 *            {@link MethodType}
+	 * @param methodWithArguments Method name with arguments
+	 * @param methodType          {@link MethodType}
 	 */
 	public void logStart(String methodWithArguments, MethodType methodType);
 
@@ -94,14 +85,11 @@ public interface ILauncherClient {
 	 * Log {@link MethodType} completion and duration. If {@link MethodType} failure
 	 * then log exception as well
 	 * 
-	 * @param methodWithArguments
-	 * @param methodType
-	 *            {@link MethodType}
-	 * @param testStatus
-	 *            {@link TestStatus}
-	 * @param duration
-	 * @param t
-	 *            {@link Throwable}
+	 * @param methodWithArguments Method name with arguments
+	 * @param methodType          {@link MethodType}
+	 * @param testStatus          {@link TestStatus}
+	 * @param duration            Duration in milliseconds
+	 * @param t                   {@link Throwable}
 	 */
 	public void logEnd(String methodWithArguments, MethodType methodType, TestStatus testStatus, long duration,
 			Throwable t);

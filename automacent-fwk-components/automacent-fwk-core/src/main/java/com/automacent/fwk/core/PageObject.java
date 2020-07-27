@@ -131,8 +131,7 @@ public abstract class PageObject implements IPageObject {
 	 * invoking this constructor, the provided container should be visible in the
 	 * Page
 	 * 
-	 * @param parentContainerXPATH
-	 *            XPATH to identify the parent container
+	 * @param parentContainerXPATH XPATH to identify the parent container
 	 */
 	public PageObject(String parentContainerXPATH) {
 		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
@@ -150,8 +149,7 @@ public abstract class PageObject implements IPageObject {
 	 * invoking this constructor, the provided container should be visible in the
 	 * Page
 	 * 
-	 * @param parentContainer
-	 *            Parent Container element
+	 * @param parentContainer Parent Container element
 	 */
 	public PageObject(WebElement parentContainer) {
 		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
@@ -168,10 +166,8 @@ public abstract class PageObject implements IPageObject {
 	 * invoking this constructor, the provided page container should be visible in
 	 * the Page
 	 * 
-	 * @param superContainer
-	 *            Super Parent Container
-	 * @param parentContainerXPATH
-	 *            XPATH identifier to the parent container element
+	 * @param superContainer       Super Parent Container
+	 * @param parentContainerXPATH XPATH identifier to the parent container element
 	 */
 	public PageObject(WebElement superContainer, String parentContainerXPATH) {
 		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
@@ -188,8 +184,8 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Initialize the specified page class and return object
 	 * 
-	 * @param page
-	 *            Page class to be initialized
+	 * @param <T>  Generic Type of Type {@link IPageObject}
+	 * @param page Page class to be initialized
 	 * @return Instance of class or null if error
 	 */
 	protected <T extends IPageObject> T getPage(Class<T> page) {
@@ -234,10 +230,8 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Execute provided Javascript command
 	 * 
-	 * @param command
-	 *            javascript
-	 * @param elements
-	 *            {@link WebElement}s to be used Javascript
+	 * @param command  javascript
+	 * @param elements {@link WebElement}s to be used Javascript
 	 */
 	@SuppressWarnings("all")
 	protected void executeJavascript(String command, WebElement... elements) {
@@ -247,8 +241,7 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Perform Javascript click
 	 * 
-	 * @param element
-	 *            {@link WebElement} on which click has to be performed
+	 * @param element {@link WebElement} on which click has to be performed
 	 */
 	@com.automacent.fwk.annotations.Action
 	protected void javascriptClick(WebElement element) {
@@ -258,8 +251,7 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Scroll element to view using js scrollIntoView() Javascript function
 	 * 
-	 * @param element
-	 *            {@link WebElement} to scroll into view
+	 * @param element {@link WebElement} to scroll into view
 	 */
 	@com.automacent.fwk.annotations.Action
 	protected void scrollElementToViewUsingJs(WebElement element) {
@@ -271,7 +263,7 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Get {@link Actions} instance
 	 * 
-	 * @return @link Actions} object
+	 * @return {@link Actions} object
 	 */
 	protected Actions mouse() {
 		return new Actions(driver);
@@ -280,8 +272,7 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Execute mouse {@link Actions}
 	 * 
-	 * @param actions
-	 *            The sequence of {@link Actions} to be performed
+	 * @param actions The sequence of {@link Actions} to be performed
 	 */
 	public void performMouseAction(Actions actions) {
 		actions.build().perform();
@@ -290,8 +281,7 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Scroll element to view using selenium {@link Action} (mouse)
 	 * 
-	 * @param element
-	 *            {@link WebElement} to scroll into view
+	 * @param element {@link WebElement} to scroll into view
 	 */
 	@com.automacent.fwk.annotations.Action
 	protected void scrollElementToViewUsingMouse(WebElement element) {
@@ -302,14 +292,9 @@ public abstract class PageObject implements IPageObject {
 	 * Move mouse relative to an element and click on the location. Offset should be
 	 * in pixels.
 	 * 
-	 * @param driver
-	 *            WebDriver instance
-	 * @param element
-	 *            Element against which we have to move
-	 * @param x
-	 *            x-axis to move
-	 * @param y
-	 *            y-axis to move
+	 * @param element Element against which we have to move
+	 * @param x       x-axis to move
+	 * @param y       y-axis to move
 	 */
 	@com.automacent.fwk.annotations.Action
 	protected void moveRelativeToElementAndClick(WebElement element, int x, int y) {
@@ -328,8 +313,7 @@ public abstract class PageObject implements IPageObject {
 	 * Get the {@link WebDriverWait} (explicit wait) object with the set timeout in
 	 * seconds value
 	 * 
-	 * @param explicitWaitInSeconds
-	 *            Explicit wait timeout
+	 * @param explicitWaitInSeconds Explicit wait timeout
 	 * @return {@link WebDriverWait} object
 	 */
 	protected WebDriverWait explicitWait(int explicitWaitInSeconds) {
@@ -348,8 +332,7 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Get the {@link FluentWait} object with the set timeout in seconds value
 	 * 
-	 * @param explicitWaitInSeconds
-	 *            Explicit wait timeout
+	 * @param explicitWaitInSeconds Explicit wait timeout
 	 * @return {@link FluentWait} object
 	 */
 	@SuppressWarnings("deprecation")
@@ -373,17 +356,15 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Common function to implement the different explicit wait scenarios
 	 * 
-	 * @param expectedCondition
-	 *            {@link ExpectedCondition}s
-	 * @param by
-	 *            {@link By} instance to identify the {@link WebElement} on which
-	 *            wait has to be performed. This can be null if {@link WebElement}
-	 *            parameter is provided
-	 * @param element
-	 *            {@link WebElement} instance on which wait has to be provided. This
-	 *            can be null in {@link By} parameter is provided
-	 * @param explicitWaitInSeconds
-	 *            Explicit wait timeout in seconds
+	 * @param expectedCondition     {@link ExpectedCondition}s
+	 * @param by                    {@link By} instance to identify the
+	 *                              {@link WebElement} on which wait has to be
+	 *                              performed. This can be null if
+	 *                              {@link WebElement} parameter is provided
+	 * @param element               {@link WebElement} instance on which wait has to
+	 *                              be provided. This can be null in {@link By}
+	 *                              parameter is provided
+	 * @param explicitWaitInSeconds Explicit wait timeout in seconds
 	 * @return {@link WebElement} on which wait was performed
 	 */
 	private WebElement waitUntil(ExpectedCondition expectedCondition, By by, WebElement element,
@@ -425,8 +406,7 @@ public abstract class PageObject implements IPageObject {
 	/**
 	 * Wait untill Invisibility of Element defined {@link By}
 	 * 
-	 * @param by
-	 *            {@link By}
+	 * @param by {@link By}
 	 * @return true if invisible
 	 */
 	protected boolean waitUntillInvisibilityOfElement(By by) {
@@ -450,10 +430,8 @@ public abstract class PageObject implements IPageObject {
 	 * Override the Implicit wait and enforce the explicit wait for checking whether
 	 * the {@link WebElement} is present in the DOM
 	 *
-	 * @param element
-	 *            {@link WebElement} object
-	 * @param explicitWaitInSeconds
-	 *            Explicit wait timeout in seconds
+	 * @param element               {@link WebElement} object
+	 * @param explicitWaitInSeconds Explicit wait timeout in seconds
 	 * @return true if element is found
 	 */
 	protected boolean isElementFound(WebElement element, int explicitWaitInSeconds) {
@@ -473,10 +451,8 @@ public abstract class PageObject implements IPageObject {
 	 * Override the Implicit wait and enforce the explicit wait for checking whether
 	 * the {@link WebElement} is present in the DOM
 	 *
-	 * @param by
-	 *            {@link By} object
-	 * @param explicitWaitInSeconds
-	 *            Explicit wait timeout in seconds
+	 * @param by                    {@link By} object
+	 * @param explicitWaitInSeconds Explicit wait timeout in seconds
 	 * @return true if element is found
 	 */
 	protected boolean isElementFound(By by, int explicitWaitInSeconds) {
@@ -496,8 +472,7 @@ public abstract class PageObject implements IPageObject {
 	 * Override the Implicit wait and enforce the explicit wait for checking whether
 	 * the {@link WebElement} is present in the DOM. Default explicit wait is used
 	 *
-	 * @param element
-	 *            {@link WebElement} object
+	 * @param element {@link WebElement} object
 	 * @return true if element is found
 	 */
 	protected boolean isElementFound(WebElement element) {
@@ -508,8 +483,7 @@ public abstract class PageObject implements IPageObject {
 	 * Override the Implicit wait and enforce the explicit wait for checking whether
 	 * the {@link WebElement} is present in the DOM. Default explicit wait is used
 	 *
-	 * @param by
-	 *            {@link By} object
+	 * @param by {@link By} object
 	 * @return true if element is found
 	 */
 	protected boolean isElementFound(By by) {

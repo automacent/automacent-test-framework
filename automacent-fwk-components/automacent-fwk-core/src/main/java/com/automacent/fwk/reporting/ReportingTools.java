@@ -70,13 +70,10 @@ public class ReportingTools {
 	/**
 	 * Method for taking screenshot, creating file and adding the file to the report
 	 * 
-	 * @param message
-	 *            Message to the printed
-	 * @param status
-	 *            Status of the test [FAIL/PASS]
-	 * @param screenshotType
-	 *            Specifies whether the screenshot is a WebDriver screenshot or a
-	 *            Desktop screenshot
+	 * @param message        Message to the printed
+	 * @param status         Status of the test [FAIL/PASS]
+	 * @param screenshotType Specifies whether the screenshot is a WebDriver
+	 *                       screenshot or a Desktop screenshot
 	 */
 	private static void saveScreenshot(String message, TestStatus status, ScreenshotType screenshotType) {
 		if (!message.isEmpty())
@@ -152,7 +149,7 @@ public class ReportingTools {
 
 	/**
 	 * Take screenshot with the set {@link ScreenshotType} without printing any
-	 * message to Report <br/>
+	 * message to Report
 	 */
 	public static void takeScreenshot() {
 		takeScreenshot("");
@@ -162,15 +159,14 @@ public class ReportingTools {
 	 * Take screenshot with the set {@link ScreenshotType} and print message to
 	 * Report
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void takeScreenshot(String message) {
 		saveScreenshot(message, TestStatus.PASS, BaseTest.getTestObject().getScreenshotType());
 	}
 
 	/**
-	 * Take screenshot of the browser without printing any message to Report <br/>
+	 * Take screenshot of the browser without printing any message to Report
 	 */
 	public static void takeBrowserScreenshot() {
 		takeBrowserScreenshot("");
@@ -179,8 +175,7 @@ public class ReportingTools {
 	/**
 	 * Take screenshot of the browser and print message to Report
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void takeBrowserScreenshot(String message) {
 		saveScreenshot(message, TestStatus.PASS, ScreenshotType.BROWSER_SCREENSHOT);
@@ -188,7 +183,6 @@ public class ReportingTools {
 
 	/**
 	 * Take screenshot of the desktop. This is similar to Print Screen Operation
-	 * <br/>
 	 */
 	public static void captureDesktopScreen() {
 		captureDesktopScreen("");
@@ -196,10 +190,9 @@ public class ReportingTools {
 
 	/**
 	 * Take screenshot of the desktop and prints the message to report. This is
-	 * similar to Print Screen Operation<br/>
+	 * similar to Print Screen Operation
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void captureDesktopScreen(String message) {
 		saveScreenshot(message, TestStatus.PASS, ScreenshotType.DESKTOP_SCREENSHOT);
@@ -208,10 +201,9 @@ public class ReportingTools {
 	/**
 	 * Take screenshot as per the set {@link ScreenshotType} and prints the message
 	 * to report. This method is used for logging the failure message and taking the
-	 * screenshot in the {@link AutomacentListener}. <br/>
+	 * screenshot in the {@link AutomacentListener}
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void logScreenshotOnFailure(String message) {
 		saveScreenshot(message, TestStatus.FAIL, BaseTest.getTestObject().getScreenshotType());
@@ -220,10 +212,9 @@ public class ReportingTools {
 	/**
 	 * Take screenshot of the web browser and prints the message to report. This
 	 * method is used for logging the failure message and taking the screenshot in
-	 * the {@link AutomacentListener}. <br/>
+	 * the {@link AutomacentListener}
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void logBrowserScreenshotOnFailure(String message) {
 		saveScreenshot(message, TestStatus.FAIL, ScreenshotType.BROWSER_SCREENSHOT);
@@ -232,10 +223,9 @@ public class ReportingTools {
 	/**
 	 * Take screenshot of the screen and prints the message to report. This method
 	 * is used for logging the failure message and taking the screenshot in the
-	 * {@link AutomacentListener}. <br/>
+	 * {@link AutomacentListener}
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void logScreenGrabOnFailure(String message) {
 		saveScreenshot(message, TestStatus.FAIL, ScreenshotType.DESKTOP_SCREENSHOT);
@@ -321,8 +311,7 @@ public class ReportingTools {
 	/**
 	 * Prints message to Report
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void logMessage(String message) {
 		log(Color.BLACK, Css.UNDERLINE_NONE, message);
@@ -331,8 +320,7 @@ public class ReportingTools {
 	/**
 	 * Prints message to Report in bold
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void logHeadingMessage(String message) {
 		log(Color.BLACK, Css.UNDERLINE_SILVER_1PX_SOLID, message);
@@ -341,8 +329,7 @@ public class ReportingTools {
 	/**
 	 * Prints error message to Report
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void logErrorMessage(String message) {
 		log(Color.RED, Css.UNDERLINE_NONE, message);
@@ -351,8 +338,7 @@ public class ReportingTools {
 	/**
 	 * Prints warning message to Report
 	 * 
-	 * @param message
-	 *            Message to be printed to the report
+	 * @param message Message to be printed to the report
 	 */
 	public static void logWarnMessage(String message) {
 		log(Color.ORANGE, Css.UNDERLINE_NONE, message);
@@ -363,8 +349,7 @@ public class ReportingTools {
 	/**
 	 * Prints logs generated by selenium into selenium log
 	 * 
-	 * @param logType
-	 *            {@link LogType}
+	 * @param logType {@link LogType}
 	 */
 	public static void captureSeleniumLogs1(String logType) {
 		try {

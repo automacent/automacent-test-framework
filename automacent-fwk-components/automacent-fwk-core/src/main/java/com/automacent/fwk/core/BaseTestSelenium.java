@@ -27,21 +27,16 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * Set up parameters required by the framework for managing Selenium drivers.
 	 * These parameters are set at Test suite level
 	 * 
-	 * @param ieDriverLocation
-	 *            Absolute/relative path to the location of IE driver server
-	 *            executable
-	 * @param chromeDriverLocation
-	 *            Absolute/relative path to the location of Chrome driver server
-	 *            executable
-	 * @param geckoDriverLocation
-	 *            Absolute/relative path to the location of Firefox driver server
-	 *            executable
-	 * @param scriptTimeoutInSeconds
-	 *            Timeout for Selenium Javascript Executor script
-	 * @param pageLoadTimeoutInSeconds
-	 *            Timeout for browser page load
-	 * @param socketTimeoutInSeconds
-	 *            Timeout for socket exceptions
+	 * @param ieDriverLocation         Absolute/relative path to the location of IE
+	 *                                 driver server executable
+	 * @param chromeDriverLocation     Absolute/relative path to the location of
+	 *                                 Chrome driver server executable
+	 * @param geckoDriverLocation      Absolute/relative path to the location of
+	 *                                 Firefox driver server executable
+	 * @param scriptTimeoutInSeconds   Timeout for Selenium Javascript Executor
+	 *                                 script
+	 * @param pageLoadTimeoutInSeconds Timeout for browser page load
+	 * @param socketTimeoutInSeconds   Timeout for socket exceptions
 	 */
 	@BeforeSuite
 	@Parameters({ "ieDriverLocation", "chromeDriverLocation", "geckoDriverLocation", "scriptTimeoutInSeconds",
@@ -61,16 +56,15 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * Set uo parameters required for Web Test. These parameters are set at test
 	 * level and custom values per test can be provided
 	 * 
-	 * @param browser
-	 *            {@link Browser}
-	 * @param screenshotType
-	 *            {@link ScreenshotType}
-	 * @param screenshotMode
-	 *            comma seperated {@link ScreenshotMode} values
-	 * @param screenshotModeForIteration
-	 *            {@link ScreenshotModeForIteration}
-	 * @param testContext
-	 *            testNg {@link ITestContext}
+	 * @param browser                    Browser name as provided by
+	 *                                   {@link DriverManagerType}
+	 * @param screenshotType             {@link ScreenshotType}
+	 * @param screenshotMode             comma separated {@link ScreenshotMode}
+	 *                                   values
+	 * @param screenshotModeForIteration {@link ScreenshotModeForIteration}
+	 * @param baseUrl                    Base URL of the application
+	 * 
+	 * @param testContext                testNg {@link ITestContext}
 	 */
 	@BeforeTest
 	@Parameters({ "browser", "screenshotType", "screenshotMode", "screenshotModeForIteration", "baseUrl" })
@@ -83,7 +77,7 @@ public abstract class BaseTestSelenium extends BaseTest {
 			ITestContext testContext) {
 		TestObject testObject = BaseTest.getTestObject();
 		testObject.setDriverManager(new DriverManager());
-		testObject.getDriverManager().setBrowser(browser);
+		testObject.getDriverManager().setDriverManagerType(browser);
 		testObject.setScreenshotType(screenshotType);
 		testObject.setScreenshotModes(screenshotMode);
 		testObject.setScreenshotModeForIteration(screenshotModeForIteration);
@@ -94,44 +88,39 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * Start the primary browser with {@link BrowserId} ALPHA and default. The
 	 * browser, on starting becomes the active browser/driver. Use
 	 * {@link #setActiveDriver(BrowserId)} to change the active browser/driver
-	 * {@link Browser}
 	 */
 	protected void startBrowser() {
-		BaseTest.getTestObject().getDriverManager().startBrowser(this);
+		BaseTest.getTestObject().getDriverManager().startDriverManager(this);
 	}
 
 	/**
-	 * Start new browser with provided {@link BrowserId} and default
-	 * {@link Browser}. The browser, on starting becomes the active browser/driver.
-	 * Use {@link #setActiveDriver(BrowserId)} to change the active browser/driver
+	 * Start new browser with provided {@link BrowserId} and default browser. The
+	 * browser, on starting becomes the active browser/driver. Use
+	 * {@link #setActiveDriver(BrowserId)} to change the active browser/driver
 	 * 
-	 * @param browserId
-	 *            {@link BrowserId}
+	 * @param browserId {@link BrowserId}
 	 */
 	protected void startBrowser(BrowserId browserId) {
-		BaseTest.getTestObject().getDriverManager().startBrowser(this, browserId);
+		BaseTest.getTestObject().getDriverManager().startDriverManager(this, browserId);
 	}
 
 	/**
-	 * Start new browser with provided {@link BrowserId} and provided
-	 * {@link Browser}. The browser, on starting becomes the active browser/driver.
-	 * Use {@link #setActiveDriver(BrowserId)} to change the active browser/driver
+	 * Start new browser with provided {@link BrowserId} and provided browser. The
+	 * browser, on starting becomes the active browser/driver. Use
+	 * {@link #setActiveDriver(BrowserId)} to change the active browser/driver
 	 * 
-	 * @param browserId
-	 *            {@link BrowserId}
-	 * @param browser
-	 *            {@link DriverManagerType}
+	 * @param browserId {@link BrowserId}
+	 * @param driverManagerType   {@link DriverManagerType}
 	 */
-	protected void startBrowser(BrowserId browserId, DriverManagerType browser) {
-		BaseTest.getTestObject().getDriverManager().startBrowser(this, browserId, browser);
+	protected void startBrowser(BrowserId browserId, DriverManagerType driverManagerType) {
+		BaseTest.getTestObject().getDriverManager().startDriverManager(this, browserId, driverManagerType);
 	}
 
 	/**
 	 * Set the browser/driver with the specified {@link BrowserId} as the active
 	 * browser/driver.
 	 * 
-	 * @param browserId
-	 *            {@link BrowserId}
+	 * @param browserId {@link BrowserId}
 	 */
 	protected void setActiveDriver(BrowserId browserId) {
 		BaseTest.getTestObject().getDriverManager().setActiveDriver(browserId, this);
@@ -170,14 +159,16 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * ALPHA
 	 */
 	protected void quitBrowser() {
-		BaseTest.getTestObject().getDriverManager().killBrowser();
+		BaseTest.getTestObject().getDriverManager().killDriverManager();
 	}
 
 	/**
 	 * Close and quit the {@link WebDriver} instance with the specified
 	 * {@link BrowserId}
+	 * 
+	 * @param browserId {@link BrowserId}
 	 */
 	protected void quitBrowser(BrowserId browserId) {
-		BaseTest.getTestObject().getDriverManager().killBrowser(browserId);
+		BaseTest.getTestObject().getDriverManager().killDriverManager(browserId);
 	}
 }

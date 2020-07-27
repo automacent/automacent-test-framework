@@ -26,7 +26,7 @@ public class ThreadUtils {
 	/**
 	 * When called execution will sleep for the specified time
 	 * 
-	 * @param sleepTimeInSeconds
+	 * @param sleepTimeInSeconds Sleep time in seconds
 	 */
 	public static void sleepFor(int sleepTimeInSeconds) {
 		long startTime = new Date().getTime();

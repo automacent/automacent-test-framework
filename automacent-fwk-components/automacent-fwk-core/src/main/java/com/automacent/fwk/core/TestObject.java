@@ -58,8 +58,7 @@ public class TestObject {
 	/**
 	 * Set the {@link DriverManager} instance
 	 * 
-	 * @param driverManager
-	 *            {@link DriverManager} instance
+	 * @param driverManager {@link DriverManager} instance
 	 */
 	public void setDriverManager(DriverManager driverManager) {
 		this.driverManager = driverManager;
@@ -79,7 +78,7 @@ public class TestObject {
 	/**
 	 * Set Test name
 	 * 
-	 * @param testName
+	 * @param testName Name of the test
 	 */
 	public void setTestName(String testName) {
 		if (!testName.trim().isEmpty())
@@ -109,7 +108,7 @@ public class TestObject {
 	 * Set timeout value. This is the value which defines the time execution will
 	 * poll/wait before throwing out an Exception
 	 * 
-	 * @param timeoutInSeconds
+	 * @param timeoutInSeconds Timeout in Seconds
 	 */
 	public void setTimeoutInSeconds(String timeoutInSeconds) {
 		try {
@@ -133,7 +132,7 @@ public class TestObject {
 	/**
 	 * Set the wait time between execution of subsequent {@link Action} methods
 	 * 
-	 * @param slowdownDurationInSeconds
+	 * @param slowdownDurationInSeconds Slow down duration in seconds
 	 */
 	public void setSlowdownDurationInSeconds(String slowdownDurationInSeconds) {
 		try {
@@ -167,8 +166,7 @@ public class TestObject {
 	 * Set {@link RepeatMode}. This parameter determines whether a Test method has
 	 * to be repeated and the mode of repetition
 	 * 
-	 * @param repeatMode
-	 *            {@link RepeatMode}
+	 * @param repeatMode {@link RepeatMode}
 	 */
 	public void setRepeatMode(String repeatMode) {
 		this.repeatMode = StringUtils.getEnumFromString(RepeatMode.class, repeatMode);
@@ -196,7 +194,7 @@ public class TestObject {
 	 * {@link RepeatMode#TEST_DURATION}. The test will repeat untill Test duration
 	 * is exceeded
 	 * 
-	 * @param testDurationInSeconds
+	 * @param testDurationInSeconds Test Duration in seconds
 	 */
 	public void setTestDurationInSeconds(String testDurationInSeconds) {
 		try {
@@ -225,7 +223,7 @@ public class TestObject {
 	 * {@link RepeatMode#INVOCATION_COUNT}. The test will repeat till the set
 	 * invocation count value
 	 * 
-	 * @param invocationCount
+	 * @param invocationCount Invocation count value
 	 */
 	public void setInvocationCount(String invocationCount) {
 		try {
@@ -255,7 +253,7 @@ public class TestObject {
 	 * {@link RepeatMode#INVOCATION_COUNT} and determines the wait time between
 	 * sunsequent iterations/repeat of test methods
 	 * 
-	 * @param delayBetweenIterationInSeconds
+	 * @param delayBetweenIterationInSeconds Delay between iteration in seconds
 	 */
 	public void setDelayBetweenIterationInSeconds(String delayBetweenIterationInSeconds) {
 		try {
@@ -288,8 +286,7 @@ public class TestObject {
 	 * Set {@link ScreenshotType}. This Parameter determines the type of screenshot
 	 * taken in case of web based tests
 	 * 
-	 * @param screenshotType
-	 *            {@link ScreenshotType}
+	 * @param screenshotType {@link ScreenshotType}
 	 */
 	public void setScreenshotType(String screenshotType) {
 		this.screenshotType = StringUtils.getEnumFromString(ScreenshotType.class, screenshotType);
@@ -315,8 +312,7 @@ public class TestObject {
 	 * Set {@link ScreenshotMode}. This parameter determines the locations where
 	 * screenshot has to be taken.
 	 * 
-	 * @param screenshotModes
-	 *            Comma seperated values of screenshot modes
+	 * @param screenshotModes Comma separated values of screenshot modes
 	 */
 	public void setScreenshotModes(String screenshotModes) {
 		String screenshotModeArray[] = screenshotModes.split(",");
@@ -355,8 +351,7 @@ public class TestObject {
 	 * Set {@link ScreenshotModeForIteration} This parameter determines how the
 	 * screenshots are saved for iterations/repeat of test methods
 	 * 
-	 * @param screenshotModeForIteration
-	 *            {@link ScreenshotModeForIteration}
+	 * @param screenshotModeForIteration {@link ScreenshotModeForIteration}
 	 */
 	public void setScreenshotModeForIteration(String screenshotModeForIteration) {
 		this.screenshotModeForIteration = StringUtils.getEnumFromString(ScreenshotModeForIteration.class,
@@ -390,8 +385,7 @@ public class TestObject {
 	 * Set {@link RetryMode}. This parameter determines whether retry should be
 	 * performed on test failure
 	 * 
-	 * @param retryMode
-	 *            {@link RetryMode}
+	 * @param retryMode {@link RetryMode}
 	 */
 	public void setRetryMode(String retryMode) {
 		this.retryMode = StringUtils.getEnumFromString(RetryMode.class, retryMode);
@@ -417,8 +411,7 @@ public class TestObject {
 	 * Set {@link RecoveryManager} instance. The parameter sets the recovery classes
 	 * to be called in case the test fails and had to be retried
 	 * 
-	 * @param recoveryManager
-	 *            {@link RecoveryManager} instance
+	 * @param recoveryManager {@link RecoveryManager} instance
 	 */
 	public void setRecoveryManager(RecoveryManager recoveryManager) {
 		this.recoveryManager = recoveryManager;
@@ -440,8 +433,7 @@ public class TestObject {
 	/**
 	 * Set base URL String
 	 * 
-	 * @param baseUrl
-	 *            Base URL String
+	 * @param baseUrl Base URL String
 	 */
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
