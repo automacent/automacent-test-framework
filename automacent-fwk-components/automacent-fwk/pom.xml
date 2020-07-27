@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.automacent</groupId>
 			<artifactId>automacent-fwk-core</artifactId>
-			<version>${parent.version}</version>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
