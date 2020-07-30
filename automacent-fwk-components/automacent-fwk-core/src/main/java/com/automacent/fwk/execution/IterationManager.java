@@ -36,7 +36,7 @@ public class IterationManager {
 	 * 
 	 * @return TimeKeeper
 	 */
-	public static IterationManager getManager() {
+	public synchronized static IterationManager getManager() {
 		if (!timeKeepersMap.containsKey(ThreadUtils.getThreadId()))
 			timeKeepersMap.put(ThreadUtils.getThreadId(), new IterationManager());
 		return timeKeepersMap.get(ThreadUtils.getThreadId());

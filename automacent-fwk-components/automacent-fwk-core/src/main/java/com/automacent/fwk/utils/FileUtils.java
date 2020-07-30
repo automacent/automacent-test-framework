@@ -32,10 +32,9 @@ public class FileUtils {
 	}
 
 	/**
-	 * Recursievly delete all the files and folders
+	 * Recursively delete all the files and folders
 	 * 
-	 * @param files
-	 *            {@link File} objects
+	 * @param files {@link File} objects
 	 */
 	private static void deleteFiles(File[] files) {
 		for (File tempFile : files) {
@@ -51,7 +50,7 @@ public class FileUtils {
 				} catch (Exception e) {
 					_logger.warn("Error deleting temp files");
 				}
-				if (tempFile.list().length == 0)
+				if (tempFile.list() != null && tempFile.list().length == 0)
 					try {
 						tempFile.delete();
 					} catch (SecurityException e) {
