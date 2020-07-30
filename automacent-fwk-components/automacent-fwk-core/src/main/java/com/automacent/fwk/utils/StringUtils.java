@@ -1,5 +1,7 @@
 package com.automacent.fwk.utils;
 
+import java.util.Base64;
+
 /**
  * String utility class
  * 
@@ -24,5 +26,26 @@ public class StringUtils {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Encode String using Base64
+	 * 
+	 * @param plainString String to be encoded
+	 * @return Encoded string
+	 */
+	public static String encodeStringToBase64(String plainString) {
+		return Base64.getEncoder()
+				.encodeToString(plainString.getBytes());
+	}
+
+	/**
+	 * Decode Base64 encoded string
+	 * 
+	 * @param encodedString String to be decoded
+	 * @return Decoded String
+	 */
+	public static String decodeBase64String(String encodedString) {
+		return new String(Base64.getDecoder().decode(encodedString));
 	}
 }
