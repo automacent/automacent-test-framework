@@ -334,8 +334,9 @@ public abstract class PageObject implements IPageObject {
 	 * 
 	 * @param explicitWaitInSeconds Explicit wait timeout
 	 * @return {@link FluentWait} object
+	 * @deprecated Use {@link PageObject#explicitWait()} instead
 	 */
-	@SuppressWarnings("deprecation")
+	@Deprecated
 	private Wait<SearchContext> fluentWait(int explicitWaitInSeconds) {
 		return new FluentWait<SearchContext>(component).withTimeout(explicitWaitInSeconds, TimeUnit.SECONDS)
 				.pollingEvery(100, TimeUnit.MILLISECONDS).ignoring(NoSuchElementException.class);
@@ -347,7 +348,10 @@ public abstract class PageObject implements IPageObject {
 	 * explicit wait. For example when checking element is clickable using explicit
 	 * wait and explicit wait is less than implicit wait, the implicit wait timeout
 	 * overrides the explicit wait
+	 * 
+	 * @deprecated This method is permanently deprecated without replacement
 	 */
+	@Deprecated
 	private void setImplicitWaitToOneSecond() {
 		_logger.debug("Setting implicit wait to 1");
 		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
@@ -366,7 +370,9 @@ public abstract class PageObject implements IPageObject {
 	 *                              parameter is provided
 	 * @param explicitWaitInSeconds Explicit wait timeout in seconds
 	 * @return {@link WebElement} on which wait was performed
+	 * @deprecated Use {@link CustomExpectedConditions} instead
 	 */
+	@Deprecated
 	private WebElement waitUntil(ExpectedCondition expectedCondition, By by, WebElement element,
 			int explicitWaitInSeconds) {
 		setImplicitWaitToOneSecond();
@@ -387,7 +393,7 @@ public abstract class PageObject implements IPageObject {
 				break;
 			case PROXY_ELEMENT_LOCATED:
 				returnElement = explicitWait(explicitWaitInSeconds)
-						.until(CustomExpectedConditions.proxyElementLocated(element));
+						.until(CustomExpectedConditions.waitTillproxyElementLocated(element));
 				break;
 			default:
 				break;
@@ -408,7 +414,9 @@ public abstract class PageObject implements IPageObject {
 	 * 
 	 * @param by {@link By}
 	 * @return true if invisible
+	 * @deprecated Use {@link CustomExpectedConditions} instead
 	 */
+	@Deprecated
 	protected boolean waitUntillInvisibilityOfElement(By by) {
 		setImplicitWaitToOneSecond();
 		boolean returnValue = false;
@@ -433,7 +441,9 @@ public abstract class PageObject implements IPageObject {
 	 * @param element               {@link WebElement} object
 	 * @param explicitWaitInSeconds Explicit wait timeout in seconds
 	 * @return true if element is found
+	 * @deprecated Use {@link CustomExpectedConditions} instead
 	 */
+	@Deprecated
 	protected boolean isElementFound(WebElement element, int explicitWaitInSeconds) {
 		boolean isFound = false;
 		try {
@@ -454,7 +464,9 @@ public abstract class PageObject implements IPageObject {
 	 * @param by                    {@link By} object
 	 * @param explicitWaitInSeconds Explicit wait timeout in seconds
 	 * @return true if element is found
+	 * @deprecated Use {@link CustomExpectedConditions} instead
 	 */
+	@Deprecated
 	protected boolean isElementFound(By by, int explicitWaitInSeconds) {
 		boolean isFound = false;
 		try {
@@ -474,7 +486,9 @@ public abstract class PageObject implements IPageObject {
 	 *
 	 * @param element {@link WebElement} object
 	 * @return true if element is found
+	 * @deprecated Use {@link CustomExpectedConditions} instead
 	 */
+	@Deprecated
 	protected boolean isElementFound(WebElement element) {
 		return isElementFound(element, getExplicitWaitInSeconds());
 	}
@@ -485,11 +499,55 @@ public abstract class PageObject implements IPageObject {
 	 *
 	 * @param by {@link By} object
 	 * @return true if element is found
+	 * @deprecated Use {@link CustomExpectedConditions} instead
 	 */
+	@Deprecated
 	protected boolean isElementFound(By by) {
 		return isElementFound(by, getExplicitWaitInSeconds());
 	}
 
+	/**
+	 * This method has to be implemented by all the Pages inheriting
+	 * {@link PageObject}. It can be implemented in any of ways as shown in the
+	 * below examples
+	 * 
+	 * <pre>
+	 * &#64;Override
+	 * public PageValidation pageValidation() {
+	 * 	return new PageValidation() {
+	 * 
+	 * 		&#64;Override
+	 * 		public void validate() {
+	 * 			validateLoginWithPage();
+	 * 		}
+	 * 
+	 * 		&#64;Step
+	 * 		private void validateLoginPage() {
+	 * 			Assert.assertTrue(isUsernameFieldFound(), "Username field is found");
+	 * 			Assert.assertTrue(isUsernameFieldFound(), "Username field is found");
+	 * 		}
+	 * 	};
+	 * }
+	 * 
+	 * &#64;Override
+	 * public PageValidation pageValidation() {
+	 * 	return new PageValidation() {
+	 * 
+	 * 		&#64;Override
+	 * 		public void validate(String... parameters) {
+	 * 			validateLoginWithPage(parameters[0]);
+	 * 		}
+	 * 
+	 * 		&#64;Step
+	 * 		private void validateLoginPage(String companyName) {
+	 * 			Assert.assertEquals(getCompanyName(), companyName, "");
+	 * 		}
+	 * 	};
+	 * }
+	 * </pre>
+	 * 
+	 * @return {@link PageValidation}
+	 */
 	public abstract PageValidation pageValidation();
 
 	public abstract class PageValidation {
