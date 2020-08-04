@@ -34,7 +34,7 @@ public abstract class BaseTest {
 	 * 
 	 * @return {@link TestObject}
 	 */
-	private static TestObject getTestObject(long threadId) {
+	private synchronized static TestObject getTestObject(long threadId) {
 		if (!testObjectMap.containsKey(threadId))
 			testObjectMap.put(threadId, new TestObject());
 		return testObjectMap.get(threadId);
@@ -44,7 +44,7 @@ public abstract class BaseTest {
 	 * 
 	 * @return {@link TestObject}
 	 */
-	public static TestObject getTestObject() {
+	public synchronized static TestObject getTestObject() {
 		return getTestObject(ThreadUtils.getThreadId());
 	}
 
