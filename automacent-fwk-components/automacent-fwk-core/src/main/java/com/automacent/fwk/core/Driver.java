@@ -64,22 +64,17 @@ public class Driver {
 	 * Setup default {@link Driver}. This will be used when setting up Test suite
 	 * level parameters in the {@link BaseTestSelenium}
 	 * 
-	 * @param ieDriverLocation
-	 *            Path of the IE driver server executable
-	 * @param chromeDriverLocation
-	 *            Path of the Chrome driver server executable
-	 * @param geckoDriverLocation
-	 *            Path of the Firefox driver server executable
-	 * @param scriptTimeoutInSeconds
-	 *            Selenium javascript timeout
-	 * @param pageLoadTimeoutInSeconds
-	 *            Selenium page load timeout
-	 * @param socketTimeoutInSeconds
-	 *            {@link WebDriver} SocketTimeoutException timeout
+	 * @param ieDriverLocation         Path of the IE driver server executable
+	 * @param chromeDriverLocation     Path of the Chrome driver server executable
+	 * @param geckoDriverLocation      Path of the Firefox driver server executable
+	 * @param scriptTimeoutInSeconds   Selenium javascript timeout
+	 * @param pageLoadTimeoutInSeconds Selenium page load timeout
+	 * @param socketTimeoutInSeconds   {@link WebDriver} SocketTimeoutException
+	 *                                 timeout
 	 */
 	public static void setupDefaultDriver(String ieDriverLocation, String chromeDriverLocation,
-			String geckoDriverLocation,
-			String scriptTimeoutInSeconds, String pageLoadTimeoutInSeconds, String socketTimeoutInSeconds) {
+			String geckoDriverLocation, String scriptTimeoutInSeconds, String pageLoadTimeoutInSeconds,
+			String socketTimeoutInSeconds) {
 		defaultDriver = new Driver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
 				scriptTimeoutInSeconds, pageLoadTimeoutInSeconds, socketTimeoutInSeconds);
 	}
@@ -127,8 +122,7 @@ public class Driver {
 	/**
 	 * Set Custom IE driver server executable path.
 	 * 
-	 * @param ieDriverLocation
-	 *            IE driver server executable path
+	 * @param ieDriverLocation IE driver server executable path
 	 */
 	private void setIeDriverLocation(String ieDriverLocation) {
 		if (!ieDriverLocation.equals("") && isCustomDriverFound(ieDriverLocation)) {
@@ -154,8 +148,7 @@ public class Driver {
 	/**
 	 * Set Custom Chrome driver server executable path.
 	 * 
-	 * @param chromeDriverLocation
-	 *            Chrome driver server executable path
+	 * @param chromeDriverLocation Chrome driver server executable path
 	 */
 	private void setChromeDriverLocation(String chromeDriverLocation) {
 		if (!chromeDriverLocation.equals("") && isCustomDriverFound(chromeDriverLocation)) {
@@ -181,8 +174,7 @@ public class Driver {
 	/**
 	 * Set Firefox driver server executable path.
 	 * 
-	 * @param geckoDriverLocation
-	 *            Firefox driver server executable path
+	 * @param geckoDriverLocation Firefox driver server executable path
 	 */
 	private void setGeckoDriverLocation(String geckoDriverLocation) {
 		if (!geckoDriverLocation.equals("") && isCustomDriverFound(geckoDriverLocation)) {
@@ -202,11 +194,9 @@ public class Driver {
 	 * valid, driver server executable packaged in the framework is extracted and
 	 * its absolute path is returned
 	 * 
-	 * @param driverServerLocation
-	 *            path of driver server executable
-	 * @param driverName
-	 *            Name of the driver
-	 * @return
+	 * @param driverServerLocation path of driver server executable
+	 * @param driverName           Name of the driver
+	 * @return Absolute path of the driver executable
 	 */
 	@SuppressWarnings("unused")
 	@Deprecated
@@ -250,8 +240,7 @@ public class Driver {
 	 * Check if the provided driver server executable path is valid. If path is not
 	 * valid
 	 * 
-	 * @param driverServerLocation
-	 *            path of driver server executable
+	 * @param driverServerLocation path of driver server executable
 	 * @return true if valid
 	 */
 	private boolean isCustomDriverFound(String driverServerLocation) {
@@ -272,8 +261,7 @@ public class Driver {
 	/**
 	 * Set the Selenium javascript timeout
 	 * 
-	 * @param scriptTimeoutInSeconds
-	 *            Selenium javascript timeout
+	 * @param scriptTimeoutInSeconds Selenium javascript timeout
 	 */
 	private void setScriptTimeoutInSeconds(long scriptTimeoutInSeconds) {
 		this.scriptTimeoutInSeconds = scriptTimeoutInSeconds;
@@ -284,8 +272,7 @@ public class Driver {
 	 * converted to long value and set to variable. If parameter is invalid default
 	 * value is set
 	 * 
-	 * @param scriptTimeoutInSeconds
-	 *            Selenium javascript timeout
+	 * @param scriptTimeoutInSeconds Selenium javascript timeout
 	 */
 	private void setScriptTimeoutInSeconds(String scriptTimeoutInSeconds) {
 		try {
@@ -308,8 +295,7 @@ public class Driver {
 	/**
 	 * Set the Selenium page load timeout
 	 * 
-	 * @param pageLoadTimeoutInSeconds
-	 *            Selenium page load timeout
+	 * @param pageLoadTimeoutInSeconds Selenium page load timeout
 	 */
 	private void setPageLoadTimeoutInSeconds(long pageLoadTimeoutInSeconds) {
 		this.pageLoadTimeoutInSeconds = pageLoadTimeoutInSeconds;
@@ -320,8 +306,7 @@ public class Driver {
 	 * converted to long value and set to variable. If parameter is invalid default
 	 * value is set
 	 * 
-	 * @param pageLoadTimeoutInSeconds
-	 *            Selenium page load timeout
+	 * @param pageLoadTimeoutInSeconds Selenium page load timeout
 	 */
 	private void setPageLoadTimeoutInSeconds(String pageLoadTimeoutInSeconds) {
 		try {
@@ -344,8 +329,8 @@ public class Driver {
 	/**
 	 * Set the {@link WebDriver} SocketTimeoutException timeout
 	 * 
-	 * @param socketTimeoutInSeconds
-	 *            {@link WebDriver} SocketTimeoutException timeout
+	 * @param socketTimeoutInSeconds {@link WebDriver} SocketTimeoutException
+	 *                               timeout
 	 */
 	private void setSocketTimeoutInSeconds(long socketTimeoutInSeconds) {
 		this.socketTimeoutInSeconds = socketTimeoutInSeconds;
@@ -356,8 +341,8 @@ public class Driver {
 	 * the parameter is converted to long value and set to variable. If parameter is
 	 * invalid default value is set
 	 * 
-	 * @param socketTimeoutInSeconds
-	 *            {@link WebDriver} SocketTimeoutException timeout
+	 * @param socketTimeoutInSeconds {@link WebDriver} SocketTimeoutException
+	 *                               timeout
 	 */
 	private void setSocketTimeoutInSeconds(String socketTimeoutInSeconds) {
 		try {
@@ -382,8 +367,7 @@ public class Driver {
 	/**
 	 * Set {@link BrowserId} for the driver instance
 	 * 
-	 * @param browserId
-	 *            {@link BrowserId}
+	 * @param browserId {@link BrowserId}
 	 */
 	private void setBrowserId(BrowserId browserId) {
 		this.browserId = browserId;
@@ -403,8 +387,7 @@ public class Driver {
 	 * This method initializes the driver (opens browser), maximizes browser window,
 	 * sets timeouts and deletes the cookies.
 	 * 
-	 * @param driverManagerType
-	 *            {@link DriverManagerType}
+	 * @param driverManagerType {@link DriverManagerType}
 	 */
 	public void startDriver(DriverManagerType driverManagerType) {
 		try {
@@ -460,7 +443,7 @@ public class Driver {
 	public void terminateDriver() {
 		if (webDriver != null) {
 			_logger.info(String.format("Quiting driver %s", webDriver));
-			webDriver.close();
+			// webDriver.close();
 			webDriver.quit();
 		} else {
 			_logger.warn(String.format("Driver %s is already dead", webDriver));
