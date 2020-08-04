@@ -79,18 +79,18 @@ public class ReportingTools {
 		if (!message.isEmpty())
 			if (status == TestStatus.FAIL)
 				logErrorMessage(message);
-			else
-				logMessage(message);
+		// else
+		// logMessage(message);
 
 		int iteration = IterationManager.getManager().getIteration();
 
-		String screenShotDirectory = "screenshots" + File.separator + "itr_" + BaseTest.getTestObject().getTestName()
-				+ "_" + iteration;
-		String screenShotDirectoryPath = System.getProperty("automacent.reportdir") + File.separator
-				+ screenShotDirectory;
-		String screenShotName = "scr" + (++screenshotNumber) + ".png";
-		String href = screenShotDirectory + File.separator + screenShotName;
-		String screenShotFile = screenShotDirectoryPath + File.separator + screenShotName;
+		String screenShotDirectory = String.format("screenshots%sitr_%s_%s", File.separator,
+				BaseTest.getTestObject().getTestName(), iteration);
+		String screenShotDirectoryPath = String.format("%s%s%s", System.getProperty("automacent.reportdir"),
+				File.separator, screenShotDirectory);
+		String screenShotName = String.format("scr%s.png", ++screenshotNumber);
+		String href = String.format("..%s%s%s%s", File.separator, screenShotDirectory, File.separator, screenShotName);
+		String screenShotFile = String.format("%s%s%s", screenShotDirectoryPath, File.separator, screenShotName);
 
 		if (screenshotType == ScreenshotType.BROWSER_SCREENSHOT)
 			try {
@@ -141,6 +141,7 @@ public class ReportingTools {
 			Reporter.log("<div style='color: " + Color.BLACK.getColorValue() + "; font-size: small; "
 					+ Css.UNDERLINE_NONE.getCssValue() + "'>" + DateUtils.getDate() + " : "
 					+ LoggingUtils.getSpaceForNestingLevel(LoggingUtils.getNestingLevelOfLogs() + 1, LogType.HTML)
+					+ (status == TestStatus.FAIL ? "" : message + " screenshot --&gt;")
 					+ "<a href='" + href + "'><img src='" + href + "' style='height:25%; width:25%;' alt='itr_"
 					+ BaseTest.getTestObject().getTestName() + "_" + IterationManager.getManager().getIteration()
 					+ "'/></a></div>");

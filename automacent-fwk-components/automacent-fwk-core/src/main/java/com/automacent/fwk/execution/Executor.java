@@ -2,7 +2,6 @@ package com.automacent.fwk.execution;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +15,8 @@ import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
+import org.uncommons.reportng.HTMLReporter;
+import org.uncommons.reportng.JUnitXMLReporter;
 
 import com.automacent.fwk.core.BaseTest;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
@@ -117,20 +118,6 @@ class Executor {
 	/**
 	 * Get listeners from System property <b>automacent.listeners</b>
 	 * 
-	 * @return List of fully qualified name of Listener classes
-	 */
-	private List<String> getListeners() {
-		String listenerStrings[] = System.getProperty("automacent.listeners", AutomacentListener.class.getName())
-				.split(",");
-		Set<String> listeners = new HashSet<>(Arrays.asList(listenerStrings));
-		listeners.add(AutomacentListener.class.getName());
-		_logger.info(String.format("Setting Listeners %s", listeners.toString()));
-		return new ArrayList<String>(listeners);
-	}
-
-	/**
-	 * Get listeners from System property <b>automacent.listeners</b>
-	 * 
 	 * @return List of Listener classes
 	 */
 	@SuppressWarnings("unchecked")
@@ -152,6 +139,9 @@ class Executor {
 		}
 
 		listeners.add(AutomacentListener.class);
+		listeners.add(HTMLReporter.class);
+		listeners.add(JUnitXMLReporter.class);
+
 		_logger.info(String.format("Setting Listeners %s", listeners.toString()));
 		return new ArrayList<Class<? extends ITestNGListener>>(listeners);
 	}
@@ -219,7 +209,6 @@ class Executor {
 		getTests();
 		XmlSuite suite = new XmlSuite();
 		suite.setName(String.format("Automacent-XML-Suite"));
-		suite.setListeners(new ArrayList<String>(getListeners()));
 		suite.setParameters(getGlobalParametersFromEnvironmentParameters());
 		for (TestDefinition testDefinition : testDefinitions) {
 			_logger.info(String.format("Adding Test %s [%s]", testDefinition.getTestName(),
@@ -235,6 +224,9 @@ class Executor {
 		xmlSuites.add(suite);
 	}
 
+	/**
+	 * generate TestNG File Suites
+	 */
 	public void generateTestNGFileSuites() {
 		String testSuitesProperty = System.getProperty("automacent.testsuites", null);
 		if (testSuitesProperty == null)
@@ -246,12 +238,18 @@ class Executor {
 		}
 	}
 
+	private void configureGlobalSettings(TestNG tng) {
+		System.setProperty("usedefaultlisteners", "false");
+		tng.setListenerClasses(getListenerClasses());
+		tng.setOutputDirectory(getOutputDirectory());
+	}
+
 	/**
 	 * Run XML suites
 	 */
 	public void runXMLSuite() {
 		TestNG tng = new TestNG();
-		tng.setOutputDirectory(getOutputDirectory());
+		configureGlobalSettings(tng);
 		tng.setXmlSuites(xmlSuites);
 		tng.run();
 	}
@@ -261,8 +259,7 @@ class Executor {
 	 */
 	public void runTestNGFileSuites() {
 		TestNG tng = new TestNG();
-		tng.setListenerClasses(getListenerClasses());
-		tng.setOutputDirectory(getOutputDirectory());
+		configureGlobalSettings(tng);
 		tng.setTestSuites(testNGSuites);
 		tng.run();
 	}
