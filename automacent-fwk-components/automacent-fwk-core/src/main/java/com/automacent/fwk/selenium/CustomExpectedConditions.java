@@ -3,6 +3,7 @@ package com.automacent.fwk.selenium;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -26,8 +27,8 @@ public class CustomExpectedConditions {
 	 * In case of using {@link FindBy} to locate elements, there is no
 	 * {@link ExpectedConditions} to override the ImplicitWait set and use
 	 * {@link WebDriverWait}. The custom proxyElementLocated
-	 * {@link CustomExpectedConditions#waitTillproxyElementLocated(WebElement)} will take
-	 * care of this scenario
+	 * {@link CustomExpectedConditions#waitTillproxyElementLocated(WebElement)} will
+	 * take care of this scenario
 	 * 
 	 * @param proxyElement Proxy {@link WebElement} object
 	 * @return null if not found, element if found
@@ -56,8 +57,17 @@ public class CustomExpectedConditions {
 		};
 	}
 
+	/**
+	 * Wait until text in an element not matches the provided text
+	 * 
+	 * @param proxyElement The proxy {@link WebElement}
+	 * @param text         The text which is expected not present in
+	 *                     {@link WebElement#getText()}
+	 * @return {@link ExpectedCondition} containing the {@link WebElement}
+	 */
 	@Action
-	public static ExpectedCondition<WebElement> waitTillTextInElementNotMatches(final WebElement proxyElement, String text) {
+	public static ExpectedCondition<WebElement> waitTillTextInElementNotMatches(final WebElement proxyElement,
+			String text) {
 		return new ExpectedCondition<WebElement>() {
 			@Override
 			public WebElement apply(WebDriver driver) {
@@ -74,7 +84,41 @@ public class CustomExpectedConditions {
 
 			@Override
 			public String toString() {
+				ExpectedConditions.alertIsPresent();
 				return "Text in Element Not Matches given value";
+			}
+		};
+	}
+
+	/**
+	 * Wait until an element is no longer attached to the DOM.
+	 *
+	 * @param element The element to wait for.
+	 * @return false if the element is still attached to the DOM, true otherwise.
+	 */
+	@Action
+	public static ExpectedCondition<Boolean> stalenessOf(final WebElement element) {
+		return new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+				try {
+					// Calling any method forces a staleness check
+					element.isEnabled();
+					return false;
+				} catch (StaleElementReferenceException expected) {
+					return true;
+				} catch (NoSuchElementException e) {
+					return true;
+				} finally {
+					driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
+							TimeUnit.SECONDS);
+				}
+			}
+
+			@Override
+			public String toString() {
+				return String.format("element (%s) to become stale", element);
 			}
 		};
 	}
