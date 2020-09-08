@@ -162,6 +162,14 @@ public class AutomacentListener extends TestListenerAdapter
 	 */
 	@Override
 	public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
+		String message = new String(String.format("Preparing to execute the below @Test under test %s\n",
+				context.getCurrentXmlTest().getName()));
+		message = message.concat("------------------Execution Order ---------------------\n");
+		for (IMethodInstance method : methods) {
+			message = message.concat(method.getMethod().getQualifiedName()).concat("\n");
+		}
+		message = message.concat("-------------------------------------------------------");
+		_logger.info(message);
 		return methods;
 	}
 }
