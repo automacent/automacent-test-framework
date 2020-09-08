@@ -1,8 +1,12 @@
 package com.automacent.fwk.listeners;
 
+import java.util.List;
+
 import org.testng.IExecutionListener;
 import org.testng.IInvokedMethod;
-import org.testng.IInvokedMethodListener2;
+import org.testng.IInvokedMethodListener;
+import org.testng.IMethodInstance;
+import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
@@ -28,7 +32,8 @@ import com.automacent.fwk.utils.FileUtils;
  * @author sighil.sivadas
  *
  */
-public class AutomacentListener extends TestListenerAdapter implements IInvokedMethodListener2, IExecutionListener {
+public class AutomacentListener extends TestListenerAdapter
+		implements IInvokedMethodListener, IExecutionListener, IMethodInterceptor {
 
 	private static final Logger _logger = Logger.getLogger(AutomacentListener.class);
 
@@ -96,19 +101,22 @@ public class AutomacentListener extends TestListenerAdapter implements IInvokedM
 		super.onFinish(testContext);
 	}
 
+	@Override
 	public void afterInvocation(IInvokedMethod invokedMethod, ITestResult testResult) {
 
 	}
 
+	@Override
 	public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult testResult) {
 
 	}
 
 	/**
-	 * Implement afterInvocation method in the {@link IInvokedMethodListener2} to
+	 * Implement afterInvocation method in the {@link IInvokedMethodListener} to
 	 * listen for the {@link BeforeTest} method automacentInternalSetParameters so
 	 * that start test can be logged to the Launcher
 	 */
+	@Override
 	public void afterInvocation(IInvokedMethod invokedMethod, ITestResult testResult, ITestContext testContext) {
 		String methodName = invokedMethod.getTestMethod().getMethodName();
 		if (invokedMethod.isConfigurationMethod() && methodName.equals("automacentInternalSetParameters")) {
@@ -118,6 +126,12 @@ public class AutomacentListener extends TestListenerAdapter implements IInvokedM
 		}
 	}
 
+	/**
+	 * Implement beforeInvocation method in the {@link IInvokedMethodListener} to
+	 * listen for @Before and @After methods that are not part of the internal
+	 * framework and initialize {@link StepsAndPagesProcessor}
+	 */
+	@Override
 	public void beforeInvocation(IInvokedMethod invokedMethod, ITestResult testResult, ITestContext testContext) {
 		String methodName = invokedMethod.getTestMethod().getMethodName();
 		if (!methodName.startsWith("automacentInternal")
@@ -139,5 +153,15 @@ public class AutomacentListener extends TestListenerAdapter implements IInvokedM
 	@Override
 	public void onExecutionFinish() {
 		FileUtils.cleanTempDirectory();
+	}
+
+	/**
+	 * Implement {@link IMethodInterceptor#intercept(List, ITestContext)} method to
+	 * fix the sequencing Test cases in test classes specified within the
+	 * &lt;TEST&gt; tag in TestNG XML file
+	 */
+	@Override
+	public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
+		return methods;
 	}
 }
