@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
 import com.automacent.fwk.annotations.Action;
 import com.automacent.fwk.enums.ErrorCode;
 import com.automacent.fwk.enums.RepeatMode;
@@ -32,6 +35,12 @@ public class TestObject {
 
 	private Map<String, String> testParameters = new HashMap<>();
 
+	/**
+	 * Get Test parameter pertaining to the current {@link Test}
+	 * 
+	 * @param parameter Name of the TestNG {@link Parameters}
+	 * @return Value of the parameter
+	 */
 	public String getTestParameter(String parameter) {
 		String value = testParameters.get(parameter);
 		if (value == null)
@@ -40,8 +49,23 @@ public class TestObject {
 		return value;
 	}
 
+	/**
+	 * Set all test parameters
+	 * 
+	 * @param testParameters {@link Map} of Test Parameters
+	 */
 	public void setTestParameters(Map<String, String> testParameters) {
 		this.testParameters.putAll(testParameters);
+	}
+
+	/**
+	 * Add Test Parameter
+	 * 
+	 * @param key   Test parameter Key
+	 * @param value Test Parameter Value
+	 */
+	public void addTestParameters(String key, String value) {
+		this.testParameters.put(key, value);
 	}
 
 	// Driver Manager -----------------------------------------------
@@ -95,7 +119,7 @@ public class TestObject {
 	private long slowdownDurationInSeconds = 1;
 
 	/**
-	 * Get timout value. This is the value which defines the time execution will
+	 * Get timeout value. This is the value which defines the time execution will
 	 * poll/wait before throwing out an Exception
 	 * 
 	 * @return timeout in seconds
@@ -239,7 +263,7 @@ public class TestObject {
 	 * Get delay between iterations. This parameter is used if {@link RepeatMode} is
 	 * set to {@link RepeatMode#TEST_DURATION} or
 	 * {@link RepeatMode#INVOCATION_COUNT} and determines the wait time between
-	 * sunsequent iterations/repeat of test methods
+	 * subsequent iterations/repeat of test methods
 	 * 
 	 * @return Delay between iterations
 	 */
@@ -251,7 +275,7 @@ public class TestObject {
 	 * Set delay between iterations. This parameter is used if {@link RepeatMode} is
 	 * set to {@link RepeatMode#TEST_DURATION} or
 	 * {@link RepeatMode#INVOCATION_COUNT} and determines the wait time between
-	 * sunsequent iterations/repeat of test methods
+	 * subsequent iterations/repeat of test methods
 	 * 
 	 * @param delayBetweenIterationInSeconds Delay between iteration in seconds
 	 */
