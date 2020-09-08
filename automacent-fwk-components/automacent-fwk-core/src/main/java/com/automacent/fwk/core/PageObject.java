@@ -40,19 +40,19 @@ public abstract class PageObject implements IPageObject {
 
 	protected SearchContext component;
 
-	private String parentContainerXPATH;
+	private By parentContainerLocator;
 
 	private WebElement parentContainer;
 
 	private boolean isSuperContainer = false;
 
 	/**
-	 * Get Parent Container XPATH
+	 * Get Parent Container {@link By} element locator
 	 * 
-	 * @return Parent Container XPATH String
+	 * @return {@link By} element locator
 	 */
-	public String getParentContainerXPATH() {
-		return parentContainerXPATH;
+	public By getParentContainerLocator() {
+		return parentContainerLocator;
 	}
 
 	/**
@@ -73,30 +73,30 @@ public abstract class PageObject implements IPageObject {
 	public boolean reInitializePageObject() {
 		_logger.info("Attempting to re-initialize page object");
 		boolean isSuccessful = false;
-		if (getParentContainerXPATH() != null) {
+		if (getParentContainerLocator() != null) {
 			try {
 				if (!isSuperContainer) {
 					PageFactory.initElements(field -> {
-						return new DefaultElementLocator(driver.findElement(By.xpath(parentContainerXPATH)), field);
+						return new DefaultElementLocator(driver.findElement(getParentContainerLocator()), field);
 					}, this);
-					this.parentContainer = driver.findElement(By.xpath(parentContainerXPATH));
+					this.parentContainer = driver.findElement(getParentContainerLocator());
 					this.component = this.parentContainer;
 					isSuccessful = true;
-					_logger.info(String.format("Reinitialized page object with parentContainerXPath %s",
-							getParentContainerXPATH()));
+					_logger.info(String.format("Reinitialized page object with parentContainerLocator %s",
+							getParentContainerLocator()));
 				} else {
 					try {
 						((WebElement) component).getTagName();
 						PageFactory.initElements(field -> {
-							return new DefaultElementLocator(component.findElement(By.xpath(parentContainerXPATH)),
+							return new DefaultElementLocator(component.findElement(getParentContainerLocator()),
 									field);
 						}, this);
-						this.parentContainer = component.findElement(By.xpath(parentContainerXPATH));
+						this.parentContainer = component.findElement(getParentContainerLocator());
 						isSuccessful = true;
 						_logger.info(
 								String.format(
-										"Reinitialized page object with parentContainerXPath %s in super container",
-										getParentContainerXPATH()));
+										"Reinitialized page object with parentContainerLocator %s in super container",
+										getParentContainerLocator()));
 					} catch (Exception e) {
 						_logger.info(
 								String.format("Super container threw exception %s. Cannot re-initialize page object",
@@ -108,7 +108,7 @@ public abstract class PageObject implements IPageObject {
 				_logger.debug(String.format("Error trying to reinitialize objects. Error is %s", e.getMessage()));
 			}
 		} else {
-			_logger.info("parentContainerXPATH is null. Cannot re-initialize page object");
+			_logger.info("parentContainerLocator is null. Cannot re-initialize page object");
 		}
 
 		return isSuccessful;
@@ -131,16 +131,17 @@ public abstract class PageObject implements IPageObject {
 	 * invoking this constructor, the provided container should be visible in the
 	 * Page
 	 * 
-	 * @param parentContainerXPATH XPATH to identify the parent container
+	 * @param parentContainerLocator {@link By} identifier to the parent container
+	 *                               element
 	 */
-	public PageObject(String parentContainerXPATH) {
+	public PageObject(By parentContainerLocator) {
 		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
 		PageFactory.initElements(field -> {
-			return new DefaultElementLocator(driver.findElement(By.xpath(parentContainerXPATH)), field);
+			return new DefaultElementLocator(driver.findElement(parentContainerLocator), field);
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
-		this.parentContainerXPATH = parentContainerXPATH;
-		this.parentContainer = driver.findElement(By.xpath(parentContainerXPATH));
+		this.parentContainerLocator = parentContainerLocator;
+		this.parentContainer = driver.findElement(parentContainerLocator);
 		component = parentContainer;
 	}
 
@@ -166,17 +167,18 @@ public abstract class PageObject implements IPageObject {
 	 * invoking this constructor, the provided page container should be visible in
 	 * the Page
 	 * 
-	 * @param superContainer       Super Parent Container
-	 * @param parentContainerXPATH XPATH identifier to the parent container element
+	 * @param superContainer         Super Parent Container
+	 * @param parentContainerLocator {@link By} identifier to the parent container
+	 *                               element
 	 */
-	public PageObject(WebElement superContainer, String parentContainerXPATH) {
+	public PageObject(WebElement superContainer, By parentContainerLocator) {
 		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
 		PageFactory.initElements(field -> {
-			return new DefaultElementLocator(superContainer.findElement(By.xpath(parentContainerXPATH)), field);
+			return new DefaultElementLocator(superContainer.findElement(parentContainerLocator), field);
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
-		this.parentContainerXPATH = parentContainerXPATH;
-		this.parentContainer = superContainer.findElement(By.xpath(parentContainerXPATH));
+		this.parentContainerLocator = parentContainerLocator;
+		this.parentContainer = superContainer.findElement(parentContainerLocator);
 		component = superContainer;
 		this.isSuperContainer = true;
 	}
@@ -256,6 +258,11 @@ public abstract class PageObject implements IPageObject {
 	@com.automacent.fwk.annotations.Action
 	protected void scrollElementToViewUsingJs(WebElement element) {
 		executeJavascript("arguments[0].scrollIntoView(true)", element);
+	}
+
+	@com.automacent.fwk.annotations.Action
+	protected void javascriptClearField(WebElement element) {
+		executeJavascript("arguments[0].value = ''", element);
 	}
 
 	// Mouse Action -------------------------------------------------
