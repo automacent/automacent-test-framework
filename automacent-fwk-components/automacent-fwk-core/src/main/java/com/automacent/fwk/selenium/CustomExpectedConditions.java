@@ -27,14 +27,14 @@ public class CustomExpectedConditions {
 	 * In case of using {@link FindBy} to locate elements, there is no
 	 * {@link ExpectedConditions} to override the ImplicitWait set and use
 	 * {@link WebDriverWait}. The custom proxyElementLocated
-	 * {@link CustomExpectedConditions#waitTillproxyElementLocated(WebElement)} will
+	 * {@link CustomExpectedConditions#waitTillProxyElementLocated(WebElement)} will
 	 * take care of this scenario
 	 * 
 	 * @param proxyElement Proxy {@link WebElement} object
 	 * @return null if not found, element if found
 	 */
 	@Action
-	public static ExpectedCondition<WebElement> waitTillproxyElementLocated(final WebElement proxyElement) {
+	public static ExpectedCondition<WebElement> waitTillProxyElementLocated(final WebElement proxyElement) {
 		return new ExpectedCondition<WebElement>() {
 			@Override
 			public WebElement apply(WebDriver driver) {
@@ -74,8 +74,6 @@ public class CustomExpectedConditions {
 				driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 				try {
 					return !proxyElement.getText().equals("") ? proxyElement : null;
-				} catch (NoSuchElementException e) {
-					return null;
 				} finally {
 					driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
 							TimeUnit.SECONDS);
@@ -119,6 +117,32 @@ public class CustomExpectedConditions {
 			@Override
 			public String toString() {
 				return String.format("element (%s) to become stale", element);
+			}
+		};
+	}
+
+	/**
+	 * Wait until provided {@link WebElement} is visible
+	 * 
+	 * @param element Element whose visibility has to be checked
+	 * @return True if element is visible
+	 */
+	public static ExpectedCondition<Boolean> visibilityOf(final WebElement element) {
+		return new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+				try {
+					return element.isDisplayed();
+				} finally {
+					driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
+							TimeUnit.SECONDS);
+				}
+			}
+
+			@Override
+			public String toString() {
+				return "visibility of " + element;
 			}
 		};
 	}
