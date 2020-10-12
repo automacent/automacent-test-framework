@@ -218,7 +218,7 @@ public abstract class PageObject implements IPageObject {
 		this.explicitWaitInSeconds = explicitWaitInSeconds;
 	}
 
-	// Javascript Executor ------------------------------------------
+	// JavaScript Executor ------------------------------------------
 
 	/**
 	 * Get {@link JavascriptExecutor} object
@@ -230,10 +230,10 @@ public abstract class PageObject implements IPageObject {
 	}
 
 	/**
-	 * Execute provided Javascript command
+	 * Execute provided JavaScript command
 	 * 
-	 * @param command  javascript
-	 * @param elements {@link WebElement}s to be used Javascript
+	 * @param command  JavaScript
+	 * @param elements {@link WebElement}s to be used JavaScript
 	 */
 	@SuppressWarnings("all")
 	protected void executeJavascript(String command, WebElement... elements) {
@@ -241,7 +241,7 @@ public abstract class PageObject implements IPageObject {
 	}
 
 	/**
-	 * Perform Javascript click
+	 * Perform JavaScript click
 	 * 
 	 * @param element {@link WebElement} on which click has to be performed
 	 */
@@ -251,7 +251,7 @@ public abstract class PageObject implements IPageObject {
 	}
 
 	/**
-	 * Scroll element to view using js scrollIntoView() Javascript function
+	 * Scroll element to view using scrollIntoView() JavaScript function
 	 * 
 	 * @param element {@link WebElement} to scroll into view
 	 */
@@ -260,9 +260,25 @@ public abstract class PageObject implements IPageObject {
 		executeJavascript("arguments[0].scrollIntoView(true)", element);
 	}
 
+	/**
+	 * Clear a {@link WebElement} using JavaScript
+	 * 
+	 * @param element {@link WebElement}
+	 */
 	@com.automacent.fwk.annotations.Action
 	protected void javascriptClearField(WebElement element) {
 		executeJavascript("arguments[0].value = ''", element);
+	}
+
+	/**
+	 * Send keys to {@link WebElement} using JavaScript
+	 * 
+	 * @param element The {@link WebElement} to which keys have to be sent
+	 * @param keys    Keys to be sent
+	 */
+	@com.automacent.fwk.annotations.Action
+	protected void javascriptSendKeys(WebElement element, String keys) {
+		executeJavascript(String.format("arguments[0].value = '%s'", keys), element);
 	}
 
 	// Mouse Action -------------------------------------------------
