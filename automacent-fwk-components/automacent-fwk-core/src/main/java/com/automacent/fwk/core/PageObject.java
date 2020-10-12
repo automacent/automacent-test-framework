@@ -400,7 +400,7 @@ public abstract class PageObject implements IPageObject {
 				break;
 			case PROXY_ELEMENT_LOCATED:
 				returnElement = explicitWait(explicitWaitInSeconds)
-						.until(CustomExpectedConditions.waitTillproxyElementLocated(element));
+						.until(CustomExpectedConditions.waitTillProxyElementLocated(element));
 				break;
 			default:
 				break;
