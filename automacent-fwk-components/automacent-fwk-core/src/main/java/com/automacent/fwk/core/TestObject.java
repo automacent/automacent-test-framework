@@ -33,7 +33,16 @@ public class TestObject {
 
 	// Test parameters ----------------------------------------------
 
-	private Map<String, String> testParameters = new HashMap<>();
+	private Map<String, Map<String, String>> testParametersMap = new HashMap<>();
+
+	private Map<String, String> getTestParameters() {
+		Map<String, String> testParameters = testParametersMap.get(testName);
+		if (testParameters == null) {
+			testParameters = new HashMap<String, String>();
+		}
+		testParametersMap.put(testName, testParameters);
+		return testParameters;
+	}
 
 	/**
 	 * Get Test parameter pertaining to the current {@link Test}
@@ -42,20 +51,11 @@ public class TestObject {
 	 * @return Value of the parameter
 	 */
 	public String getTestParameter(String parameter) {
-		String value = testParameters.get(parameter);
+		String value = getTestParameters().get(parameter);
 		if (value == null)
 			throw new SetupFailedFatalException(
 					String.format("Requested Test Parameter %s not found. Test will exit", parameter));
 		return value;
-	}
-
-	/**
-	 * Set all test parameters
-	 * 
-	 * @param testParameters {@link Map} of Test Parameters
-	 */
-	public void setTestParameters(Map<String, String> testParameters) {
-		this.testParameters.putAll(testParameters);
 	}
 
 	/**
@@ -64,8 +64,30 @@ public class TestObject {
 	 * @param key   Test parameter Key
 	 * @param value Test Parameter Value
 	 */
-	public void addTestParameters(String key, String value) {
-		this.testParameters.put(key, value);
+	public void addTestParameter(String key, String value) {
+		getTestParameters().put(key, value);
+	}
+
+	public void appendTestParameter(String key, String value) {
+		String existing = "";
+		try {
+			existing = getTestParameter(key);
+		} catch (SetupFailedFatalException e) {
+		}
+		if (!existing.isEmpty()) {
+			value = String.format("%s,%s", existing, value);
+		}
+		getTestParameters().put(key, value);
+	}
+
+	/**
+	 * Set all test parameters
+	 * 
+	 * @param testParameters {@link Map} of Test Parameters
+	 */
+	public void setTestParameters(Map<String, String> testParameters) {
+		getTestParameters().putAll(testParameters);
+		_logger.info("Setting test parameters");
 	}
 
 	// Driver Manager -----------------------------------------------

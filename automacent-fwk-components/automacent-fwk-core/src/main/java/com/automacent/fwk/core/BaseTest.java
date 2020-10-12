@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.testng.ITestContext;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Optional;
@@ -90,6 +91,7 @@ public abstract class BaseTest {
 	 * @param testContext                    testNg {@link ITestContext}
 	 */
 	@BeforeTest
+	@BeforeClass
 	@Parameters({ "repeatMode", "testDurationInSeconds", "invocationCount", "delayBetweenIterationInSeconds",
 			"timeoutInSeconds", "slowdownDurationInSeconds", "retryMode", "recoveryClasses" })
 	public void automacentInternalSetParameters(
