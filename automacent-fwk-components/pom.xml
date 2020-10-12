@@ -49,7 +49,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<webdriver.version>3.141.59</webdriver.version>
 		<webdrivermanager.version>3.8.1</webdrivermanager.version>
-		<aspectj.version>1.8.9</aspectj.version>
+		<aspectj.version>1.9.6</aspectj.version>
 		<jsch.version>0.1.53</jsch.version>
 		<commons.io.version>2.6</commons.io.version>
 		<testng.version>7.3.0</testng.version>
