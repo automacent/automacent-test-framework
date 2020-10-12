@@ -15,8 +15,7 @@ public class AspectJUtils {
 	/**
 	 * Get method name with arguments from the {@link ProceedingJoinPoint}
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
+	 * @param point {@link ProceedingJoinPoint}
 	 * @return method name with arguments in the format methodName(arg1_value,
 	 *         arg2_value ...)
 	 */
@@ -28,8 +27,7 @@ public class AspectJUtils {
 	/**
 	 * Get arguments/parameters from a method
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint}
+	 * @param point {@link ProceedingJoinPoint}
 	 * @return Arguments in the format (arg1_value, arg2_value ...)
 	 */
 	public static String getArguments(ProceedingJoinPoint point) {
@@ -43,6 +41,10 @@ public class AspectJUtils {
 				arguments += "webelement";
 			else if (signatureArg instanceof WebDriver)
 				arguments += "webdriver";
+			else if (signatureArg instanceof String)
+				arguments += ((String) signatureArg).length() > 50
+						? String.format("%s...", ((String) signatureArg).substring(0, 49))
+						: signatureArg;
 			else
 				arguments += signatureArg;
 		}

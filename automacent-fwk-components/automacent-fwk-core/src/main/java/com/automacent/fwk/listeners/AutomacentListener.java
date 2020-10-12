@@ -23,6 +23,7 @@ import com.automacent.fwk.reporting.ExecutionLogManager;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.reporting.ReportingTools;
 import com.automacent.fwk.utils.FileUtils;
+import com.automacent.fwk.utils.ThreadUtils;
 
 /**
  * This is the custom reporter for Automacent framework and should be specified
@@ -43,6 +44,10 @@ public class AutomacentListener extends TestListenerAdapter
 	 */
 	@Override
 	public void onStart(ITestContext testContext) {
+		_logger.info("----------------- Starting XML Test -------------------");
+		_logger.info(String.format("XML Test    : %s", testContext.getCurrentXmlTest().getName()));
+		_logger.info(String.format("Thread Name : %s", ThreadUtils.getThreadName()));
+		_logger.info("-------------------------------------------------------");
 		_logger.debug("Starting timekeeper " + IterationManager.getManager().getElapsedTimeInMilliSeconds());
 		super.onStart(testContext);
 	}
@@ -140,7 +145,7 @@ public class AutomacentListener extends TestListenerAdapter
 	}
 
 	/**
-	 * Delete temp folder before testng execution start
+	 * Delete temporary folder before testNG execution start
 	 */
 	@Override
 	public void onExecutionStart() {
@@ -148,7 +153,7 @@ public class AutomacentListener extends TestListenerAdapter
 	}
 
 	/**
-	 * Delete temp folder after testng execution complete
+	 * Delete temporary folder after testNG execution complete
 	 */
 	@Override
 	public void onExecutionFinish() {
@@ -162,14 +167,12 @@ public class AutomacentListener extends TestListenerAdapter
 	 */
 	@Override
 	public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
-		String message = new String(String.format("Preparing to execute the below @Test under test %s\n",
-				context.getCurrentXmlTest().getName()));
-		message = message.concat("------------------Execution Order ---------------------\n");
+		_logger.info("------------------ Execution Order --------------------");
+		_logger.info(String.format("XML Test  : %s", context.getCurrentXmlTest().getName()));
 		for (IMethodInstance method : methods) {
-			message = message.concat(method.getMethod().getQualifiedName()).concat("\n");
+			_logger.info(String.format("@Test     : %s", method.getMethod().getQualifiedName()));
 		}
-		message = message.concat("-------------------------------------------------------");
-		_logger.info(message);
+		_logger.info("-------------------------------------------------------");
 		return methods;
 	}
 }

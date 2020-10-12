@@ -24,6 +24,15 @@ public class ThreadUtils {
 	}
 
 	/**
+	 * Get the current thread name
+	 * 
+	 * @return current thread name
+	 */
+	public static String getThreadName() {
+		return Thread.currentThread().getName();
+	}
+
+	/**
 	 * When called execution will sleep for the specified time
 	 * 
 	 * @param sleepTimeInSeconds Sleep time in seconds
@@ -57,4 +66,5 @@ public class ThreadUtils {
 					new Date().getTime() - startTime, e);
 		}
 	}
+
 }
