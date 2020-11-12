@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.testng.IInvokedMethod;
 import org.testng.ITestContext;
-import org.testng.ITestResult;
 
 import com.automacent.fwk.annotations.Step;
-import com.automacent.fwk.core.TestObject;
 import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.TestStatus;
 import com.automacent.fwk.exceptions.LauncherForceCompletedException;
@@ -18,7 +16,7 @@ import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.ThreadUtils;
 
 /**
- * This class manages the Launcher clients and is resposible for invoking all
+ * This class manages the Launcher clients and is responsible for invoking all
  * the specified Launcher clients
  * 
  * @author sighil.sivadas
@@ -43,76 +41,6 @@ public class LauncherClientManager implements ILauncherClient {
 		return launcherClientManager;
 	}
 
-	private List<Class<?>> launcherClientClasses = new ArrayList<>();
-
-	/**
-	 * Get launcher client classes
-	 * 
-	 * @return {@link List} of launcher client classes
-	 */
-	private List<Class<?>> getLauncherClientClasses() {
-		return launcherClientClasses;
-	}
-
-	/**
-	 * Get the comma seperated launcher client classes and map it to Java classes
-	 * 
-	 * @param launcherClientClasses Comma separated launcher client classes
-	 */
-	public void addLauncherClientClasses(String launcherClientClasses) {
-		if (!launcherClientClasses.trim().isEmpty()) {
-			String launcherClients[] = launcherClientClasses.split(",");
-			for (String launcherClient : launcherClients)
-				try {
-					Class<?> clazz = Class.forName(launcherClient);
-					if (AbstractLauncherClient.class.isAssignableFrom(clazz))
-						this.launcherClientClasses.add(clazz);
-					else
-						_logger.warn(String.format(
-								"Provided Launcher client class %s is not an sub class of com.automacent.fwk.launcher.LauncherClient",
-								launcherClient));
-				} catch (ClassNotFoundException e) {
-					_logger.warn(String.format("Provided Launcher client class %s is not found in the classpath",
-							launcherClient));
-				}
-			if (getLauncherClientClasses().isEmpty()) {
-				_logger.warn("Launcher clients provided are not usable. Launcher clients service will be disabled");
-			} else {
-				isEnabled = true;
-				_logger.info(String.format("Launcher clients set up %s", launcherClientClasses));
-			}
-		} else {
-			_logger.warn("No Launcher clients specified. Launcher clients service will be disabled");
-		}
-	}
-
-	private Map<Long, List<ILauncherClient>> threadMap = new HashMap<>();
-
-	/**
-	 * Get list of launcher client instances
-	 * 
-	 * @return List of launcher client instances
-	 */
-	public List<ILauncherClient> getLauncherClients() {
-		List<ILauncherClient> launcherClientList = threadMap.get(ThreadUtils.getThreadId());
-		if (launcherClientList == null) {
-			launcherClientList = new ArrayList<>();
-			for (Class<?> launcherClientClass : getLauncherClientClasses()) {
-				try {
-					launcherClientList.add((ILauncherClient) launcherClientClass.newInstance());
-				} catch (InstantiationException | IllegalAccessException e) {
-					_logger.warn(String.format("Error initializing launcher client class %s.",
-							launcherClientClass.getName()), e);
-				}
-			}
-			threadMap.put(ThreadUtils.getThreadId(), launcherClientList);
-		}
-
-		if (!launcherClientList.isEmpty())
-			isEnabled = true;
-		return launcherClientList;
-	}
-
 	private boolean isEnabled = false;
 
 	/**
@@ -135,20 +63,82 @@ public class LauncherClientManager implements ILauncherClient {
 				launcherClient.disableClient();
 	}
 
+	private Map<Class<?>, Map<Long, ILauncherClient>> launcherClientMasterMap = new HashMap<>();
+
+	public Map<Class<?>, Map<Long, ILauncherClient>> getLauncherClientMasterMap() {
+		return launcherClientMasterMap;
+	}
+
 	/**
-	 * Mark start of test on all launcher clients
+	 * Get the comma separated launcher client classes and map it to Java classes
 	 * 
-	 * @param testObject    Test object for the Test
-	 * @param invokedMethod TestNG {@link IInvokedMethod}
-	 * @param testResult    TestNG {@link ITestResult}
-	 * @param testContext   TestNG {@link ITestContext}
+	 * @param launcherClientClasses Comma separated launcher client classes
 	 */
-	@Override
-	public void startTest(TestObject testObject, IInvokedMethod invokedMethod, ITestResult testResult,
-			ITestContext testContext) {
+	public void generateLauncherClientMasterMap(String launcherClientClasses) {
+		if (!launcherClientClasses.trim().isEmpty()) {
+			String launcherClients[] = launcherClientClasses.split(",");
+			for (String launcherClient : launcherClients)
+				try {
+					Class<?> clazz = Class.forName(launcherClient);
+					if (AbstractLauncherClient.class.isAssignableFrom(clazz)) {
+						this.launcherClientMasterMap.put(clazz, new HashMap<>());
+					} else
+						_logger.warn(String.format(
+								"Provided Launcher client class %s is not an sub class of com.automacent.fwk.launcher.AbstractLauncherClient",
+								launcherClient));
+				} catch (ClassNotFoundException e) {
+					_logger.warn(String.format("Provided Launcher client class %s is not found in the classpath",
+							launcherClient));
+				}
+			if (getLauncherClientMasterMap().isEmpty()) {
+				_logger.warn("Launcher clients provided are not usable. Launcher clients service will be disabled");
+			} else {
+				isEnabled = true;
+				_logger.info(String.format("Launcher clients set up %s", launcherClientClasses));
+			}
+		} else {
+			_logger.warn("No Launcher clients specified. Launcher clients service will be disabled");
+		}
+	}
+
+	/**
+	 * Get list of launcher client instances
+	 * 
+	 * @return List of launcher client instances
+	 */
+	public List<ILauncherClient> getLauncherClients() {
+		List<ILauncherClient> activeLauncherClientList = new ArrayList<>();
+
+		Set<Class<?>> launcherClientClasses = getLauncherClientMasterMap().keySet();
+		for (Class<?> launcherClientClass : launcherClientClasses) {
+			Map<Long, ILauncherClient> launcherClientMap = getLauncherClientMasterMap().get(launcherClientClass);
+			ILauncherClient launcherClient = launcherClientMap.get(ThreadUtils.getThreadId());
+			try {
+				if (launcherClient == null)
+					launcherClient = (ILauncherClient) launcherClientClass.newInstance();
+				launcherClientMap.put(ThreadUtils.getThreadId(), launcherClient);
+				activeLauncherClientList.add(launcherClient);
+			} catch (InstantiationException | IllegalAccessException e) {
+				_logger.warn(String.format("Error initializing launcher client class %s.",
+						launcherClientClass.getName()), e);
+			}
+
+		}
+
+		if (!activeLauncherClientList.isEmpty())
+			isEnabled = true;
+		return activeLauncherClientList;
+	}
+
+	/**
+	 * Mark start of XML test on all launcher client
+	 * 
+	 * @param testContext
+	 */
+	public void startTest(ITestContext testContext) {
 		if (isEnabled)
 			for (ILauncherClient launcherClient : getLauncherClients())
-				launcherClient.startTest(testObject, invokedMethod, testResult, testContext);
+				launcherClient.startTest(testContext);
 	}
 
 	/**

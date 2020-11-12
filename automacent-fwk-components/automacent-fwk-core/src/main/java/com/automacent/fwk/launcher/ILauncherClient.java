@@ -1,10 +1,7 @@
 package com.automacent.fwk.launcher;
 
-import org.testng.IInvokedMethod;
 import org.testng.ITestContext;
-import org.testng.ITestResult;
 
-import com.automacent.fwk.core.TestObject;
 import com.automacent.fwk.enums.MethodType;
 import com.automacent.fwk.enums.TestStatus;
 import com.automacent.fwk.exceptions.LauncherForceCompletedException;
@@ -29,15 +26,11 @@ public interface ILauncherClient {
 	void disableClient();
 
 	/**
-	 * Mark start of test on all launcher client
+	 * Mark start of XML test on all launcher client
 	 * 
-	 * @param testObject    Test object for the class being logged
-	 * @param invokedMethod TestNG {@link IInvokedMethod} method
-	 * @param testResult    TestNG {@link ITestResult}
-	 * @param testContext   TestNG {@link ITestContext}
+	 * @param testContext
 	 */
-	void startTest(TestObject testObject, IInvokedMethod invokedMethod, ITestResult testResult,
-			ITestContext testContext);
+	void startTest(ITestContext testContext);
 
 	/**
 	 * Mark success of test/iteration on launcher client

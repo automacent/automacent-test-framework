@@ -42,6 +42,7 @@ public abstract class BaseTest {
 	}
 
 	/**
+	 * Get the test object associated with the current test
 	 * 
 	 * @return {@link TestObject}
 	 */
@@ -63,7 +64,7 @@ public abstract class BaseTest {
 	@Parameters({ "launcherClients", "runName", "batchNumber" })
 	public void automacentInternalSetLauncherClients(@Optional("") String launcherClients, @Optional("") String runName,
 			@Optional("") String batchNumber) {
-		LauncherClientManager.getManager().addLauncherClientClasses(launcherClients);
+		LauncherClientManager.getManager().generateLauncherClientMasterMap(launcherClients);
 	}
 
 	/**

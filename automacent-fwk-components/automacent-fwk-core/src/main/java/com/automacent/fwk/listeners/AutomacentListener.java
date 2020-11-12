@@ -1,17 +1,19 @@
 package com.automacent.fwk.listeners;
 
 import java.util.List;
+import java.util.Map;
 
 import org.testng.IExecutionListener;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNGException;
-import org.testng.annotations.BeforeTest;
 
 import com.automacent.fwk.annotations.StepsAndPagesProcessor;
 import com.automacent.fwk.core.BaseTest;
@@ -34,7 +36,7 @@ import com.automacent.fwk.utils.ThreadUtils;
  *
  */
 public class AutomacentListener extends TestListenerAdapter
-		implements IInvokedMethodListener, IExecutionListener, IMethodInterceptor {
+		implements IInvokedMethodListener, IExecutionListener, IMethodInterceptor, ISuiteListener {
 
 	private static final Logger _logger = Logger.getLogger(AutomacentListener.class);
 
@@ -47,8 +49,11 @@ public class AutomacentListener extends TestListenerAdapter
 		_logger.info("----------------- Starting XML Test -------------------");
 		_logger.info(String.format("XML Test    : %s", testContext.getCurrentXmlTest().getName()));
 		_logger.info(String.format("Thread Name : %s", ThreadUtils.getThreadName()));
+		_logger.info(String.format("Thread ID : %s", ThreadUtils.getThreadId()));
 		_logger.info("-------------------------------------------------------");
 		_logger.debug("Starting timekeeper " + IterationManager.getManager().getElapsedTimeInMilliSeconds());
+		LauncherClientManager.getManager().enableClient();
+		LauncherClientManager.getManager().startTest(testContext);
 		super.onStart(testContext);
 	}
 
@@ -108,7 +113,6 @@ public class AutomacentListener extends TestListenerAdapter
 
 	@Override
 	public void afterInvocation(IInvokedMethod invokedMethod, ITestResult testResult) {
-
 	}
 
 	@Override
@@ -116,19 +120,8 @@ public class AutomacentListener extends TestListenerAdapter
 
 	}
 
-	/**
-	 * Implement afterInvocation method in the {@link IInvokedMethodListener} to
-	 * listen for the {@link BeforeTest} method automacentInternalSetParameters so
-	 * that start test can be logged to the Launcher
-	 */
 	@Override
 	public void afterInvocation(IInvokedMethod invokedMethod, ITestResult testResult, ITestContext testContext) {
-		String methodName = invokedMethod.getTestMethod().getMethodName();
-		if (invokedMethod.isConfigurationMethod() && methodName.equals("automacentInternalSetParameters")) {
-			LauncherClientManager.getManager().enableClient();
-			LauncherClientManager.getManager().startTest(BaseTest.getTestObject(), invokedMethod, testResult,
-					testContext);
-		}
 	}
 
 	/**
