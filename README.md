@@ -1,4 +1,4 @@
-# automacent ![Java CI with Maven](https://github.com/sighil/automacent/workflows/Java%20CI%20with%20Maven/badge.svg)
+# Automacent Test Framework ![Java CI with Maven](https://github.com/sighil/automacent/workflows/Java%20CI%20with%20Maven/badge.svg)
 
 Test automation framework based on TestNG to write test code with a host of helpful utilities and enhanced reporting structure. The framework primarily focusses on UI test case development with Selenium included as a direct dependency. That being said, the framework can also used for writing API tests, database tests and unit tests.
 
@@ -21,7 +21,7 @@ Selenium Specific features
 - Manage test timeouts
 - Handle and resolve common selenium issues like test failures due to flakiness
 
-For documentation and entire feature list visit [GitHub Pages](https://pages.github.com/)
+> For documentation and entire feature list visit [GitHub Automacent Framework Wiki](https://github.com/sighil/automacent/wiki)
 
 ## Stable version
 Add below dependency to maven pom.xml to get started with the released stable version
