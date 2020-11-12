@@ -2,6 +2,7 @@ package com.automacent.fwk.selenium;
 
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -21,6 +22,33 @@ import com.automacent.fwk.core.BaseTest;
  *
  */
 public class CustomExpectedConditions {
+
+	/**
+	 * An expectation for checking that an element is present on the DOM of a page.
+	 * This does not necessarily mean that the element is visible.
+	 *
+	 * @param locator used to find the element
+	 * @return the WebElement once it is located
+	 */
+	public static ExpectedCondition<WebElement> presenceOfElementLocated(final By locator) {
+		return new ExpectedCondition<WebElement>() {
+			@Override
+			public WebElement apply(WebDriver driver) {
+				try {
+					driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+					return driver.findElement(locator);
+				} finally {
+					driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
+							TimeUnit.SECONDS);
+				}
+			}
+
+			@Override
+			public String toString() {
+				return "presence of element located by: " + locator;
+			}
+		};
+	}
 
 	/**
 	 * 
