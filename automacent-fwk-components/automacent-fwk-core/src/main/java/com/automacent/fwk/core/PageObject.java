@@ -40,28 +40,12 @@ public abstract class PageObject implements IPageObject {
 
 	protected SearchContext component;
 
-	private By parentContainerLocator;
+	protected By parentContainerLocator;
 
-	private WebElement parentContainer;
+	private WebElement superContainer;
 
-	private boolean isSuperContainer = false;
-
-	/**
-	 * Get Parent Container {@link By} element locator
-	 * 
-	 * @return {@link By} element locator
-	 */
-	public By getParentContainerLocator() {
-		return parentContainerLocator;
-	}
-
-	/**
-	 * Get the parent container
-	 * 
-	 * @return {@link WebElement} Parent container
-	 */
-	public WebElement getParentContainer() {
-		return parentContainer;
+	protected WebElement getParentContainer() {
+		return (WebElement) component;
 	}
 
 	/**
@@ -73,43 +57,53 @@ public abstract class PageObject implements IPageObject {
 	public boolean reInitializePageObject() {
 		_logger.info("Attempting to re-initialize page object");
 		boolean isSuccessful = false;
-		if (getParentContainerLocator() != null) {
-			try {
-				if (!isSuperContainer) {
+		if (parentContainerLocator != null) {
+			if (superContainer == null) {
+				try {
 					PageFactory.initElements(field -> {
-						return new DefaultElementLocator(driver.findElement(getParentContainerLocator()), field);
+						return new DefaultElementLocator(driver.findElement(parentContainerLocator), field);
 					}, this);
-					this.parentContainer = driver.findElement(getParentContainerLocator());
-					this.component = this.parentContainer;
+					this.component = driver.findElement(parentContainerLocator);
 					isSuccessful = true;
-					_logger.info(String.format("Reinitialized page object with parentContainerLocator %s",
-							getParentContainerLocator()));
-				} else {
-					try {
-						((WebElement) component).getTagName();
-						PageFactory.initElements(field -> {
-							return new DefaultElementLocator(component.findElement(getParentContainerLocator()),
-									field);
-						}, this);
-						this.parentContainer = component.findElement(getParentContainerLocator());
-						isSuccessful = true;
-						_logger.info(
-								String.format(
-										"Reinitialized page object with parentContainerLocator %s in super container",
-										getParentContainerLocator()));
-					} catch (Exception e) {
-						_logger.info(
-								String.format("Super container threw exception %s. Cannot re-initialize page object",
-										e.getMessage()));
-					}
+				} catch (Exception e) {
+					_logger.info(
+							String.format(
+									"Error trying to reinitialize page object with parent Container Locator %s. Error is %s",
+									parentContainerLocator, e.getMessage()));
 				}
-			} catch (Exception e) {
-				_logger.info("Error trying to reinitialize objects");
-				_logger.debug(String.format("Error trying to reinitialize objects. Error is %s", e.getMessage()));
+			} else {
+				try {
+					((WebElement) superContainer).getTagName();
+					PageFactory.initElements(field -> {
+						return new DefaultElementLocator(superContainer.findElement(parentContainerLocator),
+								field);
+					}, this);
+					this.component = superContainer.findElement(parentContainerLocator);
+					isSuccessful = true;
+				} catch (Exception e) {
+					_logger.info(
+							String.format(
+									"Error trying to reinitialize page object with parent Container Locator %s and super container %s. Error is %s",
+									parentContainerLocator, superContainer.toString(), e.getMessage()));
+				}
 			}
 		} else {
-			_logger.info("parentContainerLocator is null. Cannot re-initialize page object");
+			try {
+				((WebElement) component).getTagName();
+				PageFactory.initElements(field -> {
+					return new DefaultElementLocator(component, field);
+				}, this);
+				isSuccessful = true;
+			} catch (Exception e) {
+				_logger.info(
+						String.format(
+								"Error trying to reinitialize page object with parent Container %s. Error is %s",
+								component.toString(), e.getMessage()));
+			}
 		}
+
+		if (isSuccessful)
+			_logger.info("Reinitialized page object");
 
 		return isSuccessful;
 	}
@@ -118,12 +112,14 @@ public abstract class PageObject implements IPageObject {
 	 * Initialize page objects using {@link WebDriver}
 	 */
 	public PageObject() {
+		By parentContainerLocator = By.tagName("body");
 		driver = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver();
 		PageFactory.initElements(field -> {
-			return new DefaultElementLocator(driver, field);
+			return new DefaultElementLocator(driver.findElement(parentContainerLocator), field);
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
-		component = driver;
+		this.parentContainerLocator = parentContainerLocator;
+		this.component = driver.findElement(parentContainerLocator);
 	}
 
 	/**
@@ -141,8 +137,7 @@ public abstract class PageObject implements IPageObject {
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
 		this.parentContainerLocator = parentContainerLocator;
-		this.parentContainer = driver.findElement(parentContainerLocator);
-		component = parentContainer;
+		this.component = driver.findElement(parentContainerLocator);
 	}
 
 	/**
@@ -158,8 +153,7 @@ public abstract class PageObject implements IPageObject {
 			return new DefaultElementLocator(parentContainer, field);
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
-		this.parentContainer = parentContainer;
-		component = parentContainer;
+		this.component = parentContainer;
 	}
 
 	/**
@@ -178,9 +172,8 @@ public abstract class PageObject implements IPageObject {
 		}, this);
 		setExplicitWaitInSeconds((int) BaseTest.getTestObject().getTimeoutInSeconds());
 		this.parentContainerLocator = parentContainerLocator;
-		this.parentContainer = superContainer.findElement(parentContainerLocator);
-		component = superContainer;
-		this.isSuperContainer = true;
+		this.component = superContainer.findElement(parentContainerLocator);
+		this.superContainer = superContainer;
 	}
 
 	/**
