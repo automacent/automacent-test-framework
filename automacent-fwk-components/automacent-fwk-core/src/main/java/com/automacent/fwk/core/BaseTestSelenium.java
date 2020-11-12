@@ -11,6 +11,7 @@ import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.enums.ScreenshotMode;
 import com.automacent.fwk.enums.ScreenshotModeForIteration;
 import com.automacent.fwk.enums.ScreenshotType;
+import com.automacent.fwk.exceptions.SetupFailedFatalException;
 
 import io.github.bonigarcia.wdm.DriverManagerType;
 
@@ -75,6 +76,8 @@ public abstract class BaseTestSelenium extends BaseTest {
 			@Optional("LAST_ITERATION") String screenshotModeForIteration,
 			String baseUrl,
 			ITestContext testContext) {
+		if (baseUrl.trim().isEmpty())
+			throw new SetupFailedFatalException("Parameter, baseUrl, is empty");
 		TestObject testObject = BaseTest.getTestObject();
 		testObject.setDriverManager(new DriverManager());
 		testObject.getDriverManager().setDriverManagerType(browser);
@@ -109,8 +112,8 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * browser, on starting becomes the active browser/driver. Use
 	 * {@link #setActiveDriver(BrowserId)} to change the active browser/driver
 	 * 
-	 * @param browserId {@link BrowserId}
-	 * @param driverManagerType   {@link DriverManagerType}
+	 * @param browserId         {@link BrowserId}
+	 * @param driverManagerType {@link DriverManagerType}
 	 */
 	protected void startBrowser(BrowserId browserId, DriverManagerType driverManagerType) {
 		BaseTest.getTestObject().getDriverManager().startDriverManager(this, browserId, driverManagerType);
