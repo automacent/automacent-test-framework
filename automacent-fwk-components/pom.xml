@@ -4,9 +4,10 @@
 
 	<groupId>com.automacent</groupId>
 	<artifactId>automacent-fwk-components</artifactId>
-	<packaging>pom</packaging>
 	<version>1.1-SNAPSHOT</version>
 	<name>automacent-fwk-components</name>
+	<packaging>pom</packaging>
+	
 	<description>A Testing framework written over TestNG with a whole lot
 		of new features and utilities
 	</description>
@@ -66,6 +67,7 @@
 	<modules>
 		<module>automacent-fwk-core</module>
 		<module>automacent-fwk</module>
+		<module>automacent-fwk-archetype</module>
 	</modules>
 
 	<dependencies>
