@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sample Suite" parallel="none" thread-count="3">
+
+	<parameter name="launcherClients" value="" />
+	<parameter name="runName" value="" />
+	<parameter name="batchNumber" value="" />
+
+	<parameter name="retryMode" value="OFF" />
+	<parameter name="recoveryClasses" value="" />
+
+	<parameter name="timeoutInSeconds" value="20" />
+	<parameter name="slowdownDurationInSeconds" value="1" />
+
+	<parameter name="repeatMode" value="OFF" />
+	<parameter name="testDurationInSeconds" value="0" />
+	<parameter name="invocationCount" value="0" />
+	<parameter name="delayBetweenIterationInSeconds" value="0" />
+
+	<parameter name="ieDriverLocation" value="" />
+	<parameter name="chromeDriverLocation" value="" />
+	<parameter name="geckoDriverLocation" value="" />
+
+	<parameter name="scriptTimeoutInSeconds" value="300" />
+	<parameter name="pageLoadTimeoutInSeconds" value="300" />
+	<parameter name="socketTimeoutInSeconds" value="300" />
+
+	<parameter name="screenshotType" value="BROWSER_SCREENSHOT" />
+	<parameter name="screenshotMode" value="ON_FAILURE" />
+	<parameter name="screenshotModeForIteration" value="LAST_ITERATION" />
+
+	<parameter name="browser" value="CHROME" />
+	<parameter name="baseUrl" value="https://www.google.com" />
+	
+	<test name="Sample Test" enabled="true">
+		<parameter name="keyword" value="automacent.com" />
+		<classes>
+			<class name="${package}.test.GoogleSearchTest" />
+		</classes>
+	</test>
+</suite>

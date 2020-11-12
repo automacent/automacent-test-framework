@@ -8,7 +8,9 @@
 	</parent>
 	<artifactId>automacent-fwk</artifactId>
 	<name>automacent-fwk</name>
-	<description>Automacent framework primary dependency</description>
+	<packaging>jar</packaging>
+	
+	<description>Automacent framework dependency</description>
 	<url>http://www.automacent.com/</url>
 	<licenses>
 		<license>
@@ -26,6 +28,7 @@
 			</roles>
 		</developer>
 	</developers>
+	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
