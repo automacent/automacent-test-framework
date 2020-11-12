@@ -153,6 +153,9 @@ public abstract class BrowserControls {
 
 	// Frame ----------------------------------------------
 
+	/**
+	 * Switch to the default or top level frame
+	 */
 	@Step
 	public void switchToDefaultContent() {
 		driver.switchTo().defaultContent();
@@ -166,6 +169,14 @@ public abstract class BrowserControls {
 	@Step
 	protected void navigateBackInBrowserHistory() {
 		driver.navigate().back();
+	}
+
+	/**
+	 * Refresh the browser
+	 */
+	@Step
+	protected void refreshBrowser() {
+		driver.navigate().refresh();
 	}
 
 	/**
