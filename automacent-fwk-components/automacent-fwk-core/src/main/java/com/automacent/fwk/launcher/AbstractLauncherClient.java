@@ -37,6 +37,8 @@ public abstract class AbstractLauncherClient implements ILauncherClient {
 		this.identityHost = identityHost;
 		this.username = username;
 		this.password = password;
+		_logger.info(String.format("Identity client is %s", identityHost));
+		_logger.info(String.format("Launcher client is %s", host));
 	}
 
 	private boolean enabled = false;

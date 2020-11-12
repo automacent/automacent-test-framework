@@ -23,7 +23,7 @@ import io.github.bonigarcia.wdm.DriverManagerType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
- * Driver object holding {@link WebDriver} instaces for Selenium Web Tests
+ * Driver object holding {@link WebDriver} instances for Selenium Web Tests
  * 
  * @author sighil.sivadas
  *

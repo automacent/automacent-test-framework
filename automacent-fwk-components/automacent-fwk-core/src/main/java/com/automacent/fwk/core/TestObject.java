@@ -22,7 +22,7 @@ import com.automacent.fwk.utils.StringUtils;
 
 /**
  * Class which holds parameters required for execution of Test. Each Test class
- * will be assinged a {@link TestObject}. This class is declared and used the
+ * will be assigned a {@link TestObject}. This class is declared and used the
  * {@link BaseTest} class
  * 
  * @author sighil.sivadas
@@ -68,6 +68,13 @@ public class TestObject {
 		getTestParameters().put(key, value);
 	}
 
+	/**
+	 * This method will append the provided value with the key as comma seperated
+	 * values
+	 * 
+	 * @param key   Parameter key
+	 * @param value Parameter Value
+	 */
 	public void appendTestParameter(String key, String value) {
 		String existing = "";
 		try {
@@ -95,6 +102,8 @@ public class TestObject {
 	private DriverManager driverManager;
 
 	/**
+	 * Get the driver manager
+	 * 
 	 * @return {@link DriverManager} object
 	 */
 	public DriverManager getDriverManager() {
