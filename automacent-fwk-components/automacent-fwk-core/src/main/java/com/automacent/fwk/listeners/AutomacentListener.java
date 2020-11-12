@@ -58,6 +58,123 @@ public class AutomacentListener extends TestListenerAdapter
 	}
 
 	/**
+	 * Override {@link ISuiteListener#onStart(ISuite)} method for setting framework
+	 * parameters. If not set, apply default values
+	 */
+	@Override
+	public void onStart(ISuite suite) {
+		ISuiteListener.super.onStart(suite);
+
+		Map<String, String> parameters = suite.getXmlSuite().getAllParameters();
+		String launcherClients = parameters.get("launcherClients");
+		String runName = parameters.get("runName");
+		String batchNumber = parameters.get("batchNumber");
+		String retryMode = parameters.get("retryMode");
+		String recoveryClasses = parameters.get("recoveryClasses");
+		String timeoutInSeconds = parameters.get("timeoutInSeconds");
+		String slowdownDurationInSeconds = parameters.get("slowdownDurationInSeconds");
+		String repeatMode = parameters.get("repeatMode");
+		String testDurationInSeconds = parameters.get("testDurationInSeconds");
+		String invocationCount = parameters.get("invocationCount");
+		String delayBetweenIterationInSeconds = parameters.get("delayBetweenIterationInSeconds");
+		String ieDriverLocation = parameters.get("ieDriverLocation");
+		String chromeDriverLocation = parameters.get("chromeDriverLocation");
+		String geckoDriverLocation = parameters.get("geckoDriverLocation");
+		String scriptTimeoutInSeconds = parameters.get("scriptTimeoutInSeconds");
+		String pageLoadTimeoutInSeconds = parameters.get("pageLoadTimeoutInSeconds");
+		String socketTimeoutInSeconds = parameters.get("socketTimeoutInSeconds");
+		String browser = parameters.get("browser");
+		String baseUrl = parameters.get("baseUrl");
+		String screenshotType = parameters.get("screenshotType");
+		String screenshotMode = parameters.get("screenshotMode");
+		String screenshotModeForIteration = parameters.get("screenshotModeForIteration");
+
+		launcherClients = launcherClients == null || launcherClients.isEmpty()
+				? System.getProperty("automacent.launcherClients", "")
+				: launcherClients;
+		runName = runName == null || runName.isEmpty() ? System.getProperty("automacent.runName", "") : runName;
+		batchNumber = batchNumber == null || batchNumber.isEmpty() ? System.getProperty("automacent.batchNumber", "")
+				: batchNumber;
+		retryMode = retryMode == null || retryMode.isEmpty() ? System.getProperty("automacent.retryMode", "OFF")
+				: retryMode;
+		recoveryClasses = recoveryClasses == null || recoveryClasses.isEmpty()
+				? System.getProperty("automacent.recoveryClasses", "")
+				: recoveryClasses;
+		timeoutInSeconds = timeoutInSeconds == null || timeoutInSeconds.isEmpty()
+				? System.getProperty("automacent.timeoutInSeconds", "20")
+				: timeoutInSeconds;
+		slowdownDurationInSeconds = slowdownDurationInSeconds == null || slowdownDurationInSeconds.isEmpty()
+				? System.getProperty("automacent.slowdownDurationInSeconds", "1")
+				: slowdownDurationInSeconds;
+		repeatMode = repeatMode == null || repeatMode.isEmpty() ? System.getProperty("automacent.repeatMode", "OFF")
+				: repeatMode;
+		testDurationInSeconds = testDurationInSeconds == null || testDurationInSeconds.isEmpty()
+				? System.getProperty("automacent.testDurationInSeconds", "0")
+				: testDurationInSeconds;
+		invocationCount = invocationCount == null || invocationCount.isEmpty()
+				? System.getProperty("automacent.invocationCount", "0")
+				: invocationCount;
+		delayBetweenIterationInSeconds = delayBetweenIterationInSeconds == null
+				|| delayBetweenIterationInSeconds.isEmpty()
+						? System.getProperty("automacent.delayBetweenIterationInSeconds", "0")
+						: delayBetweenIterationInSeconds;
+		ieDriverLocation = ieDriverLocation == null || ieDriverLocation.isEmpty()
+				? System.getProperty("automacent.ieDriverLocation", "")
+				: ieDriverLocation;
+		chromeDriverLocation = chromeDriverLocation == null || chromeDriverLocation.isEmpty()
+				? System.getProperty("automacent.chromeDriverLocation", "")
+				: chromeDriverLocation;
+		geckoDriverLocation = geckoDriverLocation == null || geckoDriverLocation.isEmpty()
+				? System.getProperty("automacent.geckoDriverLocation", "")
+				: geckoDriverLocation;
+		scriptTimeoutInSeconds = scriptTimeoutInSeconds == null || scriptTimeoutInSeconds.isEmpty()
+				? System.getProperty("automacent.scriptTimeoutInSeconds", "300")
+				: scriptTimeoutInSeconds;
+		pageLoadTimeoutInSeconds = pageLoadTimeoutInSeconds == null || pageLoadTimeoutInSeconds.isEmpty()
+				? System.getProperty("automacent.pageLoadTimeoutInSeconds", "300")
+				: pageLoadTimeoutInSeconds;
+		socketTimeoutInSeconds = socketTimeoutInSeconds == null || socketTimeoutInSeconds.isEmpty()
+				? System.getProperty("automacent.socketTimeoutInSeconds", "300")
+				: socketTimeoutInSeconds;
+		browser = browser == null || browser.isEmpty() ? System.getProperty("automacent.browser", "CHROME") : browser;
+		baseUrl = baseUrl == null || baseUrl.isEmpty() ? System.getProperty("automacent.baseUrl") : baseUrl;
+		screenshotType = screenshotType == null || screenshotType.isEmpty()
+				? System.getProperty("automacent.screenshotType", "BROWSER_SCREENSHOT")
+				: screenshotType;
+		screenshotMode = screenshotMode == null || screenshotMode.isEmpty()
+				? System.getProperty("automacent.screenshotMode", "ON_FAILURE")
+				: screenshotMode;
+		screenshotModeForIteration = screenshotModeForIteration == null || screenshotModeForIteration.isEmpty()
+				? System.getProperty("automacent.screenshotModeForIteration", "LAST_ITERATION")
+				: screenshotModeForIteration;
+
+		parameters.put("launcherClients", launcherClients);
+		parameters.put("runName", runName);
+		parameters.put("batchNumber", batchNumber);
+		parameters.put("retryMode", retryMode);
+		parameters.put("recoveryClasses", recoveryClasses);
+		parameters.put("timeoutInSeconds", timeoutInSeconds);
+		parameters.put("slowdownDurationInSeconds", slowdownDurationInSeconds);
+		parameters.put("repeatMode", repeatMode);
+		parameters.put("testDurationInSeconds", testDurationInSeconds);
+		parameters.put("invocationCount", invocationCount);
+		parameters.put("delayBetweenIterationInSeconds", delayBetweenIterationInSeconds);
+		parameters.put("ieDriverLocation", ieDriverLocation);
+		parameters.put("chromeDriverLocation", chromeDriverLocation);
+		parameters.put("geckoDriverLocation", geckoDriverLocation);
+		parameters.put("scriptTimeoutInSeconds", scriptTimeoutInSeconds);
+		parameters.put("pageLoadTimeoutInSeconds", pageLoadTimeoutInSeconds);
+		parameters.put("socketTimeoutInSeconds", socketTimeoutInSeconds);
+		parameters.put("browser", browser);
+		parameters.put("baseUrl", baseUrl);
+		parameters.put("screenshotType", screenshotType);
+		parameters.put("screenshotMode", screenshotMode);
+		parameters.put("screenshotModeForIteration", screenshotModeForIteration);
+
+		suite.getXmlSuite().setParameters(parameters);
+	}
+
+	/**
 	 * Override method for onTestFailure in the TestNG library. Override is done to
 	 * log test skips and test failure
 	 */
