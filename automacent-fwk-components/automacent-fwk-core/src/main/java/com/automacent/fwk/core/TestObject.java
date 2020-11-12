@@ -35,7 +35,7 @@ public class TestObject {
 
 	private Map<String, Map<String, String>> testParametersMap = new HashMap<>();
 
-	private Map<String, String> getTestParameters() {
+	public Map<String, String> getTestParameters() {
 		Map<String, String> testParameters = testParametersMap.get(testName);
 		if (testParameters == null) {
 			testParameters = new HashMap<String, String>();
