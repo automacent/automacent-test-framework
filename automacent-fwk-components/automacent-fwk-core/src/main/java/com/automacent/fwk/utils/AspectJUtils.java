@@ -41,12 +41,11 @@ public class AspectJUtils {
 				arguments += "webelement";
 			else if (signatureArg instanceof WebDriver)
 				arguments += "webdriver";
-			else if (signatureArg instanceof String)
-				arguments += ((String) signatureArg).length() > 50
-						? String.format("%s...", ((String) signatureArg).substring(0, 49))
-						: signatureArg;
 			else
-				arguments += signatureArg;
+				arguments += signatureArg.toString().length() > 40
+						? String.format("%s... %s more chars ...", signatureArg.toString().substring(0, 39),
+								signatureArg.toString().length() - 40)
+						: signatureArg.toString();
 		}
 		arguments += ")";
 		return count == 0 ? "" : arguments;
