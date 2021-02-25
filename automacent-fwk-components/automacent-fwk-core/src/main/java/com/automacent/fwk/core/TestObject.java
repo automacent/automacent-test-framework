@@ -18,7 +18,7 @@ import com.automacent.fwk.enums.ScreenshotType;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.recovery.RecoveryManager;
 import com.automacent.fwk.reporting.Logger;
-import com.automacent.fwk.utils.StringUtils;
+import com.automacent.fwk.utils.EnumUtils;
 
 /**
  * Class which holds parameters required for execution of Test. Each Test class
@@ -224,7 +224,7 @@ public class TestObject {
 	 * @param repeatMode {@link RepeatMode}
 	 */
 	public void setRepeatMode(String repeatMode) {
-		this.repeatMode = StringUtils.getEnumFromString(RepeatMode.class, repeatMode);
+		this.repeatMode = EnumUtils.getEnumFromString(RepeatMode.class, repeatMode);
 		if (this.repeatMode == null) {
 			_logger.warn(String.format("%s for repeatMode. Expected one of %s. Got %s. Default value will be set",
 					ErrorCode.INVALID_PARAMETER_VALUE.name(), RepeatMode.values(), repeatMode));
@@ -344,7 +344,7 @@ public class TestObject {
 	 * @param screenshotType {@link ScreenshotType}
 	 */
 	public void setScreenshotType(String screenshotType) {
-		this.screenshotType = StringUtils.getEnumFromString(ScreenshotType.class, screenshotType);
+		this.screenshotType = EnumUtils.getEnumFromString(ScreenshotType.class, screenshotType);
 		if (this.screenshotType == null) {
 			_logger.warn(String.format("%s for screenshotType. Expected one of %s. Got %s. Default value will be set",
 					ErrorCode.INVALID_PARAMETER_VALUE.name(), ScreenshotType.values(), screenshotType));
@@ -372,7 +372,7 @@ public class TestObject {
 	public void setScreenshotModes(String screenshotModes) {
 		String screenshotModeArray[] = screenshotModes.split(",");
 		for (String screenshotModeString : screenshotModeArray) {
-			ScreenshotMode screenshotMode = StringUtils.getEnumFromString(ScreenshotMode.class, screenshotModeString);
+			ScreenshotMode screenshotMode = EnumUtils.getEnumFromString(ScreenshotMode.class, screenshotModeString);
 			if (screenshotMode != null)
 				this.screenshotModes.add(screenshotMode);
 			else
@@ -409,7 +409,7 @@ public class TestObject {
 	 * @param screenshotModeForIteration {@link ScreenshotModeForIteration}
 	 */
 	public void setScreenshotModeForIteration(String screenshotModeForIteration) {
-		this.screenshotModeForIteration = StringUtils.getEnumFromString(ScreenshotModeForIteration.class,
+		this.screenshotModeForIteration = EnumUtils.getEnumFromString(ScreenshotModeForIteration.class,
 				screenshotModeForIteration);
 		if (this.screenshotModeForIteration == null) {
 			_logger.warn(String.format(
@@ -443,7 +443,7 @@ public class TestObject {
 	 * @param retryMode {@link RetryMode}
 	 */
 	public void setRetryMode(String retryMode) {
-		this.retryMode = StringUtils.getEnumFromString(RetryMode.class, retryMode);
+		this.retryMode = EnumUtils.getEnumFromString(RetryMode.class, retryMode);
 		if (this.retryMode == null) {
 			_logger.warn(String.format("%s for retryMode. Expected one of %s. Got %s. Default value will be set",
 					ErrorCode.INVALID_PARAMETER_VALUE.name(), RetryMode.values(), retryMode));

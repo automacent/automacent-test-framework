@@ -11,6 +11,7 @@ public class StringUtils {
 
 	/**
 	 * Get the corresponding ENUM value from a String value
+	 * @deprecated Code restructure. Use {@link EnumUtils#getEnumFromString(Class, String)}
 	 * 
 	 * @param <T>       Generic class of type Enum
 	 * @param enumClass ENUM class
@@ -18,6 +19,7 @@ public class StringUtils {
 	 *                  found
 	 * @return ENUM value
 	 */
+	@Deprecated
 	public static <T extends Enum<T>> T getEnumFromString(Class<T> enumClass, String string) {
 		if (enumClass != null && string != null) {
 			try {
@@ -27,7 +29,7 @@ public class StringUtils {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Encode String using Base64
 	 * 

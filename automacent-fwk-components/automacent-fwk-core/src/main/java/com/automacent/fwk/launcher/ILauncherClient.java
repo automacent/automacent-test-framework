@@ -28,7 +28,7 @@ public interface ILauncherClient {
 	/**
 	 * Mark start of XML test on all launcher client
 	 * 
-	 * @param testContext
+	 * @param testContext TestNg {@link ITestContext}
 	 */
 	void startTest(ITestContext testContext);
 
