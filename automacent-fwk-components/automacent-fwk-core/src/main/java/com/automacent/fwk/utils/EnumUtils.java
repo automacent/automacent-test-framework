@@ -1,5 +1,7 @@
 package com.automacent.fwk.utils;
 
+import java.util.Arrays;
+
 /**
  * Enum utility class
  * 
@@ -24,6 +26,17 @@ public class EnumUtils {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Get the {@link Enum} names as Array of String
+	 * 
+	 * @param enumClass {@link Enum} class
+	 * @return String[] of {@link Enum} names
+	 */
+	public static String[] getEnumNames(Class<? extends Enum<?>> enumClass) {
+		return enumClass == null ? new String[] {}
+				: Arrays.stream(enumClass.getEnumConstants()).map(Enum::name).toArray(String[]::new);
 	}
 
 }
