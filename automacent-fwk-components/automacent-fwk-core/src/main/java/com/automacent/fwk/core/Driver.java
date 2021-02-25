@@ -1,9 +1,6 @@
 package com.automacent.fwk.core;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -189,53 +186,6 @@ public class Driver {
 			else
 				_logger.warn("Invalid custom geckoDriverLocation provided. Will use default");
 		}
-	}
-
-	/**
-	 * Check if the provided driver server executable path is valid. If path is not
-	 * valid, driver server executable packaged in the framework is extracted and
-	 * its absolute path is returned
-	 * 
-	 * @param driverServerLocation path of driver server executable
-	 * @param driverName           Name of the driver
-	 * @return Absolute path of the driver executable
-	 */
-	@SuppressWarnings("unused")
-	@Deprecated
-	private String extractDrivers(String driverServerLocation, String driverName) {
-		File givenFile = new File(driverServerLocation);
-		if (!givenFile.exists()) {
-			try {
-				_logger.info(String.format("Provided driver file, %s, does not exist for %s. "
-						+ "Framework will extract and use the default driver executable", driverServerLocation,
-						driverName));
-				byte[] buffer = new byte[4096];
-				String parent = "target" + File.separator + "driver";
-
-				File f = new File(parent);
-				if (!f.exists())
-					f.mkdirs();
-
-				File driverServer = new File(parent + File.separator + driverName);
-				if (!driverServer.exists())
-					driverServer.createNewFile();
-
-				FileOutputStream output = new FileOutputStream(driverServer);
-				InputStream input = Driver.class.getClassLoader()
-						.getResourceAsStream("drivers/" + driverName);
-				int bytesRead = input.read(buffer);
-				while (bytesRead != -1) {
-					output.write(buffer, 0, bytesRead);
-					bytesRead = input.read(buffer);
-				}
-				output.close();
-				input.close();
-				return driverServer.getAbsolutePath();
-			} catch (IOException e) {
-				throw new SetupFailedFatalException("Error setting up driver executable", e);
-			}
-		}
-		return givenFile.getAbsolutePath();
 	}
 
 	/**
