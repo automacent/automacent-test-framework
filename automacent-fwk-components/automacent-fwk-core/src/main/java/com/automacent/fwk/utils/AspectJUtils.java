@@ -37,10 +37,13 @@ public class AspectJUtils {
 		for (Object signatureArg : signatureArgs) {
 			if (++count > 1)
 				arguments += ", ";
+
 			if (signatureArg instanceof WebElement)
 				arguments += "webelement";
 			else if (signatureArg instanceof WebDriver)
 				arguments += "webdriver";
+			else if (signatureArg == null)
+				arguments += "null";
 			else
 				arguments += signatureArg.toString().length() > 40
 						? String.format("%s... %s more chars ...", signatureArg.toString().substring(0, 39),
