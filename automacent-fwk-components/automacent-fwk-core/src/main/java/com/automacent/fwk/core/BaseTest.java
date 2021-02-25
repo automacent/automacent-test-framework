@@ -15,6 +15,7 @@ import com.automacent.fwk.enums.RepeatMode;
 import com.automacent.fwk.enums.RetryMode;
 import com.automacent.fwk.launcher.LauncherClientManager;
 import com.automacent.fwk.recovery.RecoveryManager;
+import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.ThreadUtils;
 
 /**
@@ -25,29 +26,50 @@ import com.automacent.fwk.utils.ThreadUtils;
  */
 public abstract class BaseTest {
 
+	private static final Logger _logger = Logger.getLogger(BaseTest.class);
+
 	private static Map<Long, TestObject> testObjectMap = new HashMap<>();
 
 	/**
 	 * Get the {@link TestObject} for the current test. If {@link TestObject} is not
 	 * initiated for current Test, a new {@link TestObject}is created
 	 * 
-	 * @param threadId Current execution thread id
-	 * 
-	 * @return {@link TestObject}
-	 */
-	private synchronized static TestObject getTestObject(long threadId) {
-		if (!testObjectMap.containsKey(threadId))
-			testObjectMap.put(threadId, new TestObject());
-		return testObjectMap.get(threadId);
-	}
-
-	/**
-	 * Get the test object associated with the current test
-	 * 
 	 * @return {@link TestObject}
 	 */
 	public synchronized static TestObject getTestObject() {
-		return getTestObject(ThreadUtils.getThreadId());
+		return getTestObject("", null);
+	}
+
+	/**
+	 * Get the {@link TestObject} for the current test. If {@link TestObject} is not
+	 * initiated for current Test, a new {@link TestObject}is created
+	 * 
+	 * @param testName       Current TestNG XML test
+	 * @param testParameters Current TestNG XML Test Parameters
+	 * 
+	 * @return {@link TestObject}
+	 */
+	private synchronized static TestObject getTestObject(String testName,
+			Map<String, String> testParameters) {
+		long threadId = ThreadUtils.getThreadId();
+		if (!testObjectMap.containsKey(threadId)) {
+			testObjectMap.put(threadId, new TestObject(testName, testParameters));
+			_logger.info(String.format("Constructing Test Object for threadId %s", threadId));
+		} else
+			_logger.debug(String.format("Reusing Test Object for threadId %s", threadId));
+		return testObjectMap.get(threadId);
+	}
+
+	protected String getTestParameter(String key) {
+		return BaseTest.getTestObject().getTestParameter(key);
+	}
+
+	protected void addTestParameter(String key, String value) {
+		BaseTest.getTestObject().addTestParameter(key, value);
+	}
+
+	protected void appendTestParameter(String key, String value) {
+		BaseTest.getTestObject().appendTestParameter(key, value);
 	}
 
 	/**
@@ -107,9 +129,8 @@ public abstract class BaseTest {
 			ITestContext testContext) {
 		System.setProperty("org.uncommons.reportng.escape-output", "false");
 
-		TestObject testObject = BaseTest.getTestObject();
-		testObject.setTestName(testContext.getCurrentXmlTest().getName());
-		testObject.setTestParameters(testContext.getCurrentXmlTest().getAllParameters());
+		TestObject testObject = BaseTest.getTestObject(testContext.getCurrentXmlTest().getName(),
+				testContext.getCurrentXmlTest().getAllParameters());
 		testObject.setRepeatMode(repeatMode);
 		testObject.setTestDurationInSeconds(testDurationInSeconds);
 		testObject.setInvocationCount(invocationCount);

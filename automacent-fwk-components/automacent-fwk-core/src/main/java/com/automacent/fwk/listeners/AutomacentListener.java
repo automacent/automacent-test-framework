@@ -260,6 +260,9 @@ public class AutomacentListener extends TestListenerAdapter
 
 	@Override
 	public void afterInvocation(IInvokedMethod invokedMethod, ITestResult testResult, ITestContext testContext) {
+		String methodName = invokedMethod.getTestMethod().getMethodName();
+		if (!methodName.startsWith("automacentInternal"))
+			testContext.getCurrentXmlTest().setParameters(BaseTest.getTestObject().getTestParameters());
 	}
 
 	/**

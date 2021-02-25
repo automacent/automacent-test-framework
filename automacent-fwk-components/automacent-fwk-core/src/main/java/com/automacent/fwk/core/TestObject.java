@@ -31,10 +31,21 @@ public class TestObject {
 
 	private static final Logger _logger = Logger.getLogger(TestObject.class);
 
+	public TestObject(String testName, Map<String, String> testParameters) {
+		setTestName(testName);
+		setTestParameters(testParameters);
+	}
+
 	// Test parameters ----------------------------------------------
 
 	private Map<String, Map<String, String>> testParametersMap = new HashMap<>();
 
+	/**
+	 * Get the Test parameters set at &lt;test&gt; level in TestNG XML file for the
+	 * current TestNG XML test
+	 * 
+	 * @return Test Parameters
+	 */
 	public Map<String, String> getTestParameters() {
 		Map<String, String> testParameters = testParametersMap.get(testName);
 		if (testParameters == null) {
@@ -47,14 +58,14 @@ public class TestObject {
 	/**
 	 * Get Test parameter pertaining to the current {@link Test}
 	 * 
-	 * @param parameter Name of the TestNG {@link Parameters}
+	 * @param key Name of the TestNG {@link Parameters}
 	 * @return Value of the parameter
 	 */
-	public String getTestParameter(String parameter) {
-		String value = getTestParameters().get(parameter);
+	public String getTestParameter(String key) {
+		String value = getTestParameters().get(key);
 		if (value == null)
 			throw new SetupFailedFatalException(
-					String.format("Requested Test Parameter %s not found. Test will exit", parameter));
+					String.format("Requested Test Parameter %s not found. Test will exit", key));
 		return value;
 	}
 
@@ -90,11 +101,19 @@ public class TestObject {
 	/**
 	 * Set all test parameters
 	 * 
+	 * @deprecated Made private. Method will no longer be accessible public in the
+	 *             next version
 	 * @param testParameters {@link Map} of Test Parameters
 	 */
-	public void setTestParameters(Map<String, String> testParameters) {
+	@Deprecated
+	private void setTestParameters(Map<String, String> testParameters) {
+		testParameters = testParameters == null ? new HashMap<>() : testParameters;
+		if (!testParameters.isEmpty())
+			_logger.info("Setting test parameters");
+		else
+			_logger.info("No test parameters obtained");
+		getTestParameters().clear();
 		getTestParameters().putAll(testParameters);
-		_logger.info("Setting test parameters");
 	}
 
 	// Driver Manager -----------------------------------------------
@@ -135,11 +154,11 @@ public class TestObject {
 	 * 
 	 * @param testName Name of the test
 	 */
-	public void setTestName(String testName) {
+	private void setTestName(String testName) {
 		if (!testName.trim().isEmpty())
 			this.testName = testName;
 		else
-			_logger.warn(String.format(" %sBlank testName parameter provided. Will use default test name",
+			_logger.warn(String.format("%s Blank testName parameter provided. Will use default test name",
 					ErrorCode.INVALID_PARAMETER_VALUE.name()));
 		_logger.info(String.format("testName set to %s", getTestName()));
 	}
