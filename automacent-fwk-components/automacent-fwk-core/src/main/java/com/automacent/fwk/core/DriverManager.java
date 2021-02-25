@@ -8,7 +8,7 @@ import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.enums.ErrorCode;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
-import com.automacent.fwk.utils.StringUtils;
+import com.automacent.fwk.utils.EnumUtils;
 
 import io.github.bonigarcia.wdm.DriverManagerType;
 
@@ -54,7 +54,7 @@ public class DriverManager {
 	 * @param browser Browser string value of type {@link DriverManagerType}
 	 */
 	public void setDriverManagerType(String browser) {
-		this.driverManagerType = StringUtils.getEnumFromString(DriverManagerType.class, browser);
+		this.driverManagerType = EnumUtils.getEnumFromString(DriverManagerType.class, browser);
 		if (this.driverManagerType == null) {
 			_logger.warn(String.format("%s for browser. Expected one of %s. Got %s. Default value will be set",
 					ErrorCode.INVALID_PARAMETER_VALUE.name(), DriverManagerType.values(), browser));

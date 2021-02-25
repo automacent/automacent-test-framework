@@ -133,7 +133,7 @@ public class LauncherClientManager implements ILauncherClient {
 	/**
 	 * Mark start of XML test on all launcher client
 	 * 
-	 * @param testContext
+	 * @param testContext TestNG {@link ITestContext}
 	 */
 	public void startTest(ITestContext testContext) {
 		if (isEnabled)
