@@ -1,14 +1,8 @@
 package com.automacent.fwk.core;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Action;
@@ -16,14 +10,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.automacent.fwk.enums.ExpectedCondition;
 import com.automacent.fwk.reporting.Logger;
-import com.automacent.fwk.selenium.CustomExpectedConditions;
 
 /**
  * Base class for Page/View. All Page/View classes must extend this class.
