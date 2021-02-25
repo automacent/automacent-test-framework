@@ -18,9 +18,11 @@ import com.automacent.fwk.core.BaseTest;
 /**
  * Custom Expected conditions to be used with {@link WebDriverWait}
  * 
+ * @deprecated Use {@link AutomacentExpectedConditions} instead
  * @author sighil.sivadas
  *
  */
+@Deprecated
 public class CustomExpectedConditions {
 
 	/**
