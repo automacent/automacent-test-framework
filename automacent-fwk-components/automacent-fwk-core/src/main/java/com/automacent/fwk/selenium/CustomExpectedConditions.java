@@ -52,6 +52,73 @@ public class CustomExpectedConditions {
 		};
 	}
 
+	
+	/**
+	 * 
+	 * In case of using {@link FindBy} to locate elements, there is no
+	 * {@link ExpectedConditions} to override the ImplicitWait set and use
+	 * {@link WebDriverWait}. The custom proxyElementLocated
+	 * {@link CustomExpectedConditions#waitTillProxyElementLocated(WebElement)} will
+	 * take care of this scenario
+	 * 
+	 * @param proxyElement Proxy {@link WebElement} object
+	 * @return null if not found, element if found
+	 */
+	@Action
+	public static ExpectedCondition<WebElement> proxyElementLocated(final WebElement proxyElement) {
+		return new ExpectedCondition<WebElement>() {
+			@Override
+			public WebElement apply(WebDriver driver) {
+				driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+				try {
+					proxyElement.getTagName();
+				} catch (NoSuchElementException e) {
+					return null;
+				} finally {
+					driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
+							TimeUnit.SECONDS);
+				}
+				return proxyElement;
+			}
+
+			@Override
+			public String toString() {
+				return "Proxy element to be locate in DOM";
+			}
+		};
+	}
+
+	/**
+	 * Wait until text in an element not matches the provided text
+	 * 
+	 * @param proxyElement The proxy {@link WebElement}
+	 * @param text         The text which is expected not present in
+	 *                     {@link WebElement#getText()}
+	 * @return {@link ExpectedCondition} containing the {@link WebElement}
+	 */
+	@Action
+	public static ExpectedCondition<WebElement> textInElementNotMatches(final WebElement proxyElement,
+			String text) {
+		return new ExpectedCondition<WebElement>() {
+			@Override
+			public WebElement apply(WebDriver driver) {
+				driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+				try {
+					return !proxyElement.getText().equals("") ? proxyElement : null;
+				} finally {
+					driver.manage().timeouts().implicitlyWait(BaseTest.getTestObject().getTimeoutInSeconds(),
+							TimeUnit.SECONDS);
+				}
+			}
+
+			@Override
+			public String toString() {
+				ExpectedConditions.alertIsPresent();
+				return "Text in Element Not Matches given value";
+			}
+		};
+	}
+	
 	/**
 	 * 
 	 * In case of using {@link FindBy} to locate elements, there is no
