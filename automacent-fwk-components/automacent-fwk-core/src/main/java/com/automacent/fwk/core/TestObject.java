@@ -35,6 +35,11 @@ public class TestObject {
 
 	private ITestContext testContext;
 
+	/**
+	 * Get the test parameters from the {@link ITestContext#getCurrentXmlTest()}
+	 * 
+	 * @return {@link Map} of parameter key-value pairs
+	 */
 	public Map<String, String> getTestParameters() {
 		if (testContext == null)
 			throw new SetupFailedFatalException(
@@ -88,6 +93,11 @@ public class TestObject {
 		addTestParameter(key, value);
 	}
 
+	/**
+	 * Set the {@link ITestContext} related to the current XML test being executed.
+	 * 
+	 * @param testContext {@link ITestContext}
+	 */
 	public void setTestContext(ITestContext testContext) {
 		_logger.info(String.format("Setting test context %s", testContext));
 		this.testContext = testContext;

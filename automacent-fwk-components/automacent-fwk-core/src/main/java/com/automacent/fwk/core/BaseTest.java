@@ -45,14 +45,37 @@ public abstract class BaseTest {
 		return testObjectMap.get(threadId);
 	}
 
+	/**
+	 * Get the test parameter defined by {@link Parameters} or added to the test
+	 * parameter dynamically by calling
+	 * {@link BaseTest#addTestParameter(String, String)} or
+	 * {@link BaseTest#appendTestParameter(String, String)}
+	 * 
+	 * @param key Name of the parameter
+	 * @return Parameter value
+	 */
 	protected String getTestParameter(String key) {
 		return BaseTest.getTestObject().getTestParameter(key);
 	}
 
+	/**
+	 * Add test parameter. If the parameter with key already exists, the value is
+	 * overwritten
+	 * 
+	 * @param key   Name of the parameter
+	 * @param value Value of the parameter
+	 */
 	protected void addTestParameter(String key, String value) {
 		BaseTest.getTestObject().addTestParameter(key, value);
 	}
 
+	/**
+	 * Append test parameter. this method will get the test parameter with the given
+	 * key and append the provided value as comma seperated String
+	 * 
+	 * @param key   Name of the parameter
+	 * @param value Value of the parameter
+	 */
 	protected void appendTestParameter(String key, String value) {
 		BaseTest.getTestObject().appendTestParameter(key, value);
 	}
