@@ -1,10 +1,10 @@
 package com.automacent.fwk.core;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.testng.ITestContext;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -31,28 +31,15 @@ public class TestObject {
 
 	private static final Logger _logger = Logger.getLogger(TestObject.class);
 
-	public TestObject(String testName, Map<String, String> testParameters) {
-		setTestName(testName);
-		setTestParameters(testParameters);
-	}
-
 	// Test parameters ----------------------------------------------
 
-	private Map<String, Map<String, String>> testParametersMap = new HashMap<>();
+	private ITestContext testContext;
 
-	/**
-	 * Get the Test parameters set at &lt;test&gt; level in TestNG XML file for the
-	 * current TestNG XML test
-	 * 
-	 * @return Test Parameters
-	 */
 	public Map<String, String> getTestParameters() {
-		Map<String, String> testParameters = testParametersMap.get(testName);
-		if (testParameters == null) {
-			testParameters = new HashMap<String, String>();
-		}
-		testParametersMap.put(testName, testParameters);
-		return testParameters;
+		if (testContext == null)
+			throw new SetupFailedFatalException(
+					"Failed to retrieve test parameters. Test Context not set in Test Object. Test will exit");
+		return testContext.getCurrentXmlTest().getAllParameters();
 	}
 
 	/**
@@ -65,7 +52,8 @@ public class TestObject {
 		String value = getTestParameters().get(key);
 		if (value == null)
 			throw new SetupFailedFatalException(
-					String.format("Requested Test Parameter %s not found. Test will exit", key));
+					String.format("Requested Test Parameter, %s, not found. Test will exit", key));
+		_logger.info(String.format("Fetched test parameter, %s, with value %s", key, value));
 		return value;
 	}
 
@@ -76,7 +64,9 @@ public class TestObject {
 	 * @param value Test Parameter Value
 	 */
 	public void addTestParameter(String key, String value) {
-		getTestParameters().put(key, value);
+		_logger.info(String.format("Setting test parameter { %s : %s }", key, value));
+		testContext.getCurrentXmlTest().addParameter(key, value);
+		_logger.debug(String.format("Test parameters %s", getTestParameters().toString()));
 	}
 
 	/**
@@ -95,25 +85,13 @@ public class TestObject {
 		if (!existing.isEmpty()) {
 			value = String.format("%s,%s", existing, value);
 		}
-		getTestParameters().put(key, value);
+		addTestParameter(key, value);
 	}
 
-	/**
-	 * Set all test parameters
-	 * 
-	 * @deprecated Made private. Method will no longer be accessible public in the
-	 *             next version
-	 * @param testParameters {@link Map} of Test Parameters
-	 */
-	@Deprecated
-	private void setTestParameters(Map<String, String> testParameters) {
-		testParameters = testParameters == null ? new HashMap<>() : testParameters;
-		if (!testParameters.isEmpty())
-			_logger.info("Setting test parameters");
-		else
-			_logger.info("No test parameters obtained");
-		getTestParameters().clear();
-		getTestParameters().putAll(testParameters);
+	public void setTestContext(ITestContext testContext) {
+		_logger.info(String.format("Setting test context %s", testContext));
+		this.testContext = testContext;
+		setTestName(testContext.getCurrentXmlTest().getName());
 	}
 
 	// Driver Manager -----------------------------------------------

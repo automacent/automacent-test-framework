@@ -37,26 +37,11 @@ public abstract class BaseTest {
 	 * @return {@link TestObject}
 	 */
 	public synchronized static TestObject getTestObject() {
-		return getTestObject("", null);
-	}
-
-	/**
-	 * Get the {@link TestObject} for the current test. If {@link TestObject} is not
-	 * initiated for current Test, a new {@link TestObject}is created
-	 * 
-	 * @param testName       Current TestNG XML test
-	 * @param testParameters Current TestNG XML Test Parameters
-	 * 
-	 * @return {@link TestObject}
-	 */
-	private synchronized static TestObject getTestObject(String testName,
-			Map<String, String> testParameters) {
 		long threadId = ThreadUtils.getThreadId();
 		if (!testObjectMap.containsKey(threadId)) {
-			testObjectMap.put(threadId, new TestObject(testName, testParameters));
 			_logger.info(String.format("Constructing Test Object for threadId %s", threadId));
-		} else
-			_logger.debug(String.format("Reusing Test Object for threadId %s", threadId));
+			testObjectMap.put(threadId, new TestObject());
+		}
 		return testObjectMap.get(threadId);
 	}
 
@@ -129,8 +114,8 @@ public abstract class BaseTest {
 			ITestContext testContext) {
 		System.setProperty("org.uncommons.reportng.escape-output", "false");
 
-		TestObject testObject = BaseTest.getTestObject(testContext.getCurrentXmlTest().getName(),
-				testContext.getCurrentXmlTest().getAllParameters());
+		TestObject testObject = BaseTest.getTestObject();
+		testObject.setTestContext(testContext);
 		testObject.setRepeatMode(repeatMode);
 		testObject.setTestDurationInSeconds(testDurationInSeconds);
 		testObject.setInvocationCount(invocationCount);

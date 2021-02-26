@@ -151,7 +151,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 * @param duration   Duration of execution of method
 	 */
 	public void logSuccess(String methodName, MethodType methodType, int iteration, long duration) {
-		if (isEnabled && !methodName.toLowerCase().startsWith("automacentInternal"))
+		if (isEnabled && !methodName.toLowerCase().startsWith("automacentinternal"))
 			for (ILauncherClient launcherClient : getLauncherClients())
 				launcherClient.logSuccess(methodName, methodType, iteration, duration);
 	}
@@ -166,7 +166,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 * @param duration   Duration of execution of method
 	 */
 	public void logFailure(String methodName, MethodType methodType, int iteration, Throwable e, long duration) {
-		if (isEnabled && !methodName.toLowerCase().startsWith("automacentInternal"))
+		if (isEnabled && !methodName.toLowerCase().startsWith("automacentinternal"))
 			for (ILauncherClient launcherClient : getLauncherClients())
 				launcherClient.logFailure(methodName, methodType, iteration, e, duration);
 	}
@@ -199,7 +199,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 * @param methodType {@link MethodType}
 	 */
 	public void logStart(String method, MethodType methodType) {
-		if (isEnabled && !method.toLowerCase().startsWith("automacentInternal"))
+		if (isEnabled && !method.toLowerCase().startsWith("automacentinternal"))
 			for (ILauncherClient launcherClient : getLauncherClients())
 				launcherClient.logStart(method, methodType);
 	}
@@ -216,7 +216,7 @@ public class LauncherClientManager implements ILauncherClient {
 	 */
 	public void logEnd(String methodWithArguments, MethodType methodType, TestStatus testStatus, long duration,
 			Throwable t) {
-		if (isEnabled && !methodWithArguments.toLowerCase().startsWith("automacentInternal"))
+		if (isEnabled && !methodWithArguments.toLowerCase().startsWith("automacentinternal"))
 			for (ILauncherClient launcherClient : getLauncherClients())
 				launcherClient.logEnd(methodWithArguments, methodType, testStatus, duration, t);
 	}
