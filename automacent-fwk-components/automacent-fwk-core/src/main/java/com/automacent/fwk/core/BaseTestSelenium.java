@@ -68,9 +68,11 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * @param testContext                testNg {@link ITestContext}
 	 */
 	@BeforeTest
-	@Parameters({ "browser", "screenshotType", "screenshotMode", "screenshotModeForIteration", "baseUrl" })
+	@Parameters({ "browser", "debuggerAddress", "screenshotType", "screenshotMode",
+			"screenshotModeForIteration", "baseUrl" })
 	public void automacentInternalSetWebTestParameters(
 			@Optional("CHROME") String browser,
+			@Optional("") String debuggerAddress,
 			@Optional("BROWSER_SCREENSHOT") String screenshotType,
 			@Optional("ON_FAILURE") String screenshotMode,
 			@Optional("LAST_ITERATION") String screenshotModeForIteration,
@@ -81,6 +83,7 @@ public abstract class BaseTestSelenium extends BaseTest {
 		TestObject testObject = BaseTest.getTestObject();
 		testObject.setDriverManager(new DriverManager());
 		testObject.getDriverManager().setDriverManagerType(browser);
+		testObject.setDebuggerAddress(debuggerAddress);
 		testObject.setScreenshotType(screenshotType);
 		testObject.setScreenshotModes(screenshotMode);
 		testObject.setScreenshotModeForIteration(screenshotModeForIteration);

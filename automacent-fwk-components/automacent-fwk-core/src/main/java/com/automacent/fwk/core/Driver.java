@@ -360,13 +360,18 @@ public class Driver {
 					_logger.info("Using chromeDriver from framework");
 				}
 				ChromeOptions chromeOptions = new ChromeOptions();
-				chromeOptions.addArguments("--no-sandbox");
-				chromeOptions.addArguments("--disable-dev-shm-usage");
-				chromeOptions.addArguments("--safebrowsing-disable-download-protection");
+				/*
+				 * chromeOptions.addArguments("--no-sandbox");
+				 * chromeOptions.addArguments("--disable-dev-shm-usage");
+				 * chromeOptions.addArguments("--safebrowsing-disable-download-protection");
+				 * 
+				 * Map<String, Object> chromePrefs = new HashMap<String, Object>();
+				 * chromePrefs.put("safebrowsing.enabled", "true");
+				 * chromeOptions.setExperimentalOption("prefs", chromePrefs);
+				 */
 
-				Map<String, Object> chromePrefs = new HashMap<String, Object>();
-				chromePrefs.put("safebrowsing.enabled", "true");
-				chromeOptions.setExperimentalOption("prefs", chromePrefs);
+				if (!BaseTest.getTestObject().getDebuggerAddress().isEmpty())
+					chromeOptions.setExperimentalOption("debuggerAddress",BaseTest.getTestObject().getDebuggerAddress());
 
 				_logger.debug("Setting chrome switch --no-sandbox");
 				_logger.debug("Setting chrome switch --disable-dev-shm-usage");
