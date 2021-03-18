@@ -409,7 +409,7 @@ public class Driver {
 		webDriver.manage().timeouts().setScriptTimeout(getScriptTimeoutInSeconds(), TimeUnit.SECONDS);
 		_logger.info(String.format("Script timeout set on driver to %s seconds", getScriptTimeoutInSeconds()));
 
-		if (!BaseTest.getTestObject().getDebuggerAddress().isEmpty()) {
+		if (BaseTest.getTestObject().getDebuggerAddress().isEmpty()) {
 			webDriver.manage().window().maximize();
 			webDriver.manage().deleteAllCookies();
 			_logger.info("Cookies deleted");
