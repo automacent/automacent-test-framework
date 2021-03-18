@@ -167,6 +167,10 @@ public class AutomacentListener extends TestListenerAdapter
 		String browser = parameters.get("browser");
 		browser = browser == null || browser.isEmpty() ? System.getProperty("automacent.browser", "CHROME") : browser;
 		parameters.put("browser", browser);
+		
+		String debuggerAddress = parameters.get("debuggerAddress");
+		debuggerAddress = debuggerAddress == null || debuggerAddress.isEmpty() ? System.getProperty("automacent.debuggerAddress", "") : debuggerAddress;
+		parameters.put("debuggerAddress", debuggerAddress);
 
 		String baseUrl = parameters.get("baseUrl");
 		baseUrl = baseUrl == null || baseUrl.isEmpty() ? System.getProperty("automacent.baseUrl", "") : baseUrl;
