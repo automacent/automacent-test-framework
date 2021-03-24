@@ -1,19 +1,18 @@
 package com.automacent.fwk.core;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.automacent.fwk.annotations.Steps;
 import com.automacent.fwk.annotations.StepsAndPagesProcessor;
 import com.automacent.fwk.enums.BrowserId;
-import com.automacent.fwk.enums.ErrorCode;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
-import com.automacent.fwk.utils.EnumUtils;
 
 import io.github.bonigarcia.wdm.DriverManagerType;
 
 /**
- * Manage {@link Driver} object. This class can initiliaze {@link Driver}
+ * Manage {@link Driver} object. This class can initialize {@link Driver}
  * objects and manage multiple {@link Driver} instances
  * 
  * @author sighil.sivadas
@@ -37,35 +36,27 @@ public class DriverManager {
 	private DriverManagerType driverManagerType;
 
 	/**
-	 * If {@link DriverManagerType} value is not set, the default value is returned
+	 * Get Browser value of type {@link DriverManagerType}
 	 * 
 	 * @return {@link DriverManagerType}
 	 */
 	public DriverManagerType getDriverManagerType() {
-		if (this.driverManagerType == null)
-			_logger.warn(String.format("%s DriverManagerType is not set. Default value, %s, will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), DriverManagerType.CHROME.name()));
-		return driverManagerType != null ? driverManagerType : DriverManagerType.CHROME;
+		return driverManagerType;
 	}
 
 	/**
-	 * Set Browser. If invalid value is provided, default value is set
+	 * Set Browser value of type {@link DriverManagerType}
 	 * 
-	 * @param browser Browser string value of type {@link DriverManagerType}
+	 * @param browser Browser value of type {@link DriverManagerType}
 	 */
-	public void setDriverManagerType(String browser) {
-		this.driverManagerType = EnumUtils.getEnumFromString(DriverManagerType.class, browser);
-		if (this.driverManagerType == null) {
-			_logger.warn(String.format("%s for browser. Expected one of %s. Got %s. Default value will be set",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), DriverManagerType.values(), browser));
-			this.driverManagerType = DriverManagerType.CHROME;
-		}
+	public void setDriverManagerType(DriverManagerType browser) {
+		this.driverManagerType = browser;
 		_logger.info(String.format("Browser set to %s", getDriverManagerType()));
 	}
 
 	// Driver -------------------------------------------------------
 
-	private HashMap<BrowserId, Driver> driverMap = new HashMap<>();
+	private Map<BrowserId, Driver> driverMap = new HashMap<>();
 
 	/**
 	 * Get Driver instance.

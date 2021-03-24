@@ -7,7 +7,6 @@ import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.automacent.fwk.annotations.Action;
@@ -91,9 +90,15 @@ public abstract class BaseTest {
 	 * @param batchNumber     Batch number in the logger application
 	 */
 	@BeforeSuite
-	@Parameters({ "launcherClients", "runName", "batchNumber" })
-	public void automacentInternalSetLauncherClients(@Optional("") String launcherClients, @Optional("") String runName,
-			@Optional("") String batchNumber) {
+	@Parameters({
+			"launcherClients",
+			"runName",
+			"batchNumber"
+	})
+	public void automacentInternalSetLauncherClients(
+			String launcherClients,
+			String runName,
+			String batchNumber) {
 		LauncherClientManager.getManager().generateLauncherClientMasterMap(launcherClients);
 	}
 
@@ -123,17 +128,25 @@ public abstract class BaseTest {
 	 */
 	@BeforeTest
 	@BeforeClass
-	@Parameters({ "repeatMode", "testDurationInSeconds", "invocationCount", "delayBetweenIterationInSeconds",
-			"timeoutInSeconds", "slowdownDurationInSeconds", "retryMode", "recoveryClasses" })
+	@Parameters({
+			"repeatMode",
+			"testDurationInSeconds",
+			"invocationCount",
+			"delayBetweenIterationInSeconds",
+			"timeoutInSeconds",
+			"slowdownDurationInSeconds",
+			"retryMode",
+			"recoveryClasses"
+	})
 	public void automacentInternalSetParameters(
-			@Optional("OFF") String repeatMode,
-			@Optional("0") String testDurationInSeconds,
-			@Optional("0") String invocationCount,
-			@Optional("0") String delayBetweenIterationInSeconds,
-			@Optional("20") String timeoutInSeconds,
-			@Optional("1") String slowdownDurationInSeconds,
-			@Optional("OFF") String retryMode,
-			@Optional("") String recoveryClasses,
+			RepeatMode repeatMode,
+			long testDurationInSeconds,
+			long invocationCount,
+			long delayBetweenIterationInSeconds,
+			long timeoutInSeconds,
+			long slowdownDurationInSeconds,
+			RetryMode retryMode,
+			String recoveryClasses,
 			ITestContext testContext) {
 		System.setProperty("org.uncommons.reportng.escape-output", "false");
 

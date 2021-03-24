@@ -4,7 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.automacent.fwk.enums.BrowserId;
@@ -40,15 +39,21 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * @param socketTimeoutInSeconds   Timeout for socket exceptions
 	 */
 	@BeforeSuite
-	@Parameters({ "ieDriverLocation", "chromeDriverLocation", "geckoDriverLocation", "scriptTimeoutInSeconds",
-			"pageLoadTimeoutInSeconds", "socketTimeoutInSeconds" })
+	@Parameters({
+			"ieDriverLocation",
+			"chromeDriverLocation",
+			"geckoDriverLocation",
+			"scriptTimeoutInSeconds",
+			"pageLoadTimeoutInSeconds",
+			"socketTimeoutInSeconds"
+	})
 	public void automacentInternalSetDriverParameters(
-			@Optional("") String ieDriverLocation,
-			@Optional("") String chromeDriverLocation,
-			@Optional("") String geckoDriverLocation,
-			@Optional("300") String scriptTimeoutInSeconds,
-			@Optional("300") String pageLoadTimeoutInSeconds,
-			@Optional("300") String socketTimeoutInSeconds) {
+			String ieDriverLocation,
+			String chromeDriverLocation,
+			String geckoDriverLocation,
+			long scriptTimeoutInSeconds,
+			long pageLoadTimeoutInSeconds,
+			long socketTimeoutInSeconds) {
 		Driver.setupDefaultDriver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
 				scriptTimeoutInSeconds, pageLoadTimeoutInSeconds, socketTimeoutInSeconds);
 	}
@@ -68,12 +73,18 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * @param testContext                testNg {@link ITestContext}
 	 */
 	@BeforeTest
-	@Parameters({ "browser", "screenshotType", "screenshotMode", "screenshotModeForIteration", "baseUrl" })
+	@Parameters({
+			"browser",
+			"screenshotType",
+			"screenshotMode",
+			"screenshotModeForIteration",
+			"baseUrl"
+	})
 	public void automacentInternalSetWebTestParameters(
-			@Optional("CHROME") String browser,
-			@Optional("BROWSER_SCREENSHOT") String screenshotType,
-			@Optional("ON_FAILURE") String screenshotMode,
-			@Optional("LAST_ITERATION") String screenshotModeForIteration,
+			DriverManagerType browser,
+			ScreenshotType screenshotType,
+			String screenshotMode,
+			ScreenshotModeForIteration screenshotModeForIteration,
 			String baseUrl,
 			ITestContext testContext) {
 		if (baseUrl.trim().isEmpty())
