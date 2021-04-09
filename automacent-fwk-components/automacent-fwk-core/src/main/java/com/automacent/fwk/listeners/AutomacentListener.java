@@ -81,7 +81,7 @@ public class AutomacentListener extends TestListenerAdapter
 		ISuiteListener.super.onStart(suite);
 		Map<String, String> parameters = suite.getXmlSuite().getAllParameters();
 
-		_logger.info(String.format("Setting up default framework parameters if not explicity set for suite %s",
+		_logger.debug(String.format("Setting up default framework parameters if not explicity set for suite %s",
 				suite.getName()));
 
 		// automacentInternalSetLauncherClients -----------
