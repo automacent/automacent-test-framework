@@ -126,6 +126,30 @@ public class TestObject {
 		this.driverManager = driverManager;
 	}
 
+	// Debugger Address ----------------------------------------------------
+
+	private String debuggerAddress;
+
+	/**
+	 * set the debugger address
+	 * 
+	 * @param debuggerAddress
+	 */
+	public void setDebuggerAddress(String debuggerAddress) {
+		this.debuggerAddress = debuggerAddress;
+
+		_logger.info(String.format("debuggerAddress set to %s", getDebuggerAddress()));
+
+	}
+
+	/**
+	 * 
+	 * @return debuggerAddress
+	 */
+	public String getDebuggerAddress() {
+		return debuggerAddress;
+	}
+
 	// Test Name ----------------------------------------------------
 
 	private String testName = "undefined";
