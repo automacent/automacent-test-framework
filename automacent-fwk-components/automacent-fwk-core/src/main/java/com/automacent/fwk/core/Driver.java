@@ -14,7 +14,6 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.automacent.fwk.enums.BrowserId;
-import com.automacent.fwk.enums.ErrorCode;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
 
@@ -32,22 +31,17 @@ public class Driver {
 	private static final Logger _logger = Logger.getLogger(Driver.class);
 
 	protected Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
-			String scriptTimeoutInSeconds, String pageLoadTimeoutInSeconds, String socketTimeoutInSeconds) {
-		setIeDriverLocation(ieDriverLocation);
-		setChromeDriverLocation(chromeDriverLocation);
-		setGeckoDriverLocation(geckoDriverLocation);
-
-		setScriptTimeoutInSeconds(scriptTimeoutInSeconds);
-		setPageLoadTimeoutInSeconds(pageLoadTimeoutInSeconds);
-		setSocketTimeoutInSeconds(socketTimeoutInSeconds);
+			long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds, long socketTimeoutInSeconds) {
+		this(ieDriverLocation, chromeDriverLocation, geckoDriverLocation, scriptTimeoutInSeconds,
+				pageLoadTimeoutInSeconds, socketTimeoutInSeconds, null);
 	}
 
 	protected Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
 			long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds, long socketTimeoutInSeconds,
 			BrowserId browserId) {
-		this.ieDriverLocation = ieDriverLocation;
-		this.chromeDriverLocation = chromeDriverLocation;
-		this.geckoDriverLocation = geckoDriverLocation;
+		setIeDriverLocation(ieDriverLocation);
+		setChromeDriverLocation(chromeDriverLocation);
+		setGeckoDriverLocation(geckoDriverLocation);
 
 		setScriptTimeoutInSeconds(scriptTimeoutInSeconds);
 		setPageLoadTimeoutInSeconds(pageLoadTimeoutInSeconds);
@@ -72,8 +66,9 @@ public class Driver {
 	 *                                 timeout
 	 */
 	public static void setupDefaultDriver(String ieDriverLocation, String chromeDriverLocation,
-			String geckoDriverLocation, String scriptTimeoutInSeconds, String pageLoadTimeoutInSeconds,
-			String socketTimeoutInSeconds) {
+			String geckoDriverLocation, long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds,
+			long socketTimeoutInSeconds) {
+		_logger.info("Setting up default driver");
 		defaultDriver = new Driver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
 				scriptTimeoutInSeconds, pageLoadTimeoutInSeconds, socketTimeoutInSeconds);
 	}
@@ -90,6 +85,7 @@ public class Driver {
 	}
 
 	public static Driver cloneDefaultDriver(BrowserId browserId) {
+		_logger.info("Cloning Default Driver");
 		return new Driver(getDefaultDriver().getIeDriverLocation(), getDefaultDriver().getChromeDriverLocation(),
 				getDefaultDriver().getGeckoDriverLocation(), getDefaultDriver().getScriptTimeoutInSeconds(),
 				getDefaultDriver().getPageLoadTimeoutInSeconds(), getDefaultDriver().getSocketTimeoutInSeconds(),
@@ -124,15 +120,16 @@ public class Driver {
 	 * @param ieDriverLocation IE driver server executable path
 	 */
 	private void setIeDriverLocation(String ieDriverLocation) {
-		if (!ieDriverLocation.equals("") && isCustomDriverFound(ieDriverLocation)) {
-			this.ieDriverLocation = ieDriverLocation;
-			System.setProperty("webdriver.ie.driver", getIeDriverLocation());
-			_logger.info(String.format("ieDriverLocation set to %s", getIeDriverLocation()));
-		} else {
-			if (ieDriverLocation.equals(""))
-				_logger.info("No custom ieDriverLocation provided");
-			else
+		if (ieDriverLocation != null && !ieDriverLocation.equals("")) {
+			if (isCustomDriverFound(ieDriverLocation)) {
+				this.ieDriverLocation = ieDriverLocation;
+				System.setProperty("webdriver.ie.driver", getIeDriverLocation());
+				_logger.info(String.format("ieDriverLocation set to %s", getIeDriverLocation()));
+			} else {
 				_logger.warn("Invalid custom ieDriverLocation provided. Will use default");
+			}
+		} else {
+			_logger.info("No custom ieDriverLocation provided. Will use default");
 		}
 	}
 
@@ -150,15 +147,16 @@ public class Driver {
 	 * @param chromeDriverLocation Chrome driver server executable path
 	 */
 	private void setChromeDriverLocation(String chromeDriverLocation) {
-		if (!chromeDriverLocation.equals("") && isCustomDriverFound(chromeDriverLocation)) {
-			this.chromeDriverLocation = chromeDriverLocation;
-			System.setProperty("webdriver.chrome.driver", getChromeDriverLocation());
-			_logger.info(String.format("chromeDriverLocation set to %s", getChromeDriverLocation()));
-		} else {
-			if (chromeDriverLocation.equals(""))
-				_logger.info("No custom chromeDriverLocation provided");
-			else
+		if (chromeDriverLocation != null && !chromeDriverLocation.equals("")) {
+			if (isCustomDriverFound(chromeDriverLocation)) {
+				this.chromeDriverLocation = chromeDriverLocation;
+				System.setProperty("webdriver.chrome.driver", getChromeDriverLocation());
+				_logger.info(String.format("chromeDriverLocation set to %s", getChromeDriverLocation()));
+			} else {
 				_logger.warn("Invalid custom chromeDriverLocation provided. Will use default");
+			}
+		} else {
+			_logger.info("No custom chromeDriverLocation provided. Will use default");
 		}
 	}
 
@@ -176,15 +174,16 @@ public class Driver {
 	 * @param geckoDriverLocation Firefox driver server executable path
 	 */
 	private void setGeckoDriverLocation(String geckoDriverLocation) {
-		if (!geckoDriverLocation.equals("") && isCustomDriverFound(geckoDriverLocation)) {
-			this.geckoDriverLocation = geckoDriverLocation;
-			System.setProperty("webdriver.gecko.driver", getGeckoDriverLocation());
-			_logger.info(String.format("geckoDriverLocation set to %s", getGeckoDriverLocation()));
-		} else {
-			if (geckoDriverLocation.equals(""))
-				_logger.info("No custom geckoDriverLocation provided");
-			else
+		if (geckoDriverLocation != null && !geckoDriverLocation.equals("")) {
+			if (isCustomDriverFound(geckoDriverLocation)) {
+				this.geckoDriverLocation = geckoDriverLocation;
+				System.setProperty("webdriver.gecko.driver", getGeckoDriverLocation());
+				_logger.info(String.format("geckoDriverLocation set to %s", getGeckoDriverLocation()));
+			} else {
 				_logger.warn("Invalid custom geckoDriverLocation provided. Will use default");
+			}
+		} else {
+			_logger.info("No custom geckoDriverLocation provided. Will use default");
 		}
 	}
 
@@ -217,22 +216,6 @@ public class Driver {
 	 */
 	private void setScriptTimeoutInSeconds(long scriptTimeoutInSeconds) {
 		this.scriptTimeoutInSeconds = scriptTimeoutInSeconds;
-	}
-
-	/**
-	 * Set the Selenium javascript timeout. The String value of the parameter is
-	 * converted to long value and set to variable. If parameter is invalid default
-	 * value is set
-	 * 
-	 * @param scriptTimeoutInSeconds Selenium javascript timeout
-	 */
-	private void setScriptTimeoutInSeconds(String scriptTimeoutInSeconds) {
-		try {
-			this.scriptTimeoutInSeconds = Long.parseLong(scriptTimeoutInSeconds);
-		} catch (Exception e) {
-			_logger.warn(String.format("%s scriptTimeoutInSeconds must be a number. Default value will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name()));
-		}
 		_logger.info(String.format("scriptTimeoutInSeconds set to %s", getScriptTimeoutInSeconds()));
 	}
 
@@ -251,22 +234,6 @@ public class Driver {
 	 */
 	private void setPageLoadTimeoutInSeconds(long pageLoadTimeoutInSeconds) {
 		this.pageLoadTimeoutInSeconds = pageLoadTimeoutInSeconds;
-	}
-
-	/**
-	 * Set the Selenium page load timeout. The String value of the parameter is
-	 * converted to long value and set to variable. If parameter is invalid default
-	 * value is set
-	 * 
-	 * @param pageLoadTimeoutInSeconds Selenium page load timeout
-	 */
-	private void setPageLoadTimeoutInSeconds(String pageLoadTimeoutInSeconds) {
-		try {
-			this.pageLoadTimeoutInSeconds = Long.parseLong(pageLoadTimeoutInSeconds);
-		} catch (Exception e) {
-			_logger.warn(String.format("%s pageLoadTimeoutInSeconds must be a number. Default value will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name()));
-		}
 		_logger.info(String.format("pageLoadTimeoutInSeconds set to %s", getPageLoadTimeoutInSeconds()));
 	}
 
@@ -286,23 +253,6 @@ public class Driver {
 	 */
 	private void setSocketTimeoutInSeconds(long socketTimeoutInSeconds) {
 		this.socketTimeoutInSeconds = socketTimeoutInSeconds;
-	}
-
-	/**
-	 * Set the {@link WebDriver} SocketTimeoutException timeout. The String value of
-	 * the parameter is converted to long value and set to variable. If parameter is
-	 * invalid default value is set
-	 * 
-	 * @param socketTimeoutInSeconds {@link WebDriver} SocketTimeoutException
-	 *                               timeout
-	 */
-	private void setSocketTimeoutInSeconds(String socketTimeoutInSeconds) {
-		try {
-			this.socketTimeoutInSeconds = Long.parseLong(socketTimeoutInSeconds);
-		} catch (Exception e) {
-			_logger.warn(String.format("%s socketTimeoutInSeconds must be a number. Default value will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name()));
-		}
 		_logger.info(String.format("socketTimeoutInSeconds set to %s", getSocketTimeoutInSeconds()));
 	}
 

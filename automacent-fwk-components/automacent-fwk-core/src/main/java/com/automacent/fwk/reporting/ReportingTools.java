@@ -59,7 +59,7 @@ public class ReportingTools {
 					Toolkit.getDefaultToolkit().getScreenSize().height));
 		} catch (AWTError e) {
 			screenshotFrame = new Rectangle(1024, 768);
-			BaseTest.getTestObject().setScreenshotType(ScreenshotType.BROWSER_SCREENSHOT.name());
+			BaseTest.getTestObject().setScreenshotType(ScreenshotType.BROWSER_SCREENSHOT);
 			_logger.warn("Error Initilizing DESKTOP SCREENSHOT. BROWSER_SCREENSHOT will be used.", e);
 		}
 	}

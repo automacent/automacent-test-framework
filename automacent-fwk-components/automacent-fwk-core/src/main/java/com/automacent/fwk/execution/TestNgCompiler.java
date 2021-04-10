@@ -38,11 +38,9 @@ public class TestNgCompiler {
 	 * Aspect for TestNG Before* methods. Pre and post method execution logic is
 	 * written here
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint} to get access to method
+	 * @param point {@link ProceedingJoinPoint} to get access to method
 	 * @return Result of execution
-	 * @throws Throwable
-	 *             Throwable resulting in test failure
+	 * @throws Throwable Throwable resulting in test failure
 	 */
 	@Around("(execution(* *(..)) && @annotation(org.testng.annotations.BeforeSuite)) || "
 			+ "(execution(* *(..)) && @annotation(org.testng.annotations.BeforeGroups)) || "
@@ -67,11 +65,9 @@ public class TestNgCompiler {
 	 * Aspect for TestNG After* methods. Pre and post method execution logic is
 	 * written here
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint} to get access to method
+	 * @param point {@link ProceedingJoinPoint} to get access to method
 	 * @return Result of execution
-	 * @throws Throwable
-	 *             Throwable resulting in test failure
+	 * @throws Throwable Throwable resulting in test failure
 	 */
 	@Around("(execution(* *(..)) && @annotation(org.testng.annotations.AfterSuite)) || "
 			+ "(execution(* *(..)) && @annotation(org.testng.annotations.AfterGroups)) || "
@@ -96,11 +92,9 @@ public class TestNgCompiler {
 	 * Aspect for TestNG {@link Test} methods. Pre and post method execution logic
 	 * is written here. This method also implements {@link Repeat} logic
 	 * 
-	 * @param point
-	 *            {@link ProceedingJoinPoint} to get access to method
+	 * @param point {@link ProceedingJoinPoint} to get access to method
 	 * @return Result of execution
-	 * @throws Throwable
-	 *             Throwable resulting in test failure
+	 * @throws Throwable Throwable resulting in test failure
 	 */
 	@Around("execution(* *(..)) && @annotation(org.testng.annotations.Test)")
 	public Object aroundTestCompilerAspect(ProceedingJoinPoint point) throws Throwable {
@@ -117,7 +111,7 @@ public class TestNgCompiler {
 					break;
 				}
 			if (!repeat) {
-				BaseTest.getTestObject().setRepeatMode(RepeatMode.OFF.name());
+				BaseTest.getTestObject().setRepeatMode(RepeatMode.OFF);
 				_logger.info(String
 						.format("Starting test without repeat logic sice @Repeat annotation is not used on the test. "
 								+ "Repeat Mode is %s", repeatMode.name()));

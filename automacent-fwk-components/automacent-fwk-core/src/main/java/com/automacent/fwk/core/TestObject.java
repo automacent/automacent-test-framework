@@ -172,13 +172,8 @@ public class TestObject {
 	 * 
 	 * @param timeoutInSeconds Timeout in Seconds
 	 */
-	public void setTimeoutInSeconds(String timeoutInSeconds) {
-		try {
-			this.timeoutInSeconds = Long.parseLong(timeoutInSeconds);
-		} catch (Exception e) {
-			_logger.warn(String.format("%s timeoutInSeconds must be a number. Given %s. Default value will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), timeoutInSeconds));
-		}
+	public void setTimeoutInSeconds(long timeoutInSeconds) {
+		this.timeoutInSeconds = timeoutInSeconds;
 		_logger.info(String.format("timeoutInSeconds set to %s", getTimeoutInSeconds()));
 	}
 
@@ -196,14 +191,8 @@ public class TestObject {
 	 * 
 	 * @param slowdownDurationInSeconds Slow down duration in seconds
 	 */
-	public void setSlowdownDurationInSeconds(String slowdownDurationInSeconds) {
-		try {
-			this.slowdownDurationInSeconds = Long.parseLong(slowdownDurationInSeconds);
-		} catch (Exception e) {
-			_logger.warn(
-					String.format("%s slowdownDurationInSeconds must be a number. Given %s, Default value will be used",
-							ErrorCode.INVALID_PARAMETER_VALUE.name(), timeoutInSeconds));
-		}
+	public void setSlowdownDurationInSeconds(long slowdownDurationInSeconds) {
+		this.slowdownDurationInSeconds = slowdownDurationInSeconds;
 		_logger.info(String.format("slowdownDurationInSeconds set to %s", getSlowdownDurationInSeconds()));
 	}
 
@@ -230,13 +219,8 @@ public class TestObject {
 	 * 
 	 * @param repeatMode {@link RepeatMode}
 	 */
-	public void setRepeatMode(String repeatMode) {
-		this.repeatMode = EnumUtils.getEnumFromString(RepeatMode.class, repeatMode);
-		if (this.repeatMode == null) {
-			_logger.warn(String.format("%s for repeatMode. Expected one of %s. Got %s. Default value will be set",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), RepeatMode.values(), repeatMode));
-			this.repeatMode = RepeatMode.getDefault();
-		}
+	public void setRepeatMode(RepeatMode repeatMode) {
+		this.repeatMode = repeatMode;
 		_logger.info(String.format("repeatMode set to %s", getRepeatMode()));
 	}
 
@@ -258,14 +242,8 @@ public class TestObject {
 	 * 
 	 * @param testDurationInSeconds Test Duration in seconds
 	 */
-	public void setTestDurationInSeconds(String testDurationInSeconds) {
-		try {
-			this.testDurationInSeconds = Long.parseLong(testDurationInSeconds);
-		} catch (Exception e) {
-			_logger.warn(
-					String.format("%s testDurationInSeconds must be a number. Given %s. Default value will be used",
-							ErrorCode.INVALID_PARAMETER_VALUE.name(), testDurationInSeconds));
-		}
+	public void setTestDurationInSeconds(long testDurationInSeconds) {
+		this.testDurationInSeconds = testDurationInSeconds;
 		_logger.info(String.format("testDurationInSeconds set to %s", getTestDurationInSeconds()));
 	}
 
@@ -287,13 +265,8 @@ public class TestObject {
 	 * 
 	 * @param invocationCount Invocation count value
 	 */
-	public void setInvocationCount(String invocationCount) {
-		try {
-			this.invocationCount = Long.parseLong(invocationCount);
-		} catch (Exception e) {
-			_logger.warn(String.format("%s invocationCount must be a number. Given %s. Default value will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), invocationCount));
-		}
+	public void setInvocationCount(long invocationCount) {
+		this.invocationCount = invocationCount;
 		_logger.info(String.format("invocationCount set to %s", getInvocationCount()));
 	}
 
@@ -317,14 +290,8 @@ public class TestObject {
 	 * 
 	 * @param delayBetweenIterationInSeconds Delay between iteration in seconds
 	 */
-	public void setDelayBetweenIterationInSeconds(String delayBetweenIterationInSeconds) {
-		try {
-			this.delayBetweenIterationInSeconds = Long.parseLong(delayBetweenIterationInSeconds);
-		} catch (Exception e) {
-			_logger.warn(String.format(
-					"%s delayBetweenIterationInSeconds must be a number. Given %s. Default value will be used",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), delayBetweenIterationInSeconds));
-		}
+	public void setDelayBetweenIterationInSeconds(long delayBetweenIterationInSeconds) {
+		this.delayBetweenIterationInSeconds = delayBetweenIterationInSeconds;
 		_logger.info(String.format("delayBetweenIterationInSeconds set to %s", getDelayBetweenIterationInSeconds()));
 	}
 
@@ -350,13 +317,8 @@ public class TestObject {
 	 * 
 	 * @param screenshotType {@link ScreenshotType}
 	 */
-	public void setScreenshotType(String screenshotType) {
-		this.screenshotType = EnumUtils.getEnumFromString(ScreenshotType.class, screenshotType);
-		if (this.screenshotType == null) {
-			_logger.warn(String.format("%s for screenshotType. Expected one of %s. Got %s. Default value will be set",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), ScreenshotType.values(), screenshotType));
-			this.screenshotType = ScreenshotType.getDefault();
-		}
+	public void setScreenshotType(ScreenshotType screenshotType) {
+		this.screenshotType = screenshotType;
 		_logger.info(String.format("screenshotType set to %s", getScreenshotType()));
 	}
 
@@ -415,16 +377,8 @@ public class TestObject {
 	 * 
 	 * @param screenshotModeForIteration {@link ScreenshotModeForIteration}
 	 */
-	public void setScreenshotModeForIteration(String screenshotModeForIteration) {
-		this.screenshotModeForIteration = EnumUtils.getEnumFromString(ScreenshotModeForIteration.class,
-				screenshotModeForIteration);
-		if (this.screenshotModeForIteration == null) {
-			_logger.warn(String.format(
-					"%s for screenshotModeForIteration. Expected one of %s. Got %s. Default value will be set",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), ScreenshotModeForIteration.values(),
-					screenshotModeForIteration));
-			this.screenshotModeForIteration = ScreenshotModeForIteration.getDefault();
-		}
+	public void setScreenshotModeForIteration(ScreenshotModeForIteration screenshotModeForIteration) {
+		this.screenshotModeForIteration = screenshotModeForIteration;
 		_logger.info(String.format("screenshotModeForIteration set to %s", getScreenshotModeForIteration()));
 	}
 
@@ -449,13 +403,8 @@ public class TestObject {
 	 * 
 	 * @param retryMode {@link RetryMode}
 	 */
-	public void setRetryMode(String retryMode) {
-		this.retryMode = EnumUtils.getEnumFromString(RetryMode.class, retryMode);
-		if (this.retryMode == null) {
-			_logger.warn(String.format("%s for retryMode. Expected one of %s. Got %s. Default value will be set",
-					ErrorCode.INVALID_PARAMETER_VALUE.name(), RetryMode.values(), retryMode));
-			this.retryMode = RetryMode.getDefault();
-		}
+	public void setRetryMode(RetryMode retryMode) {
+		this.retryMode = retryMode;
 		_logger.info(String.format("retryMode set to %s", getRetryMode()));
 	}
 
