@@ -13,13 +13,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<automacent.testsuites>src/test/resources/testng.xml</automacent.testsuites>
-		<automacent.listeners>com.automacent.fwk.listeners.AutomacentListener,org.uncommons.reportng.HTMLReporter</automacent.listeners>
+		<automacent.listeners></automacent.listeners>
 		<automacent.reportdir>${basedir}${file.separator}target${file.separator}Reports</automacent.reportdir>
 		<automacent.launcherClients></automacent.launcherClients>
 		<debugMode>INFO</debugMode>
 		<failIfNoTests>true</failIfNoTests>
 		<skipTests>false</skipTests>
-		<suitethreadpoolsize>1</suitethreadpoolsize>
 	</properties>
 
 	<repositories>
@@ -140,6 +139,7 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>${automacent.testsuites}</suiteXmlFile>
 					</suiteXmlFiles>
+					<!-- These properties are used by automacent framework. Do not modify existing properties -->
 					<properties>
 						<property>
 							<name>usedefaultlisteners</name>
@@ -147,11 +147,11 @@
 						</property>
 						<property>
 							<name>listener</name>
-							<value>${automacent.listeners}</value>
+							<value>com.automacent.fwk.listeners.AutomacentListener,org.uncommons.reportng.HTMLReporter,${automacent.listeners}</value>
 						</property>
 						<property>
 							<name>suitethreadpoolsize</name>
-							<value>${suitethreadpoolsize}</value>
+							<value>1</value>
 						</property>
 					</properties>
 					<workingDirectory>${basedir}</workingDirectory>
