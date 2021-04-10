@@ -29,7 +29,7 @@ Add below dependency to maven pom.xml to get started with the released stable ve
 <dependency>
     <groupId>com.automacent</groupId>
     <artifactId>automacent-fwk</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 ## Snapshot version
@@ -38,7 +38,7 @@ Add below dependency to maven pom.xml to get started with the snapshot version
 <dependency>
     <groupId>com.automacent</groupId>
     <artifactId>automacent-fwk</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 </dependency>
 ```
 You have to add the below repository to access the snapshot version
