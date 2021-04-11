@@ -20,6 +20,8 @@ import com.automacent.fwk.recovery.RecoveryManager;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.EnumUtils;
 
+import io.github.bonigarcia.wdm.DriverManagerType;
+
 /**
  * Class which holds parameters required for execution of Test. Each Test class
  * will be assigned a {@link TestObject}. This class is declared and used the
@@ -136,10 +138,17 @@ public class TestObject {
 	 * @param debuggerAddress
 	 */
 	public void setDebuggerAddress(String debuggerAddress) {
-		this.debuggerAddress = debuggerAddress;
-
-		_logger.info(String.format("debuggerAddress set to %s", getDebuggerAddress()));
-
+		if (this.getDriverManager().getDriverManagerType().name().equals(DriverManagerType.CHROME.name())) {
+			if (!debuggerAddress.isEmpty()) {
+				this.debuggerAddress = debuggerAddress;
+				_logger.info(String.format("debuggerAddress set to %s", getDebuggerAddress()));
+			} else {
+				_logger.debug(String.format("debuggerAddress is not set since the value is empty"));
+			}
+		} else {
+			_logger.warn(String.format(
+					"debuggerAddress is not set since browser is not set to " + DriverManagerType.CHROME.name()));
+		}
 	}
 
 	/**

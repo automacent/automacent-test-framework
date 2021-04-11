@@ -310,12 +310,11 @@ public class Driver {
 					_logger.info("Using chromeDriver from framework");
 				}
 				ChromeOptions chromeOptions = new ChromeOptions();
-
 				String debuggerAddress = BaseTest.getTestObject().getDebuggerAddress();
-				if (!debuggerAddress.isEmpty()) {
+				if (debuggerAddress != null) {
 					chromeOptions.setExperimentalOption("debuggerAddress", debuggerAddress);
-
-					_logger.debug(String.format("Setting chrome debuggerAddress to %s", debuggerAddress));
+					_logger.debug(
+							String.format("Setting chrome experimental option debuggerAddress : %s", debuggerAddress));
 					_logger.debug(
 							String.format("Expecting that chrome is already running at remote debugging address %s",
 									debuggerAddress));
@@ -323,17 +322,14 @@ public class Driver {
 					chromeOptions.addArguments("--no-sandbox");
 					chromeOptions.addArguments("--disable-dev-shm-usage");
 					chromeOptions.addArguments("--safebrowsing-disable-download-protection");
-
 					Map<String, Object> chromePrefs = new HashMap<String, Object>();
 					chromePrefs.put("safebrowsing.enabled", "true");
 					chromeOptions.setExperimentalOption("prefs", chromePrefs);
-
 					_logger.debug("Setting chrome switch --no-sandbox");
 					_logger.debug("Setting chrome switch --disable-dev-shm-usage");
 					_logger.debug("Setting chrome switch --no-sandbox");
 					_logger.debug("Setting chrome pref {safebrowsing.enabled : true}");
 				}
-
 				webDriver = new ChromeDriver(chromeOptions);
 			} else if (driverManagerType.name().equals(DriverManagerType.FIREFOX.name())) {
 				if (geckoDriverLocation == null) {
@@ -357,7 +353,8 @@ public class Driver {
 		webDriver.manage().timeouts().setScriptTimeout(getScriptTimeoutInSeconds(), TimeUnit.SECONDS);
 		_logger.info(String.format("Script timeout set on driver to %s seconds", getScriptTimeoutInSeconds()));
 
-		if (BaseTest.getTestObject().getDebuggerAddress().isEmpty()) {
+		if (BaseTest.getTestObject().getDebuggerAddress() == null
+				|| !driverManagerType.name().equals(DriverManagerType.CHROME.name())) {
 			webDriver.manage().window().maximize();
 			webDriver.manage().deleteAllCookies();
 			_logger.info("Cookies deleted");
