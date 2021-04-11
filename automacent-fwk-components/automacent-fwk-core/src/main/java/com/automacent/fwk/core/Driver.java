@@ -353,8 +353,7 @@ public class Driver {
 		webDriver.manage().timeouts().setScriptTimeout(getScriptTimeoutInSeconds(), TimeUnit.SECONDS);
 		_logger.info(String.format("Script timeout set on driver to %s seconds", getScriptTimeoutInSeconds()));
 
-		if (BaseTest.getTestObject().getDebuggerAddress() == null
-				|| !driverManagerType.name().equals(DriverManagerType.CHROME.name())) {
+		if (BaseTest.getTestObject().getDebuggerAddress() == null) {
 			webDriver.manage().window().maximize();
 			webDriver.manage().deleteAllCookies();
 			_logger.info("Cookies deleted");

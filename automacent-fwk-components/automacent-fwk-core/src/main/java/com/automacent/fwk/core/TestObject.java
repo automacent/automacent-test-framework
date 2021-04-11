@@ -138,17 +138,13 @@ public class TestObject {
 	 * @param debuggerAddress
 	 */
 	public void setDebuggerAddress(String debuggerAddress) {
-		if (this.getDriverManager().getDriverManagerType().name().equals(DriverManagerType.CHROME.name())) {
-			if (!debuggerAddress.isEmpty()) {
+		if (!debuggerAddress.isEmpty()) {
+			if (this.getDriverManager().getDriverManagerType().name().equals(DriverManagerType.CHROME.name())) {
 				this.debuggerAddress = debuggerAddress;
 				_logger.info(String.format("debuggerAddress set to %s", getDebuggerAddress()));
 			} else {
-				_logger.debug(String.format("debuggerAddress is not set since the value is empty"));
-			}
-		} else {
-			if (!debuggerAddress.isEmpty()) {
-				_logger.warn(String.format(
-						"debuggerAddress is not set since browser is not set to " + DriverManagerType.CHROME.name()));
+				_logger.warn(String.format("debuggerAddress cannot be set because browser is not %s",
+						DriverManagerType.CHROME.name()));
 			}
 		}
 	}
