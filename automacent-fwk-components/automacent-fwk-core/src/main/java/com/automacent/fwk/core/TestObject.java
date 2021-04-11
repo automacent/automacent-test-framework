@@ -146,8 +146,10 @@ public class TestObject {
 				_logger.debug(String.format("debuggerAddress is not set since the value is empty"));
 			}
 		} else {
-			_logger.warn(String.format(
-					"debuggerAddress is not set since browser is not set to " + DriverManagerType.CHROME.name()));
+			if (!debuggerAddress.isEmpty()) {
+				_logger.warn(String.format(
+						"debuggerAddress is not set since browser is not set to " + DriverManagerType.CHROME.name()));
+			}
 		}
 	}
 
