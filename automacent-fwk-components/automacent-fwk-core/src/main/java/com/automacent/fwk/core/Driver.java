@@ -310,19 +310,26 @@ public class Driver {
 					_logger.info("Using chromeDriver from framework");
 				}
 				ChromeOptions chromeOptions = new ChromeOptions();
-				chromeOptions.addArguments("--no-sandbox");
-				chromeOptions.addArguments("--disable-dev-shm-usage");
-				chromeOptions.addArguments("--safebrowsing-disable-download-protection");
-
-				Map<String, Object> chromePrefs = new HashMap<String, Object>();
-				chromePrefs.put("safebrowsing.enabled", "true");
-				chromeOptions.setExperimentalOption("prefs", chromePrefs);
-
-				_logger.debug("Setting chrome switch --no-sandbox");
-				_logger.debug("Setting chrome switch --disable-dev-shm-usage");
-				_logger.debug("Setting chrome switch --no-sandbox");
-				_logger.debug("Setting chrome pref {safebrowsing.enabled : true}");
-
+				String debuggerAddress = BaseTest.getTestObject().getDebuggerAddress();
+				if (debuggerAddress != null) {
+					chromeOptions.setExperimentalOption("debuggerAddress", debuggerAddress);
+					_logger.debug(
+							String.format("Setting chrome experimental option debuggerAddress : %s", debuggerAddress));
+					_logger.debug(
+							String.format("Expecting that chrome is already running at remote debugging address %s",
+									debuggerAddress));
+				} else {
+					chromeOptions.addArguments("--no-sandbox");
+					chromeOptions.addArguments("--disable-dev-shm-usage");
+					chromeOptions.addArguments("--safebrowsing-disable-download-protection");
+					Map<String, Object> chromePrefs = new HashMap<String, Object>();
+					chromePrefs.put("safebrowsing.enabled", "true");
+					chromeOptions.setExperimentalOption("prefs", chromePrefs);
+					_logger.debug("Setting chrome switch --no-sandbox");
+					_logger.debug("Setting chrome switch --disable-dev-shm-usage");
+					_logger.debug("Setting chrome switch --no-sandbox");
+					_logger.debug("Setting chrome pref {safebrowsing.enabled : true}");
+				}
 				webDriver = new ChromeDriver(chromeOptions);
 			} else if (driverManagerType.name().equals(DriverManagerType.FIREFOX.name())) {
 				if (geckoDriverLocation == null) {
@@ -345,9 +352,12 @@ public class Driver {
 				BaseTest.getTestObject().getTimeoutInSeconds()));
 		webDriver.manage().timeouts().setScriptTimeout(getScriptTimeoutInSeconds(), TimeUnit.SECONDS);
 		_logger.info(String.format("Script timeout set on driver to %s seconds", getScriptTimeoutInSeconds()));
-		webDriver.manage().window().maximize();
-		webDriver.manage().deleteAllCookies();
-		_logger.info("Cookies deleted");
+
+		if (BaseTest.getTestObject().getDebuggerAddress() == null) {
+			webDriver.manage().window().maximize();
+			webDriver.manage().deleteAllCookies();
+			_logger.info("Cookies deleted");
+		}
 	}
 
 	/**
