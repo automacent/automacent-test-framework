@@ -13,6 +13,7 @@ import org.openqa.selenium.support.pagefactory.DefaultElementLocator;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.automacent.fwk.reporting.Logger;
+import com.automacent.fwk.selenium.AutomacentWebDriverWait;
 
 /**
  * Base class for Page/View. All Page/View classes must extend this class.
@@ -322,23 +323,27 @@ public abstract class PageObject implements IPageObject {
 	// Explicit wait ------------------------------------------------
 
 	/**
-	 * Get the {@link WebDriverWait} (explicit wait) object with the set timeout in
-	 * seconds value
+	 * Get {@link AutomacentWebDriverWait} (explicit wait) object with the set
+	 * timeout in seconds value. {@link AutomacentWebDriverWait} extends the
+	 * Selenium {@link WebDriverWait} and adds additional wait until methods
 	 * 
 	 * @param explicitWaitInSeconds Explicit wait timeout
-	 * @return {@link WebDriverWait} object
+	 * @return {@link AutomacentWebDriverWait} object
 	 */
-	protected WebDriverWait explicitWait(int explicitWaitInSeconds) {
-		return new WebDriverWait(driver, explicitWaitInSeconds);
+	protected AutomacentWebDriverWait explicitWait(int explicitWaitInSeconds) {
+		return new AutomacentWebDriverWait(driver, explicitWaitInSeconds);
 	}
 
 	/**
-	 * Get the {@link WebDriverWait} (explicit wait) object
+	 * Get {@link AutomacentWebDriverWait} (explicit wait) object with the default
+	 * timeout. {@link AutomacentWebDriverWait} extends the Selenium
+	 * {@link WebDriverWait} and adds additional wait until methods
 	 * 
-	 * @return {@link WebDriverWait} object
+	 * @param explicitWaitInSeconds Explicit wait timeout
+	 * @return {@link AutomacentWebDriverWait} object
 	 */
-	protected WebDriverWait explicitWait() {
-		return new WebDriverWait(driver, getExplicitWaitInSeconds());
+	protected AutomacentWebDriverWait explicitWait() {
+		return explicitWait(getExplicitWaitInSeconds());
 	}
 
 	/**
