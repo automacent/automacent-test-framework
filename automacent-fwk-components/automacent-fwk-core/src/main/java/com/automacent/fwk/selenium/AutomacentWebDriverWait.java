@@ -14,7 +14,7 @@ import com.automacent.fwk.core.BaseTest;
 
 /**
  * This class adds additional methods to the {@link WebDriverWait} for reducing
- * the dependency on call {@link WebDriverWait#until(ExpectedCondition)}. The
+ * the dependency on call {@link WebDriverWait#until}({@link ExpectedCondition}). The
  * additional methods will directly reference the {@link ExpectedCondition}
  * without the user explicitly calling the {@link ExpectedCondition} conditions.
  * 

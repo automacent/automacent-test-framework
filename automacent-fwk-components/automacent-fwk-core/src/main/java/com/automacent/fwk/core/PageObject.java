@@ -339,7 +339,6 @@ public abstract class PageObject implements IPageObject {
 	 * timeout. {@link AutomacentWebDriverWait} extends the Selenium
 	 * {@link WebDriverWait} and adds additional wait until methods
 	 * 
-	 * @param explicitWaitInSeconds Explicit wait timeout
 	 * @return {@link AutomacentWebDriverWait} object
 	 */
 	protected AutomacentWebDriverWait explicitWait() {
