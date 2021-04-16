@@ -113,6 +113,7 @@ public class AutomacentListener extends TestListenerAdapter
 		// automacentInternalSetWebTestParameters ---------
 
 		setDefaultParameters(parameters, "browser", DriverManagerType.CHROME.name());
+		setDefaultParameters(parameters, "debuggerAddress", "");
 		setDefaultParameters(parameters, "screenshotType", ScreenshotType.BROWSER_SCREENSHOT.name());
 		setDefaultParameters(parameters, "screenshotMode", ScreenshotMode.ON_FAILURE.name());
 		setDefaultParameters(parameters, "screenshotModeForIteration",
