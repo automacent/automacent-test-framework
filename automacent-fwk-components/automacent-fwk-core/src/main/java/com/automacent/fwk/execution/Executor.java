@@ -146,53 +146,6 @@ class Executor {
 		return new ArrayList<Class<? extends ITestNGListener>>(listeners);
 	}
 
-	/**
-	 * Get Global Parameters from environment variables
-	 * 
-	 * @return map of parameters - key, value
-	 */
-	private Map<String, String> getGlobalParametersFromEnvironmentParameters() {
-		Map<String, String> globalParameters = new HashMap<>();
-
-		globalParameters.put("launcherClients", System.getProperty("automacent.launcherClients", ""));
-		globalParameters.put("runName", System.getProperty("automacent.runName", ""));
-		globalParameters.put("batchNumber", System.getProperty("automacent.batchNumber", ""));
-
-		globalParameters.put("retryMode", System.getProperty("automacent.retryMode", "OFF"));
-		globalParameters.put("recoveryClasses", System.getProperty("automacent.recoveryClasses", ""));
-
-		globalParameters.put("timeoutInSeconds", System.getProperty("automacent.timeoutInSeconds", "20"));
-		globalParameters.put("slowdownDurationInSeconds",
-				System.getProperty("automacent.slowdownDurationInSeconds", "1"));
-
-		globalParameters.put("repeatMode", System.getProperty("automacent.repeatMode", "OFF"));
-		globalParameters.put("testDurationInSeconds", System.getProperty("automacent.testDurationInSeconds", "0"));
-		globalParameters.put("invocationCount", System.getProperty("automacent.invocationCount", "0"));
-		globalParameters.put("delayBetweenIterationInSeconds",
-				System.getProperty("automacent.delayBetweenIterationInSeconds", "0"));
-
-		// Selenium Base Test Parameters
-
-		globalParameters.put("ieDriverLocation", System.getProperty("automacent.ieDriverLocation", ""));
-		globalParameters.put("chromeDriverLocation", System.getProperty("automacent.chromeDriverLocation", ""));
-		globalParameters.put("geckoDriverLocation", System.getProperty("automacent.geckoDriverLocation", ""));
-		globalParameters.put("scriptTimeoutInSeconds", System.getProperty("automacent.scriptTimeoutInSeconds", "300"));
-		globalParameters.put("pageLoadTimeoutInSeconds",
-				System.getProperty("automacent.pageLoadTimeoutInSeconds", "300"));
-		globalParameters.put("socketTimeoutInSeconds", System.getProperty("automacent.socketTimeoutInSeconds", "300"));
-		globalParameters.put("browser", System.getProperty("automacent.browser", "CHROME"));
-
-		if (System.getProperty("automacent.baseUrl", null) != null)
-			globalParameters.put("baseUrl", System.getProperty("automacent.baseUrl"));
-
-		globalParameters.put("screenshotType", System.getProperty("automacent.screenshotType", "BROWSER_SCREENSHOT"));
-		globalParameters.put("screenshotMode", System.getProperty("automacent.screenshotMode", "ON_FAILURE"));
-		globalParameters.put("screenshotModeForIteration",
-				System.getProperty("automacent.screenshotModeForIteration", "LAST_ITERATION"));
-
-		return globalParameters;
-	}
-
 	private String getOutputDirectory() {
 		String outputDirectory = System.getProperty("automacent.reportdir", null);
 		if (outputDirectory == null) {
@@ -209,7 +162,6 @@ class Executor {
 		getTests();
 		XmlSuite suite = new XmlSuite();
 		suite.setName(String.format("Automacent-XML-Suite"));
-		suite.setParameters(getGlobalParametersFromEnvironmentParameters());
 		for (TestDefinition testDefinition : testDefinitions) {
 			_logger.info(String.format("Adding Test %s [%s]", testDefinition.getTestName(),
 					testDefinition.getTestClass().getName()));
