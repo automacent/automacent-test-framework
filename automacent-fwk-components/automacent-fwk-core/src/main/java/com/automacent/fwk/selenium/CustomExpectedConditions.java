@@ -14,11 +14,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.automacent.fwk.annotations.Action;
 import com.automacent.fwk.core.BaseTest;
+import com.automacent.fwk.core.PageObject;
 
 /**
  * Custom Expected conditions to be used with {@link WebDriverWait}
  * 
- * @deprecated Use {@link AutomacentExpectedConditions} instead
+ * @deprecated Use {@link PageObject}.explicitWait().until* instead
  * @author sighil.sivadas
  *
  */
@@ -52,7 +53,6 @@ public class CustomExpectedConditions {
 		};
 	}
 
-	
 	/**
 	 * 
 	 * In case of using {@link FindBy} to locate elements, there is no
@@ -118,7 +118,7 @@ public class CustomExpectedConditions {
 			}
 		};
 	}
-	
+
 	/**
 	 * 
 	 * In case of using {@link FindBy} to locate elements, there is no
