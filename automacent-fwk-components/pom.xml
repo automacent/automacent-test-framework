@@ -4,7 +4,7 @@
 
 	<groupId>com.automacent</groupId>
 	<artifactId>automacent-fwk-components</artifactId>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.2</version>
 	<name>automacent-fwk-components</name>
 	<packaging>pom</packaging>
 	
@@ -43,7 +43,7 @@
 	<scm>
 		<url>https://github.com/sighil/automacent</url>
 		<connection>scm:git:https://github.com/sighil/automacent.git</connection>
-		<tag>HEAD</tag>
+		<tag>automacent-fwk-components-1.2</tag>
 	</scm>
 
 	<properties>
