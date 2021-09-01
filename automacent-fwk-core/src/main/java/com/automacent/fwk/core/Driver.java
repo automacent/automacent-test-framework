@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,6 +12,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.automacent.fwk.enums.BrowserId;
@@ -319,16 +322,30 @@ public class Driver {
 							String.format("Expecting that chrome is already running at remote debugging address %s",
 									debuggerAddress));
 				} else {
+
+					LoggingPreferences logPrefs = new LoggingPreferences();
+					logPrefs.enable(LogType.PROFILER, Level.ALL);
+					logPrefs.enable(LogType.PERFORMANCE, Level.ALL);
+					logPrefs.enable(LogType.BROWSER, Level.ALL);
+					logPrefs.enable(LogType.CLIENT, Level.ALL);
+					logPrefs.enable(LogType.DRIVER, Level.ALL);
+					logPrefs.enable(LogType.SERVER, Level.ALL);
+					chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
+
 					chromeOptions.addArguments("--no-sandbox");
 					chromeOptions.addArguments("--disable-dev-shm-usage");
 					chromeOptions.addArguments("--safebrowsing-disable-download-protection");
 					Map<String, Object> chromePrefs = new HashMap<String, Object>();
 					chromePrefs.put("safebrowsing.enabled", "true");
+					chromePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
 					chromeOptions.setExperimentalOption("prefs", chromePrefs);
+					_logger.debug(String.format("Setting chrome capability %s", logPrefs.toJson()));
 					_logger.debug("Setting chrome switch --no-sandbox");
 					_logger.debug("Setting chrome switch --disable-dev-shm-usage");
 					_logger.debug("Setting chrome switch --no-sandbox");
 					_logger.debug("Setting chrome pref {safebrowsing.enabled : true}");
+					_logger.debug(
+							"Setting chrome pref {profile.default_content_setting_values.automatic_downloads : 1}");
 				}
 				webDriver = new ChromeDriver(chromeOptions);
 			} else if (driverManagerType.name().equals(DriverManagerType.FIREFOX.name())) {
