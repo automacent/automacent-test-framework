@@ -14,9 +14,10 @@ import com.automacent.fwk.core.BaseTest;
 
 /**
  * This class adds additional methods to the {@link WebDriverWait} for reducing
- * the dependency on call {@link WebDriverWait#until}({@link ExpectedCondition}). The
- * additional methods will directly reference the {@link ExpectedCondition}
- * without the user explicitly calling the {@link ExpectedCondition} conditions.
+ * the dependency on call
+ * {@link WebDriverWait#until}({@link ExpectedCondition}). The additional
+ * methods will directly reference the {@link ExpectedCondition} without the
+ * user explicitly calling the {@link ExpectedCondition} conditions.
  * 
  * All the new until* methods will throws {@link TimeoutException} if the
  * condition fails
@@ -92,6 +93,10 @@ public class AutomacentWebDriverWait extends WebDriverWait {
 		return applyExplicit(ExpectedConditions.visibilityOf(element));
 	}
 
+	public Boolean untilInVisibilityOf(final WebElement element) {
+		return applyExplicit(ExpectedConditions.invisibilityOf(element));
+	}
+
 	/**
 	 * Wait until {@link WebElement} to be clickable in the UI
 	 * 
@@ -114,7 +119,7 @@ public class AutomacentWebDriverWait extends WebDriverWait {
 	}
 
 	/**
-	 * Wait until {@link WebElement} is does not contain the provided text
+	 * Wait until {@link WebElement} is does not match the provided text
 	 * 
 	 * @param element {@link WebElement} on which condition has to be checked
 	 * @param text    The text that should not be present
@@ -129,7 +134,28 @@ public class AutomacentWebDriverWait extends WebDriverWait {
 
 			@Override
 			public String toString() {
-				return "Text in Element Not Matches given value";
+				return "Text in Element Matches given value";
+			}
+		});
+	}
+
+	/**
+	 * Wait until {@link WebElement} is does not contain the provided text
+	 * 
+	 * @param element {@link WebElement} on which condition has to be checked
+	 * @param text    The text that should not be contained
+	 * @return true if text is not found in the {@link WebElement}
+	 */
+	public Boolean untilTextInElementNotContains(final WebElement element, String text) {
+		return applyExplicit(new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				return !element.getText().contains(text);
+			}
+
+			@Override
+			public String toString() {
+				return "Text in Element Contains given value";
 			}
 		});
 	}
