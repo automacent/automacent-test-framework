@@ -2,6 +2,7 @@ package com.automacent.fwk.listeners;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.testng.IExecutionListener;
 import org.testng.IInvokedMethod;
@@ -72,6 +73,20 @@ public class AutomacentListener extends TestListenerAdapter
 		_logger.debug(defaultValue.equals(value) ? String.format("%s [default]", log) : log);
 	}
 
+	private void setGlobalTestParameters(Map<String, String> parameters) {
+		Properties properties = System.getProperties();
+		properties.forEach((globalKey, globalValue) -> {
+			if (globalKey.toString().startsWith("automacent.global.")) {
+				String key = globalKey.toString().replace("automacent.global.", "");
+				String value = parameters.get(key);
+				if (value == null || value.isEmpty()) {
+					parameters.put(key, globalValue.toString());
+					_logger.debug(String.format("%s : %s", key, globalValue));
+				}
+			}
+		});
+	}
+
 	/**
 	 * Override {@link ISuiteListener#onStart(ISuite)} method for setting framework
 	 * parameters. If not set, apply default values
@@ -79,10 +94,10 @@ public class AutomacentListener extends TestListenerAdapter
 	@Override
 	public void onStart(ISuite suite) {
 		ISuiteListener.super.onStart(suite);
-		Map<String, String> parameters = suite.getXmlSuite().getAllParameters();
+		Map<String, String> parameters = suite.getXmlSuite().getParameters();
 
-		_logger.debug(String.format("Setting up default framework parameters if not explicity set for suite %s",
-				suite.getName()));
+		_logger.debug(String.format("Setting up default framework parameters (Environment variables "
+				+ "starting with automacent.<key>) if not explicity set for suite %s", suite.getName()));
 
 		// automacentInternalSetLauncherClients -----------
 
@@ -121,6 +136,11 @@ public class AutomacentListener extends TestListenerAdapter
 		setDefaultParameters(parameters, "baseUrl", "");
 
 		_logger.info("Setup default framework parameters completed");
+
+		_logger.info("Setting up global test parameters (Environment variables starting with automacent.global.<key>)");
+		setGlobalTestParameters(parameters);
+		_logger.info("Setup global test parameters completed");
+
 		suite.getXmlSuite().setParameters(parameters);
 	}
 
