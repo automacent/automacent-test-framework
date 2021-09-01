@@ -86,4 +86,6 @@ public interface ILauncherClient {
 	 */
 	public void logEnd(String methodWithArguments, MethodType methodType, TestStatus testStatus, long duration,
 			Throwable t);
+	
+	void logPerformance();
 }
