@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.automacent</groupId>
+		<artifactId>automacent-test-framework</artifactId>
+		<version>1.3-SNAPSHOT</version>
+	</parent>
+	<artifactId>automacent-fwk</artifactId>
+	<name>automacent-fwk</name>
+	<packaging>jar</packaging>
+	
+	<description>Automacent framework dependency</description>
+	<url>http://www.automacent.com/</url>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>sighil.sivadas</id>
+			<name>Sighil Sivadas</name>
+			<roles>
+				<role>Owner</role>
+			</roles>
+		</developer>
+	</developers>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.automacent</groupId>
+			<artifactId>automacent-fwk-core</artifactId>
+			<version>1.3-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+</project>
