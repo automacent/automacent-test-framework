@@ -352,14 +352,14 @@ public class ReportingTools {
 	 * 
 	 * @param logType {@link LogType}
 	 */
-	public static void captureSeleniumLogs1(String logType) {
+	public static Path captureSeleniumLogs(String logType) {
 		try {
 			if (BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver() != null) {
 				File parentDir = new File(System.getProperty("automacent.reportdir") + File.separator + "logs");
 				if (!parentDir.exists())
 					parentDir.mkdirs();
 
-				StandardOpenOption option = StandardOpenOption.APPEND;
+				StandardOpenOption option = StandardOpenOption.TRUNCATE_EXISTING;
 				File file = new File(parentDir.getAbsolutePath() + File.separator + "selenium_" + logType + ".log");
 				if (!file.exists())
 					option = StandardOpenOption.CREATE;
@@ -368,7 +368,7 @@ public class ReportingTools {
 				LogEntries logEntries = BaseTest.getTestObject().getDriverManager().getActiveDriver().getWebDriver()
 						.manage().logs().get(logType);
 				List<String> browserLogs = new ArrayList<>();
-				browserLogs.add("Iteration" + IterationManager.getManager().getIteration());
+				// browserLogs.add("Iteration" + IterationManager.getManager().getIteration());
 				for (LogEntry entry : logEntries)
 					browserLogs.add(String.format("%s %s %s %s", logType.toUpperCase(), entry.getTimestamp(),
 							entry.getLevel(), entry.getMessage()));
@@ -379,9 +379,11 @@ public class ReportingTools {
 							e);
 				}
 				_logger.info("Printing log entries for LogType - " + logType.toUpperCase());
+				return path;
 			}
 		} catch (Exception e) {
 			_logger.warn("Error while capturing Selenium Logs LogType - " + logType.toUpperCase(), e);
 		}
+		return null;
 	}
 }

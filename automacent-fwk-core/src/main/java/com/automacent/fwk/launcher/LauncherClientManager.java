@@ -220,4 +220,12 @@ public class LauncherClientManager implements ILauncherClient {
 			for (ILauncherClient launcherClient : getLauncherClients())
 				launcherClient.logEnd(methodWithArguments, methodType, testStatus, duration, t);
 	}
+
+	@Override
+	public void logPerformance() {
+		if (isEnabled)
+			for (ILauncherClient launcherClient : getLauncherClients())
+				launcherClient.logPerformance();
+	}
+
 }
