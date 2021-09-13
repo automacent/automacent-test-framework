@@ -14,7 +14,7 @@
 	<parameter name="slowdownDurationInSeconds" value="1" />
 	<parameter name="retryMode" value="OFF" />
 	<parameter name="recoveryClasses" value="" />
-	
+
 	<parameter name="ieDriverLocation" value="" />
 	<parameter name="chromeDriverLocation" value="" />
 	<parameter name="geckoDriverLocation" value="" />
@@ -24,12 +24,13 @@
 
 	<parameter name="browser" value="CHROME" />
 	<parameter name="debuggerAddress" value="" />
+	<parameter name="downloadLocation" value="" />
 	<parameter name="screenshotType" value="BROWSER_SCREENSHOT" />
 	<parameter name="screenshotMode" value="ON_FAILURE" />
 	<parameter name="screenshotModeForIteration" value="LAST_ITERATION" />
 
 	<parameter name="baseUrl" value="https://www.google.com" />
-	
+
 	<test name="Sample Test" enabled="true">
 		<parameter name="keyword" value="automacent.com" />
 		<classes>
