@@ -4,7 +4,7 @@
 
 	<groupId>com.automacent</groupId>
 	<artifactId>automacent-test-framework</artifactId>
-	<version>1.3-SNAPSHOT</version>
+	<version>1.3</version>
 	<name>automacent-test-framework</name>
 	<packaging>pom</packaging>
 	
@@ -43,7 +43,7 @@
 	<scm>
 		<url>https://github.com/automacent/automacent-test-framework</url>
 		<connection>scm:git:https://github.com/automacent/automacent-test-framework.git</connection>
-		<tag>HEAD</tag>
+		<tag>automacent-test-framework-1.3</tag>
 	</scm>
 
 	<properties>
