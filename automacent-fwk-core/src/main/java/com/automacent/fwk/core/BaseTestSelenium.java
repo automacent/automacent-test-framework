@@ -76,6 +76,7 @@ public abstract class BaseTestSelenium extends BaseTest {
 	@Parameters({
 			"browser",
 			"debuggerAddress",
+			"downloadLocation",
 			"screenshotType",
 			"screenshotMode",
 			"screenshotModeForIteration",
@@ -84,6 +85,7 @@ public abstract class BaseTestSelenium extends BaseTest {
 	public void automacentInternalSetWebTestParameters(
 			DriverManagerType browser,
 			String debuggerAddress,
+			String downloadLocation,
 			ScreenshotType screenshotType,
 			String screenshotMode,
 			ScreenshotModeForIteration screenshotModeForIteration,
@@ -95,6 +97,7 @@ public abstract class BaseTestSelenium extends BaseTest {
 		testObject.setDriverManager(new DriverManager());
 		testObject.getDriverManager().setDriverManagerType(browser);
 		testObject.setDebuggerAddress(debuggerAddress);
+		testObject.setDownloadLocation(downloadLocation);
 		testObject.setScreenshotType(screenshotType);
 		testObject.setScreenshotModes(screenshotMode);
 		testObject.setScreenshotModeForIteration(screenshotModeForIteration);

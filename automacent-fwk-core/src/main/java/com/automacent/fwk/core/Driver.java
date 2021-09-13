@@ -10,6 +10,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.logging.LogType;
@@ -48,7 +50,7 @@ public class Driver {
 
 		setScriptTimeoutInSeconds(scriptTimeoutInSeconds);
 		setPageLoadTimeoutInSeconds(pageLoadTimeoutInSeconds);
-		setSocketTimeoutInSeconds(socketTimeoutInSeconds);
+		setSocketTimeoutInSeconds(socketTimeoutInSeconds);  
 		setBrowserId(browserId);
 	}
 
@@ -314,7 +316,7 @@ public class Driver {
 				}
 				ChromeOptions chromeOptions = new ChromeOptions();
 				String debuggerAddress = BaseTest.getTestObject().getDebuggerAddress();
-				if (debuggerAddress != null) {
+				if (!debuggerAddress.isEmpty()) {
 					chromeOptions.setExperimentalOption("debuggerAddress", debuggerAddress);
 					_logger.debug(
 							String.format("Setting chrome experimental option debuggerAddress : %s", debuggerAddress));
@@ -335,7 +337,7 @@ public class Driver {
 					chromeOptions.addArguments("--no-sandbox");
 					chromeOptions.addArguments("--disable-dev-shm-usage");
 					chromeOptions.addArguments("--safebrowsing-disable-download-protection");
-					Map<String, Object> chromePrefs = new HashMap<String, Object>();
+					Map<String, Object> chromePrefs = new HashMap<>();
 					chromePrefs.put("safebrowsing.enabled", "true");
 					chromePrefs.put("profile.default_content_setting_values.automatic_downloads", 1);
 					chromeOptions.setExperimentalOption("prefs", chromePrefs);
@@ -346,6 +348,13 @@ public class Driver {
 					_logger.debug("Setting chrome pref {safebrowsing.enabled : true}");
 					_logger.debug(
 							"Setting chrome pref {profile.default_content_setting_values.automatic_downloads : 1}");
+
+					String downloadLocation = BaseTest.getTestObject().getDownloadLocation();
+					if (!downloadLocation.isEmpty()) {
+						chromePrefs.put("download.default_directory", downloadLocation);
+						_logger.debug(String.format("Setting chrome pref {download.default_directory : \"%s\"}",
+								downloadLocation));
+					}
 				}
 				webDriver = new ChromeDriver(chromeOptions);
 			} else if (driverManagerType.name().equals(DriverManagerType.FIREFOX.name())) {
@@ -353,7 +362,36 @@ public class Driver {
 					WebDriverManager.getInstance(DriverManagerType.FIREFOX).setup();
 					_logger.info("Using geckoDriver from framework");
 				}
-				webDriver = new FirefoxDriver();
+
+				FirefoxOptions option = new FirefoxOptions();
+				String downloadLocation = BaseTest.getTestObject().getDownloadLocation();
+				if (!downloadLocation.isEmpty()) {
+					FirefoxProfile profile = new FirefoxProfile();
+					profile.setPreference("browser.download.folderList", 2);
+					profile.setPreference("browser.download.dir", downloadLocation);
+					String fileTypes =  "text/csv;"
+							+ "application/java-archive;"
+							+ "application/x-msexcel;"
+							+ "application/excel;"
+							+ "application/vnd.openxmlformats-officedocument.wordprocessingml.document;"
+							+ "application/x-excel;"
+							+ "application/vnd.ms-excel;"
+							+ "image/png;"
+							+ "image/jpeg;"
+							+ "text/html;"
+							+ "text/plain;"
+							+ "application/msword;"
+							+ "application/xml;"
+							+ "application/vnd.microsoft.portable-executable;"
+							+ "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+					profile.setPreference("browser.helperApps.neverAsk.saveToDisk", fileTypes);
+					_logger.debug("Setting firefox pref {browser.download.folderList : 2}");
+					_logger.debug(String.format("Setting firefox pref {browser.download.dir : %s}", downloadLocation));
+					_logger.debug(String.format("Setting firefox pref {browser.helperApps.neverAsk.saveToDisk : %s}",
+							fileTypes));
+					option.setProfile(profile);
+				}
+				webDriver = new FirefoxDriver(option);
 			} else if (driverManagerType.name().equals(DriverManagerType.CHROMIUM.name())) {
 				WebDriverManager.getInstance(DriverManagerType.CHROMIUM).setup();
 				webDriver = new ChromeDriver();
@@ -370,7 +408,7 @@ public class Driver {
 		webDriver.manage().timeouts().setScriptTimeout(getScriptTimeoutInSeconds(), TimeUnit.SECONDS);
 		_logger.info(String.format("Script timeout set on driver to %s seconds", getScriptTimeoutInSeconds()));
 
-		if (BaseTest.getTestObject().getDebuggerAddress() == null) {
+		if (BaseTest.getTestObject().getDebuggerAddress().isEmpty()) {
 			webDriver.manage().window().maximize();
 			webDriver.manage().deleteAllCookies();
 			_logger.info("Cookies deleted");
@@ -383,7 +421,6 @@ public class Driver {
 	public void terminateDriver() {
 		if (webDriver != null) {
 			_logger.info(String.format("Quiting driver %s", webDriver));
-			// webDriver.close();
 			webDriver.quit();
 		} else {
 			_logger.warn(String.format("Driver %s is already dead", webDriver));
