@@ -10,16 +10,41 @@
 	<name>${artifactId}</name>
 	<url>https://automacent.com</url>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<automacent.testsuites>src/test/resources/testng.xml</automacent.testsuites>
-		<automacent.listeners></automacent.listeners>
-		<automacent.reportdir>${basedir}${file.separator}target${file.separator}Reports</automacent.reportdir>
-		<automacent.launcherClients></automacent.launcherClients>
-		<debugMode>INFO</debugMode>
-		<failIfNoTests>true</failIfNoTests>
-		<skipTests>false</skipTests>
-	</properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<failIfNoTests>true</failIfNoTests>
+	<skipTests>false</skipTests>
+	<automacent.loglevel>INFO</automacent.loglevel>
+	<automacent.listeners></automacent.listeners>
+	<automacent.reportdir>${basedir}${file.separator}target${file.separator}Reports</automacent.reportdir>
+	<automacent.testsuites></automacent.testsuites>
+
+	<!-- Framework Level Parameters -->
+	<automacent.launcherClients></automacent.launcherClients>
+	<automacent.runName></automacent.runName>
+	<automacent.batchNumber></automacent.batchNumber>
+	<automacent.repeatMode>OFF</automacent.repeatMode>
+	<automacent.testDurationInSeconds>0</automacent.testDurationInSeconds>
+	<automacent.invocationCount>0</automacent.invocationCount>
+	<automacent.delayBetweenIterationInSeconds>0</automacent.delayBetweenIterationInSeconds>
+	<automacent.timeoutInSeconds>20</automacent.timeoutInSeconds>
+	<automacent.slowdownDurationInSeconds>0</automacent.slowdownDurationInSeconds>
+	<automacent.retryMode>OFF</automacent.retryMode>
+	<automacent.recoveryClasses></automacent.recoveryClasses>
+	<automacent.ieDriverLocation></automacent.ieDriverLocation>
+	<automacent.chromeDriverLocation></automacent.chromeDriverLocation>
+	<automacent.geckoDriverLocation></automacent.geckoDriverLocation>
+	<automacent.scriptTimeoutInSeconds>300</automacent.scriptTimeoutInSeconds>
+	<automacent.pageLoadTimeoutInSeconds>300</automacent.pageLoadTimeoutInSeconds>
+	<automacent.socketTimeoutInSeconds>300</automacent.socketTimeoutInSeconds>
+	<automacent.browser>CHROME</automacent.browser>
+	<automacent.debuggerAddress></automacent.debuggerAddress>
+	<automacent.downloadLocation></automacent.downloadLocation>
+	<automacent.screenshotType>BROWSER_SCREENSHOT</automacent.screenshotType>
+	<automacent.screenshotMode>ON_FAILURE</automacent.screenshotMode>
+	<automacent.screenshotModeForIteration>LAST_ITERATION</automacent.screenshotModeForIteration>
+	<automacent.baseUrl></automacent.baseUrl>
+	<!-- Global test Parameters -->
+</properties>
 
 	<repositories>
 		<repository>
@@ -139,8 +164,8 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>${automacent.testsuites}</suiteXmlFile>
 					</suiteXmlFiles>
-					<!-- These properties are used by automacent framework. Do not modify existing properties -->
 					<properties>
+						<!-- These properties are used by automacent framework. Do not modify existing properties -->
 						<property>
 							<name>usedefaultlisteners</name>
 							<value>false</value>
@@ -157,10 +182,36 @@
 					<workingDirectory>${basedir}</workingDirectory>
 					<reportsDirectory>${automacent.reportdir}</reportsDirectory>
 					<systemPropertyVariables>
-						<debugMode>${debugMode}</debugMode>
+						<automacent.loglevel>${automacent.loglevel}</automacent.loglevel>
 						<automacent.reportdir>${automacent.reportdir}</automacent.reportdir>
 						<automacent.listeners>${automacent.listeners}</automacent.listeners>
+						<automacent.testsuites>${automacent.testsuites}</automacent.testsuites>
+						<!-- Framework Level Parameters -->
 						<automacent.launcherClients>${automacent.launcherClients}</automacent.launcherClients>
+						<automacent.runName>${automacent.runName}</automacent.runName>
+						<automacent.batchNumber>${automacent.batchNumber}</automacent.batchNumber>
+						<automacent.repeatMode>${automacent.repeatMode}</automacent.repeatMode>
+						<automacent.testDurationInSeconds>${automacent.testDurationInSeconds}</automacent.testDurationInSeconds>
+						<automacent.invocationCount>${automacent.invocationCount}</automacent.invocationCount>
+						<automacent.delayBetweenIterationInSeconds>${automacent.delayBetweenIterationInSeconds}</automacent.delayBetweenIterationInSeconds>
+						<automacent.timeoutInSeconds>${automacent.timeoutInSeconds}</automacent.timeoutInSeconds>
+						<automacent.slowdownDurationInSeconds>${automacent.slowdownDurationInSeconds}</automacent.slowdownDurationInSeconds>
+						<automacent.retryMode>${automacent.retryMode}</automacent.retryMode>
+						<automacent.recoveryClasses>${automacent.recoveryClasses}</automacent.recoveryClasses>
+						<automacent.ieDriverLocation>${automacent.ieDriverLocation}</automacent.ieDriverLocation>
+						<automacent.chromeDriverLocation>${automacent.chromeDriverLocation}</automacent.chromeDriverLocation>
+						<automacent.geckoDriverLocation>${automacent.geckoDriverLocation}</automacent.geckoDriverLocation>
+						<automacent.scriptTimeoutInSeconds>${automacent.scriptTimeoutInSeconds}</automacent.scriptTimeoutInSeconds>
+						<automacent.pageLoadTimeoutInSeconds>${automacent.pageLoadTimeoutInSeconds}</automacent.pageLoadTimeoutInSeconds>
+						<automacent.socketTimeoutInSeconds>${automacent.socketTimeoutInSeconds}</automacent.socketTimeoutInSeconds>
+						<automacent.browser>${automacent.browser}</automacent.browser>
+						<automacent.debuggerAddress>${automacent.debuggerAddress}</automacent.debuggerAddress>
+						<automacent.downloadLocation>${automacent.downloadLocation}</automacent.downloadLocation>
+						<automacent.screenshotType>${automacent.screenshotType}</automacent.screenshotType>
+						<automacent.screenshotMode>${automacent.screenshotMode}</automacent.screenshotMode>
+						<automacent.screenshotModeForIteration>${automacent.screenshotModeForIteration}</automacent.screenshotModeForIteration>
+						<automacent.baseUrl>${automacent.baseUrl}</automacent.baseUrl>
+						<!-- Global Test Parameters -->
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
