@@ -1,5 +1,6 @@
 package com.automacent.fwk.core;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +131,7 @@ public class TestObject {
 
 	// Debugger Address ----------------------------------------------------
 
-	private String debuggerAddress;
+	private String debuggerAddress = "";
 
 	/**
 	 * set the debugger address
@@ -155,6 +156,39 @@ public class TestObject {
 	 */
 	public String getDebuggerAddress() {
 		return debuggerAddress;
+	}
+
+	// Download Location --------------------------------------------
+
+	private String downloadLocation = "";
+
+	/**
+	 * set the download location
+	 * 
+	 * @param downloadLocation
+	 */
+	public void setDownloadLocation(String downloadLocation) {
+		if (!downloadLocation.isEmpty()) {
+			try {
+				File directory = new File(downloadLocation);
+				if (!directory.exists())
+					directory.mkdirs();
+				this.downloadLocation = directory.getAbsolutePath();
+			} catch (Exception e) {
+				_logger.warn("Error setting download location", e);
+			}
+		}
+
+		_logger.info(String.format("debuggerAddress set to %s", getDebuggerAddress()));
+
+	}
+
+	/**
+	 * 
+	 * @return downloadLocation
+	 */
+	public String getDownloadLocation() {
+		return downloadLocation;
 	}
 
 	// Test Name ----------------------------------------------------
