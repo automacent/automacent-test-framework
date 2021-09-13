@@ -136,7 +136,8 @@ public class TestObject {
 	/**
 	 * set the debugger address
 	 * 
-	 * @param debuggerAddress
+	 * @param debuggerAddress Port of running chrome browser which selenium can take
+	 *                        control of
 	 */
 	public void setDebuggerAddress(String debuggerAddress) {
 		if (!debuggerAddress.isEmpty()) {
@@ -165,7 +166,7 @@ public class TestObject {
 	/**
 	 * set the download location
 	 * 
-	 * @param downloadLocation
+	 * @param downloadLocation Location for downloaded files on browser
 	 */
 	public void setDownloadLocation(String downloadLocation) {
 		if (!downloadLocation.isEmpty()) {

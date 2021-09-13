@@ -64,6 +64,9 @@ public abstract class BaseTestSelenium extends BaseTest {
 	 * 
 	 * @param browser                    Browser name as provided by
 	 *                                   {@link DriverManagerType}
+	 * @param debuggerAddress            Debugger port for running tests on already
+	 *                                   open browser window
+	 * @param downloadLocation           Location to download files on browser
 	 * @param screenshotType             {@link ScreenshotType}
 	 * @param screenshotMode             comma separated {@link ScreenshotMode}
 	 *                                   values
