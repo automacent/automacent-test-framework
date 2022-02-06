@@ -56,7 +56,7 @@
 		<testng.version>7.3.0</testng.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
 		<log4j.verson>1.2.17</log4j.verson>
-		<springframework.version>5.3.5</springframework.version>
+		<springframework.version>5.3.14</springframework.version>
 		<jackson.version>2.12.2</jackson.version>
 		<reportng.version>1.1.4</reportng.version>
 		<guice.version>4.2.0</guice.version>
