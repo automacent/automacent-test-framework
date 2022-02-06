@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="TRACE">
+	<Properties>
+		<Property name="automacent.reportdir">report</Property>
+		<Property name="automacent.loglevel">INFO</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MMM-dd HH:mm:ss,SSS} [%-5p] %-15.15t %-25.25c{1.} : %m%n" />
+		</Console>
+		<File name="ErrorLog" fileName="${sys:automacent.reportdir}/logs/error.log" immediateFlush="false"
+			append="false">
+			<PatternLayout
+				pattern="%d{yyyy-MMM-dd HH:mm:ss,SSS} [%-5p] %-15.15t %-25.25c{1.} : %m%n" />
+		</File>
+		<File name="DebugLog" fileName="${sys:automacent.reportdir}/logs/debug.log" immediateFlush="false"
+			append="false">
+			<PatternLayout
+				pattern="%d{yyyy-MMM-dd HH:mm:ss,SSS} [%-5p] %-15.15t %-25.25c{1.} : %m%n" />
+		</File>
+	</Appenders>
+	<Loggers>
+		<Root level="${sys:automacent.loglevel}">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="ErrorLog" />
+			<AppenderRef ref="DebugLog" />
+		</Root>
+	</Loggers>
+</Configuration>
