@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.automacent</groupId>
 		<artifactId>automacent-test-framework</artifactId>
-		<version>1.4-SNAPSHOT</version>
+		<version>1.4</version>
 	</parent>
 	<artifactId>automacent-fwk</artifactId>
 	<name>automacent-fwk</name>
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.automacent</groupId>
 			<artifactId>automacent-fwk-core</artifactId>
-			<version>1.4-SNAPSHOT</version>
+			<version>1.4</version>
 		</dependency>
 	</dependencies>
 </project>
