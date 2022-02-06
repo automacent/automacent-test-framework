@@ -3,6 +3,8 @@ package com.automacent.fwk.reporting;
 import static com.automacent.fwk.enums.LogType.HTML;
 import static com.automacent.fwk.enums.LogType.TEXT;
 
+import org.apache.logging.log4j.LogManager;
+
 import com.automacent.fwk.utils.LoggingUtils;
 
 /**
@@ -13,14 +15,14 @@ import com.automacent.fwk.utils.LoggingUtils;
  */
 public class Logger {
 
-	protected org.apache.log4j.Logger _logger;
+	protected org.apache.logging.log4j.Logger _logger;
 
 	protected Logger(Class<?> classToLog) {
-		_logger = org.apache.log4j.Logger.getLogger(classToLog);
+		_logger = LogManager.getLogger(classToLog);
 	}
 
 	protected Logger(String classToLog) {
-		_logger = org.apache.log4j.Logger.getLogger(classToLog);
+		_logger = LogManager.getLogger(classToLog);
 	}
 
 	public static Logger getLogger(Class<?> classToLog) {
@@ -80,7 +82,7 @@ public class Logger {
 	 */
 	public void trace(String message) {
 		_logger.trace(formatMessageForText(message));
-		String level = _logger.getParent().getLevel().toString();
+		String level = _logger.getLevel().toString();
 		if (level.equalsIgnoreCase("TRACE"))
 			ReportingTools.logMessage(formatMessageForHTML(message));
 	}
@@ -92,7 +94,7 @@ public class Logger {
 	 */
 	public void debug(String message) {
 		_logger.debug(formatMessageForText(message));
-		String level = _logger.getParent().getLevel().toString();
+		String level = _logger.getLevel().toString();
 		if (level.equalsIgnoreCase("DEBUG") || level.equalsIgnoreCase("TRACE"))
 			ReportingTools.logMessage(formatMessageForHTML(message));
 	}
