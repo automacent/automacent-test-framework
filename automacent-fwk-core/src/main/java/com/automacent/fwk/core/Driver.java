@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,6 +18,9 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
@@ -408,6 +412,9 @@ public class Driver {
 		webDriver.manage().timeouts().setScriptTimeout(getScriptTimeoutInSeconds(), TimeUnit.SECONDS);
 		_logger.info(String.format("Script timeout set on driver to %s seconds", getScriptTimeoutInSeconds()));
 
+		Wait<WebDriver> wait = new WebDriverWait(webDriver, 20);
+		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("")));
+		
 		if (BaseTest.getTestObject().getDebuggerAddress().isEmpty()) {
 			webDriver.manage().window().maximize();
 			webDriver.manage().deleteAllCookies();

@@ -44,7 +44,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<webdriver.version>3.141.59</webdriver.version>
+		<webdriver.version>4.1.2</webdriver.version>
 		<webdrivermanager.version>3.8.1</webdrivermanager.version>
 		<aspectj.version>1.9.6</aspectj.version>
 		<jsch.version>0.1.53</jsch.version>
@@ -168,6 +168,13 @@
 			<artifactId>commons-lang</artifactId>
 			<version>${commons.lang.version}</version>
 		</dependency>
+
+<!-- <dependency> -->
+<!--   <groupId>com.google.guava</groupId> -->
+<!--   <artifactId>guava</artifactId> -->
+<!--   <version>21.0</version> -->
+<!-- </dependency> -->
+
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
