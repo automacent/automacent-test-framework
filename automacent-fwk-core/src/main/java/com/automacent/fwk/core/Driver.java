@@ -1,12 +1,10 @@
 package com.automacent.fwk.core;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-
-import org.openqa.selenium.By;
+import com.automacent.fwk.enums.BrowserId;
+import com.automacent.fwk.exceptions.SetupFailedFatalException;
+import com.automacent.fwk.reporting.Logger;
+import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -17,44 +15,38 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.automacent.fwk.enums.BrowserId;
-import com.automacent.fwk.exceptions.SetupFailedFatalException;
-import com.automacent.fwk.reporting.Logger;
-
-import io.github.bonigarcia.wdm.DriverManagerType;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 /**
  * Driver object holding {@link WebDriver} instances for Selenium Web Tests
- * 
- * @author sighil.sivadas
  *
+ * @author sighil.sivadas
  */
 public class Driver {
 
 	private static final Logger _logger = Logger.getLogger(Driver.class);
 
 	protected Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
-			long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds, long socketTimeoutInSeconds) {
+					 long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds, long socketTimeoutInSeconds) {
 		this(ieDriverLocation, chromeDriverLocation, geckoDriverLocation, scriptTimeoutInSeconds,
 				pageLoadTimeoutInSeconds, socketTimeoutInSeconds, null);
 	}
 
 	protected Driver(String ieDriverLocation, String chromeDriverLocation, String geckoDriverLocation,
-			long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds, long socketTimeoutInSeconds,
-			BrowserId browserId) {
+					 long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds, long socketTimeoutInSeconds,
+					 BrowserId browserId) {
 		setIeDriverLocation(ieDriverLocation);
 		setChromeDriverLocation(chromeDriverLocation);
 		setGeckoDriverLocation(geckoDriverLocation);
 
 		setScriptTimeoutInSeconds(scriptTimeoutInSeconds);
 		setPageLoadTimeoutInSeconds(pageLoadTimeoutInSeconds);
-		setSocketTimeoutInSeconds(socketTimeoutInSeconds);  
+		setSocketTimeoutInSeconds(socketTimeoutInSeconds);
 		setBrowserId(browserId);
 	}
 
@@ -65,7 +57,7 @@ public class Driver {
 	/**
 	 * Setup default {@link Driver}. This will be used when setting up Test suite
 	 * level parameters in the {@link BaseTestSelenium}
-	 * 
+	 *
 	 * @param ieDriverLocation         Path of the IE driver server executable
 	 * @param chromeDriverLocation     Path of the Chrome driver server executable
 	 * @param geckoDriverLocation      Path of the Firefox driver server executable
@@ -75,15 +67,14 @@ public class Driver {
 	 *                                 timeout
 	 */
 	public static void setupDefaultDriver(String ieDriverLocation, String chromeDriverLocation,
-			String geckoDriverLocation, long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds,
-			long socketTimeoutInSeconds) {
+										  String geckoDriverLocation, long scriptTimeoutInSeconds, long pageLoadTimeoutInSeconds,
+										  long socketTimeoutInSeconds) {
 		_logger.info("Setting up default driver");
 		defaultDriver = new Driver(ieDriverLocation, chromeDriverLocation, geckoDriverLocation,
 				scriptTimeoutInSeconds, pageLoadTimeoutInSeconds, socketTimeoutInSeconds);
 	}
 
 	/**
-	 * 
 	 * @return Default {@link Driver} instance
 	 */
 	public static Driver getDefaultDriver() {
@@ -115,8 +106,8 @@ public class Driver {
 	private WebDriver webDriver;
 
 	// Executables --------------------------------------------------
+
 	/**
-	 * 
 	 * @return absolute IE driver server executable path
 	 */
 	public String getIeDriverLocation() {
@@ -125,7 +116,7 @@ public class Driver {
 
 	/**
 	 * Set Custom IE driver server executable path.
-	 * 
+	 *
 	 * @param ieDriverLocation IE driver server executable path
 	 */
 	private void setIeDriverLocation(String ieDriverLocation) {
@@ -143,7 +134,6 @@ public class Driver {
 	}
 
 	/**
-	 * 
 	 * @return absolute Chrome driver server executable path
 	 */
 	public String getChromeDriverLocation() {
@@ -152,7 +142,7 @@ public class Driver {
 
 	/**
 	 * Set Custom Chrome driver server executable path.
-	 * 
+	 *
 	 * @param chromeDriverLocation Chrome driver server executable path
 	 */
 	private void setChromeDriverLocation(String chromeDriverLocation) {
@@ -170,7 +160,6 @@ public class Driver {
 	}
 
 	/**
-	 * 
 	 * @return absolute Firefox driver server executable path
 	 */
 	public String getGeckoDriverLocation() {
@@ -179,7 +168,7 @@ public class Driver {
 
 	/**
 	 * Set Firefox driver server executable path.
-	 * 
+	 *
 	 * @param geckoDriverLocation Firefox driver server executable path
 	 */
 	private void setGeckoDriverLocation(String geckoDriverLocation) {
@@ -199,7 +188,7 @@ public class Driver {
 	/**
 	 * Check if the provided driver server executable path is valid. If path is not
 	 * valid
-	 * 
+	 *
 	 * @param driverServerLocation path of driver server executable
 	 * @return true if valid
 	 */
@@ -211,7 +200,6 @@ public class Driver {
 	// Timeouts -----------------------------------------------------
 
 	/**
-	 * 
 	 * @return Selenium javascript timeout
 	 */
 	public long getScriptTimeoutInSeconds() {
@@ -220,7 +208,7 @@ public class Driver {
 
 	/**
 	 * Set the Selenium javascript timeout
-	 * 
+	 *
 	 * @param scriptTimeoutInSeconds Selenium javascript timeout
 	 */
 	private void setScriptTimeoutInSeconds(long scriptTimeoutInSeconds) {
@@ -229,7 +217,6 @@ public class Driver {
 	}
 
 	/**
-	 * 
 	 * @return Selenium page load timeout
 	 */
 	public long getPageLoadTimeoutInSeconds() {
@@ -238,7 +225,7 @@ public class Driver {
 
 	/**
 	 * Set the Selenium page load timeout
-	 * 
+	 *
 	 * @param pageLoadTimeoutInSeconds Selenium page load timeout
 	 */
 	private void setPageLoadTimeoutInSeconds(long pageLoadTimeoutInSeconds) {
@@ -247,7 +234,6 @@ public class Driver {
 	}
 
 	/**
-	 * 
 	 * @return {@link WebDriver} SocketTimeoutException timeout
 	 */
 	public long getSocketTimeoutInSeconds() {
@@ -256,7 +242,7 @@ public class Driver {
 
 	/**
 	 * Set the {@link WebDriver} SocketTimeoutException timeout
-	 * 
+	 *
 	 * @param socketTimeoutInSeconds {@link WebDriver} SocketTimeoutException
 	 *                               timeout
 	 */
@@ -268,7 +254,6 @@ public class Driver {
 	// Browser Id ---------------------------------------------------
 
 	/**
-	 * 
 	 * @return {@link BrowserId} for the driver instance
 	 */
 	public BrowserId getBrowserId() {
@@ -277,7 +262,7 @@ public class Driver {
 
 	/**
 	 * Set {@link BrowserId} for the driver instance
-	 * 
+	 *
 	 * @param browserId {@link BrowserId}
 	 */
 	private void setBrowserId(BrowserId browserId) {
@@ -287,7 +272,6 @@ public class Driver {
 	// WebDriver ----------------------------------------------------
 
 	/**
-	 *
 	 * @return {@link WebDriver}
 	 */
 	public WebDriver getWebDriver() {
@@ -297,13 +281,14 @@ public class Driver {
 	/**
 	 * This method initializes the driver (opens browser), maximizes browser window,
 	 * sets timeouts and deletes the cookies.
-	 * 
+	 *
 	 * @param driverManagerType {@link DriverManagerType}
 	 */
 	public void startDriver(DriverManagerType driverManagerType) {
 		try {
 			if (driverManagerType.name().equals(DriverManagerType.IEXPLORER.name())) {
-				DesiredCapabilities capab = DesiredCapabilities.internetExplorer();
+				InternetExplorerOptions capab = new InternetExplorerOptions();
+				capab.setAcceptInsecureCerts(true);
 				capab.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 				capab.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
 				capab.setCapability(InternetExplorerDriver.ENABLE_PERSISTENT_HOVERING, false);
@@ -373,7 +358,7 @@ public class Driver {
 					FirefoxProfile profile = new FirefoxProfile();
 					profile.setPreference("browser.download.folderList", 2);
 					profile.setPreference("browser.download.dir", downloadLocation);
-					String fileTypes =  "text/csv;"
+					String fileTypes = "text/csv;"
 							+ "application/java-archive;"
 							+ "application/x-msexcel;"
 							+ "application/excel;"
@@ -412,9 +397,7 @@ public class Driver {
 		webDriver.manage().timeouts().setScriptTimeout(getScriptTimeoutInSeconds(), TimeUnit.SECONDS);
 		_logger.info(String.format("Script timeout set on driver to %s seconds", getScriptTimeoutInSeconds()));
 
-		Wait<WebDriver> wait = new WebDriverWait(webDriver, 20);
-		wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("")));
-		
+
 		if (BaseTest.getTestObject().getDebuggerAddress().isEmpty()) {
 			webDriver.manage().window().maximize();
 			webDriver.manage().deleteAllCookies();
