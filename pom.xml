@@ -47,7 +47,7 @@
 		<webdriver.version>3.141.59</webdriver.version>
 		<webdrivermanager.version>3.8.1</webdrivermanager.version>
 		<aspectj.version>1.9.6</aspectj.version>
-		<jsch.version>0.1.53</jsch.version>
+		<jsch.version>0.1.54</jsch.version>
 		<commons.io.version>2.7</commons.io.version>
 		<testng.version>7.3.0</testng.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
