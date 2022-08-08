@@ -223,7 +223,7 @@ public class AutomacentListener extends TestListenerAdapter
 		if (!methodName.startsWith("automacentInternal")
 				&& BaseTest.getTestObject().getDriverManager().getActiveDriver() != null)
 			StepsAndPagesProcessor.processAnnotation(invokedMethod.getTestMethod().getInstance());
-		// Remove all display parameters from context
+		// Remove all local parameters from context
 		testContext.getCurrentXmlTest().getAllParameters().keySet().stream()
 			.filter(key -> key.startsWith("automacent.local.")).forEach(key -> {
 				testContext.getCurrentXmlTest().getAllParameters().remove(key);
