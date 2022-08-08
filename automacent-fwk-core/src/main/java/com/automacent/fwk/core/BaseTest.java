@@ -87,7 +87,7 @@ public abstract class BaseTest {
 	 * @param value Value of the parameter
 	 */
 	protected void addLocalTestParameter(String key, String value) {
-		addTestParameter(String.format("automacent.local.", key), value);
+		addTestParameter(String.format("automacent.local.%s", key), value);
 	}
 
 	/**
