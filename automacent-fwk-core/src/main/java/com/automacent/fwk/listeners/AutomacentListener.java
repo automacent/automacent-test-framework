@@ -225,7 +225,7 @@ public class AutomacentListener extends TestListenerAdapter
 			StepsAndPagesProcessor.processAnnotation(invokedMethod.getTestMethod().getInstance());
 		// Remove all display parameters from context
 		testContext.getCurrentXmlTest().getAllParameters().keySet().stream()
-			.filter(key -> key.startsWith("automacent.parameter.display.")).forEach(key -> {
+			.filter(key -> key.startsWith("automacent.local.")).forEach(key -> {
 				testContext.getCurrentXmlTest().getAllParameters().remove(key);
 			});
 	}
