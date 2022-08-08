@@ -78,6 +78,17 @@ public abstract class BaseTest {
 	protected void appendTestParameter(String key, String value) {
 		BaseTest.getTestObject().appendTestParameter(key, value);
 	}
+	
+	/**
+	 * Add test parameter within the scope of current method. If the parameter with
+	 * key already exists, the value is overwritten
+	 * 
+	 * @param key   Name of the parameter
+	 * @param value Value of the parameter
+	 */
+	protected void addLocalTestParameter(String key, String value) {
+		addTestParameter(String.format("automacent.local.", key), value);
+	}
 
 	/**
 	 * Set up launcher clients for framework.Launcher clients are REST based
