@@ -224,10 +224,12 @@ public class AutomacentListener extends TestListenerAdapter
 				&& BaseTest.getTestObject().getDriverManager().getActiveDriver() != null)
 			StepsAndPagesProcessor.processAnnotation(invokedMethod.getTestMethod().getInstance());
 		// Remove all local parameters from context
-		testContext.getCurrentXmlTest().getAllParameters().keySet().stream()
-			.filter(key -> key.startsWith("automacent.local.")).forEach(key -> {
-				testContext.getCurrentXmlTest().getAllParameters().remove(key);
-			});
+		Map<String, String> localParameters = new ConcurrentHashMap<>();
+		localParameters.putAll(testContext.getCurrentXmlTest().getLocalParameters());
+		localParameters.keySet().stream().filter(key -> key.startsWith("automacent.local")).forEach(key -> {
+			localParameters.remove(key);
+		});
+		testContext.getCurrentXmlTest().setParameters(localParameters);
 	}
 
 	/**
