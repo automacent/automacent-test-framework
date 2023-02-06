@@ -19,7 +19,7 @@ import com.automacent.fwk.core.BaseTest;
  * methods will directly reference the {@link ExpectedCondition} without the
  * user explicitly calling the {@link ExpectedCondition} conditions.
  * 
- * All the new until* methods will throws {@link TimeoutException} if the
+ * All the new until* methods will throw {@link TimeoutException} if the
  * condition fails
  * 
  * @author sighil.sivadas

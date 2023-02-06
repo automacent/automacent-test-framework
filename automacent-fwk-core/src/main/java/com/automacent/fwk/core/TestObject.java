@@ -21,7 +21,7 @@ import com.automacent.fwk.recovery.RecoveryManager;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.EnumUtils;
 
-import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 
 /**
  * Class which holds parameters required for execution of Test. Each Test class

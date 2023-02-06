@@ -9,7 +9,7 @@ import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
 
-import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 
 /**
  * Manage {@link Driver} object. This class can initialize {@link Driver}
