@@ -37,14 +37,14 @@ public class AutomacentWebDriverWait extends WebDriverWait {
 	 * wait timeouts
 	 *
 	 * @param <V>       Return type of {@link ExpectedCondition}
-	 * @param condition {@link ExpectedCondition}
+	 * @param condition {@link ExpectedConditions}
 	 * @return Object that is expected to be returned after the
 	 * {@link ExpectedCondition} succeeds
 	 */
-	private <V> V applyExplicit(ExpectedCondition<V> condition) {
+	private <T> T applyExplicit(ExpectedCondition<T> condition) {
 		try {
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
-			return until(condition);
+			return (T) until(condition);
 		} finally {
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(BaseTest.getTestObject().getTimeoutInSeconds()));
 		}
