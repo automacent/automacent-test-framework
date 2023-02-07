@@ -33,7 +33,7 @@ import com.automacent.fwk.reporting.ReportingTools;
 import com.automacent.fwk.utils.FileUtils;
 import com.automacent.fwk.utils.ThreadUtils;
 
-import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 
 /**
  * This is the custom reporter for Automacent framework and should be specified
