@@ -3,6 +3,7 @@ package com.automacent.fwk.listeners;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.testng.IExecutionListener;
 import org.testng.IInvokedMethod;
@@ -223,6 +224,13 @@ public class AutomacentListener extends TestListenerAdapter
 		if (!methodName.startsWith("automacentInternal")
 				&& BaseTest.getTestObject().getDriverManager().getActiveDriver() != null)
 			StepsAndPagesProcessor.processAnnotation(invokedMethod.getTestMethod().getInstance());
+		// Remove all local parameters from context
+		Map<String, String> localParameters = new ConcurrentHashMap<>();
+		localParameters.putAll(testContext.getCurrentXmlTest().getLocalParameters());
+		localParameters.keySet().stream().filter(key -> key.startsWith("automacent.local")).forEach(key -> {
+			localParameters.remove(key);
+		});
+		testContext.getCurrentXmlTest().setParameters(localParameters);
 	}
 
 	/**
