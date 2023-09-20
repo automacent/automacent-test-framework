@@ -299,7 +299,7 @@ public class Driver {
 	public void startDriver(DriverManagerType driverManagerType) {
 		try {
 			if (driverManagerType.name().equals(DriverManagerType.IEXPLORER.name())) {
-				DesiredCapabilities capab = DesiredCapabilities.internetExplorer();
+				DesiredCapabilities capab = new DesiredCapabilities();
 				capab.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 				capab.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
 				capab.setCapability(InternetExplorerDriver.ENABLE_PERSISTENT_HOVERING, false);
@@ -311,7 +311,7 @@ public class Driver {
 				webDriver = new InternetExplorerDriver(ieOptions);
 			} else if (driverManagerType.name().equals(DriverManagerType.CHROME.name())) {
 				if (chromeDriverLocation == null) {
-					WebDriverManager.getInstance(DriverManagerType.CHROME).setup();
+					WebDriverManager.chromedriver().setup();
 					_logger.info("Using chromeDriver from framework");
 				}
 				ChromeOptions chromeOptions = new ChromeOptions();
@@ -389,6 +389,7 @@ public class Driver {
 					_logger.debug(String.format("Setting firefox pref {browser.download.dir : %s}", downloadLocation));
 					_logger.debug(String.format("Setting firefox pref {browser.helperApps.neverAsk.saveToDisk : %s}",
 							fileTypes));
+					option.addArguments("--disable-dev-shm-usage");
 					option.setProfile(profile);
 				}
 				webDriver = new FirefoxDriver(option);

@@ -44,12 +44,12 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<webdriver.version>3.141.59</webdriver.version>
-		<webdrivermanager.version>5.3.2</webdrivermanager.version>
-		<aspectj.version>1.9.9</aspectj.version>
+		<webdriver.version>4.12.1</webdriver.version>
+		<webdrivermanager.version>5.5.3</webdrivermanager.version>
+		<aspectj.version>1.9.9.1</aspectj.version>
 		<jsch.version>0.1.53</jsch.version>
 		<commons.io.version>2.7</commons.io.version>
-		<testng.version>7.3.0</testng.version>
+		<testng.version>7.8.0</testng.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
 		<log4j.verson>2.17.1</log4j.verson>
 		<springframework.version>5.3.14</springframework.version>
@@ -77,6 +77,12 @@
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
 			<version>${webdrivermanager.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -174,6 +180,12 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3-version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>31.0.1-jre</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -183,8 +195,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 					<useIncrementalCompilation>false</useIncrementalCompilation>
 				</configuration>
 			</plugin>
@@ -231,7 +243,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
+						<version>3.1.0</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -245,7 +257,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-source-plugin</artifactId>
-						<version>3.2.0</version>
+						<version>3.3.0</version>
 						<executions>
 							<execution>
 								<id>attach-sources</id>
@@ -258,7 +270,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>3.3.1</version>
+						<version>3.5.0</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>

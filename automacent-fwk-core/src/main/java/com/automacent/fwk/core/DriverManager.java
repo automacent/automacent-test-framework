@@ -56,7 +56,7 @@ public class DriverManager {
 
 	// Driver -------------------------------------------------------
 
-	private Map<BrowserId, Driver> driverMap = new HashMap<>();
+	private final Map<BrowserId, Driver> driverMap = new HashMap<>();
 
 	/**
 	 * Get Driver instance.

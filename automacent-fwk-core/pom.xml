@@ -48,9 +48,9 @@
 				</executions>
 				<configuration>
 					<Xlint>ignore</Xlint>
-					<complianceLevel>1.8</complianceLevel>
-					<source>1.8</source>
-					<target>1.8</target>
+					<complianceLevel>11</complianceLevel>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -73,7 +73,7 @@
 											aspectj-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.8,)
+											[11,)
 										</versionRange>
 										<goals>
 											<goal>compile</goal>

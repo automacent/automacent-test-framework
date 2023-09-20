@@ -1,5 +1,6 @@
 package com.automacent.fwk.selenium;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -30,7 +31,7 @@ public class AutomacentWebDriverWait extends WebDriverWait {
 	private final WebDriver driver;
 
 	public AutomacentWebDriverWait(WebDriver driver, long timeOutInSeconds) {
-		super(driver, timeOutInSeconds);
+		super(driver, Duration.ofSeconds(timeOutInSeconds));
 		this.driver = driver;
 	}
 
