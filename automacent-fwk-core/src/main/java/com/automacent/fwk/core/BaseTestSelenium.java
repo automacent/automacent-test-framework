@@ -12,7 +12,7 @@ import com.automacent.fwk.enums.ScreenshotModeForIteration;
 import com.automacent.fwk.enums.ScreenshotType;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 
-import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 
 /**
  * All Selenium test classes must inherit this class. Class contains essential
