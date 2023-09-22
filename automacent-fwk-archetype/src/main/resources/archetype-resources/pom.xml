@@ -116,8 +116,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
 
@@ -138,7 +138,7 @@
 							<artifactId>testng</artifactId>
 						</weaveDependency>
 					</weaveDependencies>
-					<complianceLevel>1.8</complianceLevel>
+					<complianceLevel>11</complianceLevel>
 					<showWeaveInfo>false</showWeaveInfo>
 					<verbose>false 22</verbose>
 					<Xlint>ignore</Xlint>
@@ -236,7 +236,7 @@
 											aspectj-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.8,)
+											[11,)
 										</versionRange>
 										<goals>
 											<goal>compile</goal>

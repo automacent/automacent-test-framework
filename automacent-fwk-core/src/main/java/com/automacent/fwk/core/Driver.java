@@ -22,7 +22,7 @@ import com.automacent.fwk.enums.BrowserId;
 import com.automacent.fwk.exceptions.SetupFailedFatalException;
 import com.automacent.fwk.reporting.Logger;
 
-import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
@@ -299,7 +299,7 @@ public class Driver {
 	public void startDriver(DriverManagerType driverManagerType) {
 		try {
 			if (driverManagerType.name().equals(DriverManagerType.IEXPLORER.name())) {
-				DesiredCapabilities capab = DesiredCapabilities.internetExplorer();
+				DesiredCapabilities capab = new DesiredCapabilities();
 				capab.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 				capab.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
 				capab.setCapability(InternetExplorerDriver.ENABLE_PERSISTENT_HOVERING, false);
@@ -389,6 +389,7 @@ public class Driver {
 					_logger.debug(String.format("Setting firefox pref {browser.download.dir : %s}", downloadLocation));
 					_logger.debug(String.format("Setting firefox pref {browser.helperApps.neverAsk.saveToDisk : %s}",
 							fileTypes));
+					option.addArguments("--disable-dev-shm-usage");
 					option.setProfile(profile);
 				}
 				webDriver = new FirefoxDriver(option);

@@ -21,7 +21,8 @@ import com.automacent.fwk.recovery.RecoveryManager;
 import com.automacent.fwk.reporting.Logger;
 import com.automacent.fwk.utils.EnumUtils;
 
-import io.github.bonigarcia.wdm.DriverManagerType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
+
 
 /**
  * Class which holds parameters required for execution of Test. Each Test class
@@ -364,7 +365,7 @@ public class TestObject {
 	// Screenshot ---------------------------------------------------
 
 	private ScreenshotType screenshotType;
-	private List<ScreenshotMode> screenshotModes = new ArrayList<>();
+	private final List<ScreenshotMode> screenshotModes = new ArrayList<>();
 	private ScreenshotModeForIteration screenshotModeForIteration;
 
 	/**
@@ -405,7 +406,7 @@ public class TestObject {
 	 * @param screenshotModes Comma separated values of screenshot modes
 	 */
 	public void setScreenshotModes(String screenshotModes) {
-		String screenshotModeArray[] = screenshotModes.split(",");
+		String[] screenshotModeArray = screenshotModes.split(",");
 		for (String screenshotModeString : screenshotModeArray) {
 			ScreenshotMode screenshotMode = EnumUtils.getEnumFromString(ScreenshotMode.class, screenshotModeString);
 			if (screenshotMode != null)

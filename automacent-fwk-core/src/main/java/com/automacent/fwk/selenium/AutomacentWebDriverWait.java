@@ -1,5 +1,6 @@
 package com.automacent.fwk.selenium;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -19,7 +20,7 @@ import com.automacent.fwk.core.BaseTest;
  * methods will directly reference the {@link ExpectedCondition} without the
  * user explicitly calling the {@link ExpectedCondition} conditions.
  * 
- * All the new until* methods will throws {@link TimeoutException} if the
+ * All the new until* methods will throw {@link TimeoutException} if the
  * condition fails
  * 
  * @author sighil.sivadas
@@ -30,7 +31,7 @@ public class AutomacentWebDriverWait extends WebDriverWait {
 	private final WebDriver driver;
 
 	public AutomacentWebDriverWait(WebDriver driver, long timeOutInSeconds) {
-		super(driver, timeOutInSeconds);
+		super(driver, Duration.ofSeconds(timeOutInSeconds));
 		this.driver = driver;
 	}
 
