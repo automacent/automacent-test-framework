@@ -44,7 +44,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<webdriver.version>4.12.1</webdriver.version>
+		<webdriver.version>4.15.0</webdriver.version>
 		<webdrivermanager.version>5.5.3</webdrivermanager.version>
 		<aspectj.version>1.9.9.1</aspectj.version>
 		<jsch.version>0.1.53</jsch.version>
